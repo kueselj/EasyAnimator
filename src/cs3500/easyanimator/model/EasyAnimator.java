@@ -6,6 +6,9 @@ import cs3500.easyanimator.model.shapes.IShape;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+* TODO: JavaDocs.
+*/
 public class EasyAnimator {
 
   HashMap<String, IShape> shapes;
