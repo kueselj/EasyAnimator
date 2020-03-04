@@ -13,6 +13,4 @@ public class EasyAnimator {
 
   HashMap<String, IShape> shapes;
   HashMap<String, List<IMotion>> motions;
-
-
 }

@@ -7,34 +7,26 @@ import java.awt.*;
  */
 public abstract class AbstractShape implements IShape {
 
-  private int width;
-  private int height;
+  private widthHeight size;
   private Color color;
   private Point position;
 
   /**
    * Abstract constructor for a Shape.
    *
-   * @param width the width of the Shape.
-   * @param height the height of the Shape.
+   * @param size the size of the Shape.
    * @param color the color of the Shape.
    * @param position the position of the Shape.
    */
-  AbstractShape(int width, int height, Color color, Point position) {
-    this.width = width;
-    this.height = height;
+  AbstractShape(widthHeight size, Color color, Point position) {
+    this.size = size;
     this.color = color;
     this.position = position;
   }
 
   @Override
-  public int getWidth() {
-    return this.width;
-  }
-
-  @Override
-  public int getHeight() {
-    return this.height;
+  public widthHeight getSize() {
+    return new widthHeight(this.size);
   }
 
   @Override
@@ -52,8 +44,7 @@ public abstract class AbstractShape implements IShape {
     if (width <= 0 || height <= 0) {
       throw new IllegalArgumentException("Width and Height of a shape cannot be zero or below.");
     }
-    this.width = width;
-    this.height = height;
+    this.size = new widthHeight(width, height);
   }
 
   @Override

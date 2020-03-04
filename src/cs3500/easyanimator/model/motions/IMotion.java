@@ -1,5 +1,7 @@
 package cs3500.easyanimator.model.motions;
 
+import cs3500.easyanimator.model.shapes.widthHeight;
+
 import java.awt.Color;
 import java.awt.Point;
 
@@ -37,32 +39,18 @@ public interface IMotion {
   Point getEndPosition();
 
   /**
-   * Gets the start width of the Motion.
+   * Gets the start size of the Motion.
    *
-   * @return the start width of the Motion as an int.
+   * @return the start size of the Motion as an widthHeight.
    */
-  int getStartWidth();
+  widthHeight getStartSize();
 
   /**
-   * Gets the end width of the Motion.
+   * Gets the end size of the Motion.
    *
-   * @return the end width of the Motion as an int.
+   * @return the end size of the Motion as a widthHeight.
    */
-  int getEndWidth();
-
-  /**
-   * Gets the start height of the Motion.
-   *
-   * @return the start height of the Motion as an int.
-   */
-  int getStartHeight();
-
-  /**
-   * Gets the end height of the Motion.
-   *
-   * @return the end height of the Motion as an int.
-   */
-  int getEndHeight();
+  widthHeight getEndSize();
 
   /**
    * Gets the start color of the Motion.

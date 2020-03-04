@@ -28,27 +28,22 @@ public class BasicMotion implements IMotion {
    *
    * @param startTime the start time of the Motion.
    * @param endTime the end time of the Motion.
-   * @param startWidth the start width of the Motion.
-   * @param endWidth the end width of the Motion.
-   * @param startHeight the start height of the Motion.
-   * @param endHeight the end height of the Motion.
+   * @param startSize the start width of the Motion.
+   * @param endSize the end width of the Motion.
    * @param startPosition the start position of the Motion.
    * @param endPosition the end position of the Motion.
    * @param startColor the start color of the Motion.
    * @param endColor the end color of the Motion.
    */
   public BasicMotion(int startTime, int endTime,
-                     int startWidth, int endWidth,
-                     int startHeight, int endHeight,
+                     widthHeight startSize, widthHeight endSize,
                      Point startPosition, Point endPosition,
                      Color startColor, Color endColor) {
 
     this.startTime = startTime;
     this.endTime = endTime;
-    this.startWidth = startWidth;
-    this.endWidth = endWidth;
-    this.startHeight = startHeight;
-    this.endHeight = endHeight;
+    this.startSize = startSize;
+    this.endSize = endSize;
     this.startPosition = startPosition;
     this.endPosition = endPosition;
     this.startColor = startColor;
@@ -76,23 +71,13 @@ public class BasicMotion implements IMotion {
   }
 
   @Override
-  public int getStartWidth() {
-    return this.startWidth;
+  public widthHeight getStartSize() {
+    return new widthHeight(this.startSize);
   }
 
   @Override
-  public int getEndWidth() {
-    return this.endWidth;
-  }
-
-  @Override
-  public int getStartHeight() {
-    return this.startHeight;
-  }
-
-  @Override
-  public int getEndHeight() {
-    return this.endHeight;
+  public widthHeight getEndSize() {
+    return new widthHeight(this.endSize);
   }
 
   @Override

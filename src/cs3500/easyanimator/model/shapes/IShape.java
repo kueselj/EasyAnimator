@@ -9,18 +9,11 @@ import java.awt.Point;
 public interface IShape {
 
   /**
-   * Gets the width of the Shape.
+   * Gets the size of the Shape.
    *
-   * @return an int representing the width of the Shape.
+   * @return a widthHeight representing the size of the Shape.
    */
-  int getWidth();
-
-  /**
-   * Gets the height of the Shape.
-   *
-   * @return an int representing the height of the Shape.
-   */
-  int getHeight();
+  widthHeight getSize();
 
   /**
    * Gets the color of the shape.

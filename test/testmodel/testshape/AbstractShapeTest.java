@@ -3,6 +3,7 @@ package testmodel.testshape;
 import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.model.shapes.Oval;
 import cs3500.easyanimator.model.shapes.Rectangle;
+import cs3500.easyanimator.model.shapes.widthHeight;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -16,6 +17,7 @@ import java.awt.Point;
 public abstract class AbstractShapeTest {
 
   private IShape testShape;
+  private widthHeight testSize = new widthHeight(3, 10);
   private static final Color testShapeColor = new Color(100, 100, 100);
   private final Point testShapePosition = new Point(50, 100);
 
@@ -23,19 +25,19 @@ public abstract class AbstractShapeTest {
    * Resets the testShape
    */
   private void reset() {
-    this.testShape = rec(3, 10, this.testShapeColor, this.testShapePosition);
+    this.testShape = rec(this.testSize, this.testShapeColor, this.testShapePosition);
   }
 
   @Test
-  public void testGetWidth() {
+  public void testGetSizeWidth() {
     this.reset();
-    assertEquals(3, testShape.getWidth());
+    assertEquals(3, testShape.getSize().getWidth());
   }
 
   @Test
-  public void testGetHeight() {
+  public void testGetSizeHeight() {
     this.reset();
-    assertEquals(10, testShape.getHeight());
+    assertEquals(10, testShape.getSize().getHeight());
   }
 
   @Test
@@ -53,11 +55,11 @@ public abstract class AbstractShapeTest {
   @Test
   public void testSetSize() {
     this.reset();
-    assertEquals(3, testShape.getWidth());
-    assertEquals(10, testShape.getHeight());
+    assertEquals(3, testShape.getSize().getWidth());
+    assertEquals(10, testShape.getSize().getHeight());
     testShape.setSize(15, 20);
-    assertEquals(15, testShape.getWidth());
-    assertEquals(20, testShape.getHeight());
+    assertEquals(15, testShape.getSize().getWidth());
+    assertEquals(20, testShape.getSize().getHeight());
   }
 
   @Test(expected = IllegalArgumentException.class)
@@ -102,27 +104,25 @@ public abstract class AbstractShapeTest {
    * Constructs an instance of the class under test representing the Shape
    * given as a Rectangle.
    *
-   * @param width the width of the rectangle.
-   * @param height the height of the rectangle.
+   * @param size the size of the rectangle.
    * @param color the color of the rectangle.
    * @param position the position of the rectangle.
    *
    * @return an instance of the class under test
    */
-  protected abstract IShape rec(int width, int height, Color color, Point position);
+  protected abstract IShape rec(widthHeight size, Color color, Point position);
 
   /**
    * Constructs an instance of the class under test representing the Shape
    * given as an Oval.
    *
-   * @param width the width of the oval.
-   * @param height the height of the oval.
+   * @param size the width of the oval.
    * @param color the color of the oval.
    * @param position the position of the oval.
    *
    * @return an instance of the class under test.
    */
-  protected abstract IShape oval(int width, int height, Color color, Point position);
+  protected abstract IShape oval(widthHeight size, Color color, Point position);
 
   /**
    * Concrete class for testing the Rectangle implementation of IShape.
@@ -130,13 +130,13 @@ public abstract class AbstractShapeTest {
   public static final class RectangleShapeTest extends AbstractShapeTest {
 
     @Override
-    protected IShape rec(int width, int height, Color color, Point position) {
-      return new Rectangle(width, height, color, position);
+    protected IShape rec(widthHeight size, Color color, Point position) {
+      return new Rectangle(size, color, position);
     }
 
     @Override
-    protected IShape oval(int width, int height, Color color, Point position) {
-      return new Rectangle(width, height, color, position);
+    protected IShape oval(widthHeight size, Color color, Point position) {
+      return new Rectangle(size, color, position);
     }
 
     /**
@@ -145,13 +145,13 @@ public abstract class AbstractShapeTest {
     public static final class OvalShapeTest extends AbstractShapeTest {
 
       @Override
-      protected IShape rec(int width, int height, Color color, Point position) {
-        return new Oval(width, height, color, position);
+      protected IShape rec(widthHeight size, Color color, Point position) {
+        return new Oval(size, color, position);
       }
 
       @Override
-      protected IShape oval(int width, int height, Color color, Point position) {
-        return new Oval(width, height, color, position);
+      protected IShape oval(widthHeight size, Color color, Point position) {
+        return new Oval(size, color, position);
       }
     }
   }
