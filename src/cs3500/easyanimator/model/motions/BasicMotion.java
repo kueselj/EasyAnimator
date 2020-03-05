@@ -3,19 +3,20 @@ package cs3500.easyanimator.model.motions;
 import java.awt.Point;
 import java.awt.Color;
 
-import cs3500.easyanimator.model.shapes.widthHeight;
+import cs3500.easyanimator.model.shapes.WidthHeight;
 
 /**
  * Class representing a basic motion, has a start time, end time,
  * start size, end size, start position, end position, start color, and end color.
+ * The class is immutable, once initialized it cannot be changed.
  */
-public class BasicMotion implements IMotion {
+public final class BasicMotion implements IMotion {
 
   private final int startTime;
   private final int endTime;
 
-  private final widthHeight startSize;
-  private final widthHeight endSize;
+  private final WidthHeight startSize;
+  private final WidthHeight endSize;
 
   private final Point startPosition;
   private final Point endPosition;
@@ -36,7 +37,7 @@ public class BasicMotion implements IMotion {
    * @param endColor the end color of the Motion.
    */
   public BasicMotion(int startTime, int endTime,
-                     widthHeight startSize, widthHeight endSize,
+                     WidthHeight startSize, WidthHeight endSize,
                      Point startPosition, Point endPosition,
                      Color startColor, Color endColor) {
 
@@ -71,13 +72,13 @@ public class BasicMotion implements IMotion {
   }
 
   @Override
-  public widthHeight getStartSize() {
-    return new widthHeight(this.startSize);
+  public WidthHeight getStartSize() {
+    return new WidthHeight(this.startSize);
   }
 
   @Override
-  public widthHeight getEndSize() {
-    return new widthHeight(this.endSize);
+  public WidthHeight getEndSize() {
+    return new WidthHeight(this.endSize);
   }
 
   @Override

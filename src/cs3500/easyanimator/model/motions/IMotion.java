@@ -1,12 +1,12 @@
 package cs3500.easyanimator.model.motions;
 
-import cs3500.easyanimator.model.shapes.widthHeight;
+import cs3500.easyanimator.model.shapes.WidthHeight;
 
 import java.awt.Color;
 import java.awt.Point;
 
 /**
- * Interface for a Motion.
+ * Interface for a Motion, defines only getter methods for the fields of an implementation.
  */
 public interface IMotion {
 
@@ -43,14 +43,14 @@ public interface IMotion {
    *
    * @return the start size of the Motion as an widthHeight.
    */
-  widthHeight getStartSize();
+  WidthHeight getStartSize();
 
   /**
    * Gets the end size of the Motion.
    *
    * @return the end size of the Motion as a widthHeight.
    */
-  widthHeight getEndSize();
+  WidthHeight getEndSize();
 
   /**
    * Gets the start color of the Motion.

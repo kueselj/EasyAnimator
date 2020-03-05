@@ -13,7 +13,7 @@ public interface IShape {
    *
    * @return a widthHeight representing the size of the Shape.
    */
-  widthHeight getSize();
+  WidthHeight getSize();
 
   /**
    * Gets the color of the shape.
@@ -40,6 +40,15 @@ public interface IShape {
    * @throws IllegalArgumentException if the width or height is set to equal or below zero.
    */
   void setSize(int width, int height);
+
+  /**
+   * Sets the size of the Shape.
+   *
+   * @param size a widthHeight to set as the Shape's size.
+   *
+   * @throws IllegalArgumentException if the width or height is set to equal or below zero.
+   */
+  void setSize(WidthHeight size);
 
   /**
    * Sets the color of the Shape.
