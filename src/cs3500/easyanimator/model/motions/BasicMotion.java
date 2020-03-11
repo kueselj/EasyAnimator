@@ -94,7 +94,7 @@ public final class BasicMotion implements IMotion {
 
   @Override
   public String toString() {
-    //TODO compile a list of ints and use deliminator instead of this monstrosity.
+    //TODO compile a list of ints and use deliminator instead of this monstrosity. or visitor
     return this.startTime + " "
             + this.startPosition.getX() + " "
             + this.startPosition.getY() + " "

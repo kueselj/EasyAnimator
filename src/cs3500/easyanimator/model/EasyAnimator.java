@@ -6,9 +6,7 @@ import cs3500.easyanimator.model.shapes.IShapeVisitor;
 import cs3500.easyanimator.model.shapes.Oval;
 import cs3500.easyanimator.model.shapes.Rectangle;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
 * TODO: JavaDocs.
@@ -69,8 +67,10 @@ public class EasyAnimator implements IAnimatorModel {
    * @return a text rendering output of the model as a String.
    */
   public String textOutput() {
+
     //output string builder to build.
     StringBuilder output = new StringBuilder();
+
 
     //iterate through each shape or entry in
     for (Map.Entry<String, List<IMotion>> entry: this.motions.entrySet()) {
@@ -80,6 +80,8 @@ public class EasyAnimator implements IAnimatorModel {
 
       //add the shape to the output.
       output.append(shapeString + "\n");
+
+      Collections.sort(this.motions.get(entry), Comparator.comparingInt(IMotion::getStartTime));
 
       //now iterate through the list of motions for the given entry.
       for (IMotion motion: this.motions.get(entry)) {
