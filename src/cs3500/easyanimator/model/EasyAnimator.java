@@ -10,9 +10,14 @@ import java.util.Map;
 /**
 * TODO: JavaDocs.
 */
-public class EasyAnimator {
+public class EasyAnimator implements IAnimatorModel {
 
   HashMap<String, IShape> shapes;
+  // The list of motions we associate with will have the invariant that the end state of the
+  // previous motion will match the start state of the next motion.
+  // Additionally none of the motions will clash in tick range.
+  // We have another invariant here that the keysets for the shapes map and the motions map should
+  // match.
   HashMap<String, List<IMotion>> motions;
 
   /**
@@ -23,36 +28,35 @@ public class EasyAnimator {
     this.motions = new HashMap<String, List<IMotion>>();
   }
 
-  /**
-   * Adds a motion bound to the specific id representing an IShape.
-   * @param id the id of the IShape.
-   * @param motion the motion to be added.
-   *
-   * @throws IllegalArgumentException if the motion is invalid.
-   */
+  @Override
+  public void addShape(String id, IShape shape) {
+    // TODO: Implement this! After Testing of course!
+  }
+
+  @Override
+  public void removeShape(String id) {
+    // TODO: Implement this! After Testing of course!
+  }
+
+  @Override
+  public Map<String, IShape> getShapes() {
+    // TODO: Implement this! After Testing of course!
+    return null;
+  }
+
+  @Override
   public void addMotion(String id, IMotion motion) {
-    //TODO: Implement this! After Testing of course!
+    // TODO: Implement this! After Testing of course!
   }
 
-  /**
-   * Adds a motion bound to the specific id representing an IShape.
-   * @param id the id of the IShape.
-   * @param motion the motion to be removed.
-   *
-   * @throws IllegalArgumentException if the motion is invalid or the
-   * motion is not bound to the specified id.
-   */
+  @Override
   public void removeMotion(String id, IMotion motion) {
-    //TODO: Implement this! After Testing of course!
+    // TODO: Implement this! After Testing of course!
   }
 
-  /**
-   * Returns the map containing all of the ids of the IShapes and their respective list of motions.
-   *
-   * @return the map of shape id's to their motions
-   */
+  @Override
   public Map<String, List<IMotion>> getMotions() {
-    //TODO: Implement this! After Testing of course!
+    // TODO: Implement this! After Testing of course!
     return null;
   }
 
