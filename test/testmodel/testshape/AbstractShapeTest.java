@@ -1,5 +1,7 @@
 package testmodel.testshape;
 
+import cs3500.easyanimator.model.Color;
+import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.model.shapes.Oval;
 import cs3500.easyanimator.model.shapes.Rectangle;
@@ -8,8 +10,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.awt.Color;
-import java.awt.Point;
+
 
 /**
  * Tests for {@link IShape}s.
