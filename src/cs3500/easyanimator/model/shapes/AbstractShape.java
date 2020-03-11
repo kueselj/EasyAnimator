@@ -40,14 +40,6 @@ public abstract class AbstractShape implements IShape {
   }
 
   @Override
-  public void setSize(int width, int height) {
-    if (width <= 0 || height <= 0) {
-      throw new IllegalArgumentException("Width and Height of a shape cannot be zero or below.");
-    }
-    this.size = new WidthHeight(width, height);
-  }
-
-  @Override
   public void setSize(WidthHeight size) {
     if (size.getWidth() <= 0 || size.getHeight() <= 0) {
       throw new IllegalArgumentException("Width and Height of a shape cannot be zero or below.");

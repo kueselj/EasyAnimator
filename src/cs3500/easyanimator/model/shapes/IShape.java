@@ -34,16 +34,6 @@ public interface IShape {
   /**
    * Sets the size of the Shape.
    *
-   * @param width an int to set as the Shape's width.
-   * @param height an int to set as the Shape's height.
-   *
-   * @throws IllegalArgumentException if the width or height is set to equal or below zero.
-   */
-  void setSize(int width, int height);
-
-  /**
-   * Sets the size of the Shape.
-   *
    * @param size a widthHeight to set as the Shape's size.
    *
    * @throws IllegalArgumentException if the width or height is set to equal or below zero.

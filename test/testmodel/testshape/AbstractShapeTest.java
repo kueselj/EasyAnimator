@@ -64,7 +64,7 @@ public abstract class AbstractShapeTest {
     assertEquals(3, testShape.getSize().getWidth());
     assertEquals(10, testShape.getSize().getHeight());
     assertEquals(new WidthHeight(3, 10), testShape.getSize());
-    testShape.setSize(15, 20);
+    testShape.setSize(new WidthHeight(15, 20));
     assertEquals(15, testShape.getSize().getWidth());
     assertEquals(20, testShape.getSize().getHeight());
     assertEquals(new WidthHeight(15, 20), testShape.getSize());
@@ -73,13 +73,13 @@ public abstract class AbstractShapeTest {
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidSetSizeWidth() {
     this.reset();
-    testShape.setSize(0, 10);
+    testShape.setSize(new WidthHeight(0, 10));
   }
 
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidSetSizeHeight() {
     this.reset();
-    testShape.setSize(10, -10);
+    testShape.setSize(new WidthHeight(10, -10));
   }
 
   @Test
