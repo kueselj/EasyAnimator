@@ -51,7 +51,7 @@ public class EasyAnimatorTest {
     // We CAN test that whatever properties are in there are not the result of mutation.
     r.setColor(new Color(0,0,0));
     assertNotEquals("Expected the rectangle in the model to be unmutated.",
-            new Color(255,0,0), model.getShapes().get("R").getColor());
+            new Color(0,0,0), model.getShapes().get("R").getColor());
 
     // We then want to verify the next behavior of addShape, replacement with the same key.
     // We mutated r, now lets add it in.
@@ -60,7 +60,7 @@ public class EasyAnimatorTest {
             model.getShapes().size(), 2);
     assertEquals("Expected motions after replacement to remain the same",
             1, model.getMotions().get("R").size());
-    assertNotEquals("Expected the rectangle in the model to have the new color.",
+    assertEquals("Expected the rectangle in the model to have the new color.",
             new Color(0,0,0), model.getShapes().get("R").getColor());
   }
 
@@ -95,17 +95,17 @@ public class EasyAnimatorTest {
     Rectangle r = new Rectangle(new WidthHeight(100, 100),
             new Color(0,0,255), new Point(100, 100));
     model.addShape("R", r);
-    assertEquals("Verify that adding two shape brings the total number to 2.",
-            1, model.getShapes().size());
+    assertEquals("Verify that adding two shapes brings the total number to 2.",
+            2, model.getShapes().size());
     model.removeShape("R");
     assertEquals("Then after removing a shape, we expected the total number to be 1.",
             1, model.getShapes().size());
-    assertTrue("Since we removed the circle named C," +
-            " we expect the key for the rectangle named R to still exist.",
-            model.getShapes().containsKey("R"));
-    assertFalse("Since we removed the circle named C," +
-            " we expect the key for the circle named C to not exist anymore.",
+    assertTrue("Since we removed the rectangle named R," +
+            " we expect the key for the circle named C to still exist.",
             model.getShapes().containsKey("C"));
+    assertFalse("Since we removed the rectangle named R," +
+            " we expect the key for the rectangle named R to not exist anymore.",
+            model.getShapes().containsKey("R"));
   }
 
   /**

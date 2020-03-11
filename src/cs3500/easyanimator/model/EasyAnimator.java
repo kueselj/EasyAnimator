@@ -42,7 +42,7 @@ public class EasyAnimator implements IAnimatorModel {
     }
 
     // We add the shape. And watch to see if we replaced anything.
-    IShape previous = this.shapes.put(id, shape);
+    IShape previous = this.shapes.put(id, shape.copy());
     if (previous == null) {
       // We will need to add a blank list to motions.
       this.motions.put(id, new ArrayList<>());
@@ -70,7 +70,11 @@ public class EasyAnimator implements IAnimatorModel {
 
   @Override
   public Map<String, IShape> getShapes() {
-    return this.shapes;
+    Map<String, IShape> newMap = new HashMap<>();
+    for (Map.Entry<String, IShape> entry: shapes.entrySet()) {
+      newMap.put(entry.getKey(), entry.getValue().copy());
+    }
+    return newMap;
   }
 
   /**
@@ -84,9 +88,9 @@ public class EasyAnimator implements IAnimatorModel {
             .stream()
             .anyMatch(otherMotion ->
                     (motion.getStartTime() >= otherMotion.getStartTime() &&
-                     otherMotion.getEndTime() >= motion.getStartTime()) ||
+                     otherMotion.getEndTime() > motion.getStartTime()) ||
                     (motion.getStartTime() <= otherMotion.getStartTime() &&
-                     otherMotion.getStartTime() >= motion.getEndTime()));
+                     otherMotion.getStartTime() <= motion.getEndTime()));
   }
 
   /**
@@ -197,7 +201,7 @@ public class EasyAnimator implements IAnimatorModel {
               "state.");
     }
 
-    motions.remove(motion);
+    motions.get("C").remove(motion);
   }
 
   @Override

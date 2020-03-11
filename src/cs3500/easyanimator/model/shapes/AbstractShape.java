@@ -9,9 +9,9 @@ import cs3500.easyanimator.model.Point;
  */
 public abstract class AbstractShape implements IShape {
 
-  private WidthHeight size;
-  private Color color;
-  private Point position;
+  protected WidthHeight size;
+  protected Color color;
+  protected Point position;
 
   /**
    * Abstract constructor for a Shape.

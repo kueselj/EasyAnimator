@@ -1,5 +1,7 @@
 package cs3500.easyanimator.model;
 
+import java.util.Objects;
+
 /**
  * Class representing a color as a RGB value. All values must be in range of 0-255.
  */
@@ -52,5 +54,25 @@ public final class Color {
    */
   public int getBlue() {
     return this.blue;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true; // Fast path for pointer comparison.
+    }
+
+    if (!(o instanceof Color)) {
+      return false; // It can't possibly be equal.
+    }
+
+    Color otherColor = (Color) o;
+    return otherColor.red == this.red && otherColor.blue == this.blue &&
+            otherColor.green == this.green;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(this.red, this.blue, this.green);
   }
 }

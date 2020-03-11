@@ -1,5 +1,7 @@
 package cs3500.easyanimator.model;
 
+import java.util.Objects;
+
 /**
  * Represents a point that has an x and a y coordinate.
  */
@@ -39,5 +41,25 @@ public final class Point {
    */
   public int getY() {
     return this.yCoordinate;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return false; // Fast pointer comparison.
+    }
+
+    if (!(o instanceof Point)) {
+      return false; // You know the drill.
+    }
+
+    Point otherPoint = (Point) o;
+    return otherPoint.xCoordinate == this.xCoordinate &&
+            otherPoint.yCoordinate == this.yCoordinate;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(xCoordinate, yCoordinate);
   }
 }

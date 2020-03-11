@@ -76,4 +76,10 @@ public interface IShape {
    * @return something of the parameter T.
    */
   <T> T accept(IShapeVisitor<T> visitor);
+
+  /**
+   * Returns a copy of the given object.
+   * @return  Returns a copy of this object, deep-copied.
+   */
+  IShape copy();
 }

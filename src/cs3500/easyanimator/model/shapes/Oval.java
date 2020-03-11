@@ -23,4 +23,9 @@ public class Oval extends AbstractShape {
   public <T> T accept(IShapeVisitor<T> visitor) {
     return visitor.applyToOval(this);
   }
+
+  @Override
+  public IShape copy() {
+    return new Oval(this.size, this.color, this.position);
+  }
 }

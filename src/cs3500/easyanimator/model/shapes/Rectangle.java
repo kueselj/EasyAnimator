@@ -24,4 +24,9 @@ public class Rectangle extends AbstractShape {
   public <T> T accept(IShapeVisitor<T> visitor) {
     return visitor.applyToRectangle(this);
   }
+
+  @Override
+  public IShape copy() {
+    return new Rectangle(this.size, this.color, this.position);
+  }
 }
