@@ -1,9 +1,9 @@
 package cs3500.easyanimator.model.motions;
 
+import cs3500.easyanimator.model.Color;
+import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.shapes.WidthHeight;
 
-import java.awt.Color;
-import java.awt.Point;
 
 /**
  * Interface for a Motion, defines only getter methods for the fields of an implementation.
@@ -65,4 +65,11 @@ public interface IMotion {
    * @return the end color of the Motion represented by a Color.
    */
   Color getEndColor();
+
+  /**
+   * Returns a string representation of the motion, which includes all of its fields.
+   *
+   * @return a string representing the motion.
+   */
+  String toString();
 }

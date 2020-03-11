@@ -1,8 +1,8 @@
 package testmodel.testeasyanimator;
 
+import cs3500.easyanimator.model.Color;
+import cs3500.easyanimator.model.Point;
 import org.junit.Test;
-
-import java.awt.*;
 
 import cs3500.easyanimator.model.EasyAnimator;
 import cs3500.easyanimator.model.IAnimatorModel;
@@ -33,9 +33,9 @@ public class EasyAnimatorTest {
     assertEquals("Expected no shapes to be in a newly constructed model.",
             0, model.getShapes().size());
     Oval c = new Oval(new WidthHeight(100, 100),
-            Color.RED, new Point(100, 100));
+            new Color(255, 0, 0), new Point(100, 100));
     Rectangle r = new Rectangle(new WidthHeight(100, 100),
-            Color.BLUE, new Point(100, 100));
+            new Color(0,0,255), new Point(100, 100));
     model.addShape("C", c); // We add an oval named C.
     model.addShape("R", r); // We add a rectangle named C.
     assertEquals("Expected the # of shapes in the model to be 2 after addition.",
@@ -44,14 +44,14 @@ public class EasyAnimatorTest {
     model.addMotion("R", new BasicMotion(0, 10,
             new WidthHeight(100, 100), new WidthHeight(100, 100),
             new Point(100, 100), new Point(100, 100),
-            Color.BLUE, Color.BLUE));
+            new Color(0,0,255), new Color(0,0,255)));
 
     // I am unsure if we can exactly test that the shapes are now definitely in the model with the
     // same properties.
     // We CAN test that whatever properties are in there are not the result of mutation.
-    r.setColor(Color.BLACK);
+    r.setColor(new Color(0,0,0));
     assertNotEquals("Expected the rectangle in the model to be unmutated.",
-            Color.RED, model.getShapes().get("R").getColor());
+            new Color(255,0,0), model.getShapes().get("R").getColor());
 
     // We then want to verify the next behavior of addShape, replacement with the same key.
     // We mutated r, now lets add it in.
@@ -61,7 +61,7 @@ public class EasyAnimatorTest {
     assertEquals("Expected motions after replacement to remain the same",
             1, model.getMotions().get("R").size());
     assertNotEquals("Expected the rectangle in the model to have the new color.",
-            Color.BLACK, model.getShapes().get("R").getColor());
+            new Color(0,0,0), model.getShapes().get("R").getColor());
   }
 
   /**
@@ -80,7 +80,7 @@ public class EasyAnimatorTest {
   @Test(expected = IllegalArgumentException.class)
   public void testAddShapeNullId() {
     Oval c = new Oval(new WidthHeight(100, 100),
-            Color.RED, new Point(100, 100));
+            new Color(255,0,0), new Point(100, 100));
     model.addShape(null, c);
   }
 
@@ -90,10 +90,10 @@ public class EasyAnimatorTest {
   @Test
   public void testRemoveShapeValidId() {
     Oval c = new Oval(new WidthHeight(100, 100),
-            Color.RED, new Point(100, 100));
+            new Color(255,0,0), new Point(100, 100));
     model.addShape("C", c);
     Rectangle r = new Rectangle(new WidthHeight(100, 100),
-            Color.BLUE, new Point(100, 100));
+            new Color(0,0,255), new Point(100, 100));
     model.addShape("R", r);
     assertEquals("Verify that adding two shape brings the total number to 2.",
             1, model.getShapes().size());
@@ -124,7 +124,7 @@ public class EasyAnimatorTest {
   @Test(expected = IllegalArgumentException.class)
   public void testRemoveShapeInvalidId() {
     Oval c = new Oval(new WidthHeight(100, 100),
-            Color.RED, new Point(100, 100));
+            new Color(255,0,0), new Point(100, 100));
     model.addShape("C", c);
     model.removeShape("R");
   }
@@ -136,7 +136,7 @@ public class EasyAnimatorTest {
   @Test
   public void testAddRemoveShapeMotions() {
     Oval c = new Oval(new WidthHeight(100, 100),
-            Color.RED, new Point(100, 100));
+            new Color(255,0,0), new Point(100, 100));
     model.addShape("C", c);
     assertTrue("Expected new added shape to have a motion list.",
             model.getMotions().containsKey("C"));
@@ -157,12 +157,12 @@ public class EasyAnimatorTest {
   @Test
   public void testAddValidMotion() {
     Oval c = new Oval(new WidthHeight(100, 100),
-            Color.RED, new Point(100, 100));
+            new Color(255,0,0), new Point(100, 100));
     model.addShape("C", c);
     model.addMotion("C", new BasicMotion(0, 10,
             new WidthHeight(100, 100), new WidthHeight(120, 120),
             new Point(100, 100), new Point(100, 100),
-            Color.BLUE, Color.BLUE));
+            new Color(0,0,255), new Color(0,0,255)));
     assertEquals("After adding a motion expected the motion list for the shape to be size 1.",
             1, model.getMotions().get("C").size());
     assertEquals("After adding a motion we expect properties of the motion in the model to match" +
@@ -176,7 +176,7 @@ public class EasyAnimatorTest {
   @Test(expected = IllegalArgumentException.class)
   public void testAddNullMotion() {
     Oval c = new Oval(new WidthHeight(100, 100),
-            Color.RED, new Point(100, 100));
+            new Color(255,0,0), new Point(100, 100));
     model.addShape("C", c);
     model.addMotion("C", null);
   }
@@ -187,12 +187,12 @@ public class EasyAnimatorTest {
   @Test(expected = IllegalArgumentException.class)
   public void testAddMotionNullId() {
     Oval c = new Oval(new WidthHeight(100, 100),
-            Color.RED, new Point(100, 100));
+            new Color(255,0,0), new Point(100, 100));
     model.addShape("C", c);
     model.addMotion(null, new BasicMotion(0, 10,
             new WidthHeight(100, 100), new WidthHeight(100, 100),
             new Point(100, 100), new Point(100, 100),
-            Color.RED, Color.BLUE));
+            new Color(255,0,0), new Color(0,0,255)));
   }
 
   /**
@@ -202,12 +202,12 @@ public class EasyAnimatorTest {
   @Test(expected = IllegalArgumentException.class)
   public void testAddMotionInvalidId() {
     Oval c = new Oval(new WidthHeight(100, 100),
-            Color.RED, new Point(100, 100));
+            new Color(255,0,0), new Point(100, 100));
     model.addShape("C", c);
     model.addMotion("R", new BasicMotion(0, 10,
             new WidthHeight(100, 100), new WidthHeight(100, 100),
             new Point(100, 100), new Point(100, 100),
-            Color.RED, Color.BLUE));
+            new Color(255,0,0), new Color(0,0,255)));
   }
 
   /**
@@ -217,7 +217,7 @@ public class EasyAnimatorTest {
   @Test
   public void testAddInvalidMotions() {
     Oval c = new Oval(new WidthHeight(100, 100),
-            Color.RED, new Point(100, 100));
+            new Color(255,0,0), new Point(100, 100));
     model.addShape("C", c);
 
     // We add a basic motion that changes color.
@@ -287,7 +287,7 @@ public class EasyAnimatorTest {
   @Test
   public void testRemoveMotion() {
     Oval c = new Oval(new WidthHeight(100, 100),
-            Color.RED, new Point(100, 100));
+            new Color(255,0,0), new Point(100, 100));
     model.addShape("C", c);
     // We change the size.
     BasicMotion b = new BasicMotion(0, 10,
@@ -335,7 +335,7 @@ public class EasyAnimatorTest {
   @Test(expected = IllegalArgumentException.class)
   public void testRemoveMotionInvalidId() {
     Oval c = new Oval(new WidthHeight(100, 100),
-            Color.RED, new Point(100, 100));
+            new Color(255,0,0), new Point(100, 100));
     BasicMotion b = new BasicMotion(0, 10,
             new WidthHeight(100, 100), new WidthHeight(200, 200),
             new Point(100, 100), new Point(100, 100),
@@ -353,7 +353,7 @@ public class EasyAnimatorTest {
   @Test(expected = IllegalArgumentException.class)
   public void testRemoveMotionInvalidState() {
     Oval c = new Oval(new WidthHeight(100, 100),
-            Color.RED, new Point(100, 100));
+            new Color(255,0,0), new Point(100, 100));
     // We change the size here.
     BasicMotion left = new BasicMotion(0, 10,
             new WidthHeight(100, 100), new WidthHeight(200, 200),

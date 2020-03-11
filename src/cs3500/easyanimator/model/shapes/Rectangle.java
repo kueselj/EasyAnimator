@@ -1,6 +1,8 @@
 package cs3500.easyanimator.model.shapes;
 
-import java.awt.*;
+
+import cs3500.easyanimator.model.Color;
+import cs3500.easyanimator.model.Point;
 
 /**
  * A class representing a Rectangle Shape.
@@ -18,6 +20,8 @@ public class Rectangle extends AbstractShape {
     super(size, color, position);
   }
 
-
-
+  @Override
+  public <T> T accept(IShapeVisitor<T> visitor) {
+    return visitor.applyToRectangle(this);
+  }
 }

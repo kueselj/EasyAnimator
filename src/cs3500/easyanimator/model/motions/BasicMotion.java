@@ -1,8 +1,9 @@
 package cs3500.easyanimator.model.motions;
 
-import java.awt.Point;
-import java.awt.Color;
 
+
+import cs3500.easyanimator.model.Color;
+import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.shapes.WidthHeight;
 
 /**
@@ -89,5 +90,26 @@ public final class BasicMotion implements IMotion {
   @Override
   public Color getEndColor() {
     return this.endColor;
+  }
+
+  @Override
+  public String toString() {
+    //TODO compile a list of ints and use deliminator instead of this monstrosity. or visitor
+    return this.startTime + " "
+            + this.startPosition.getX() + " "
+            + this.startPosition.getY() + " "
+            + this.startSize.getWidth() + " "
+            + this.startSize.getHeight() + " "
+            + this.startColor.getRed() + " "
+            + this.startColor.getGreen() + " "
+            + this.startColor.getBlue() + " "
+            + this.endTime + " "
+            + this.endPosition.getX() + " "
+            + this.endPosition.getY() + " "
+            + this.endSize.getWidth() + " "
+            + this.endSize.getHeight() + " "
+            + this.endColor.getRed() + " "
+            + this.endColor.getGreen() + " "
+            + this.endColor.getBlue();
   }
 }

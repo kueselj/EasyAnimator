@@ -1,6 +1,8 @@
 package cs3500.easyanimator.model.shapes;
 
-import java.awt.*;
+
+import cs3500.easyanimator.model.Color;
+import cs3500.easyanimator.model.Point;
 
 /**
  * Abstract base class for implementation of {@link IShape}

@@ -2,8 +2,12 @@ package cs3500.easyanimator.model;
 
 import cs3500.easyanimator.model.motions.IMotion;
 import cs3500.easyanimator.model.shapes.IShape;
+import cs3500.easyanimator.model.shapes.IShapeVisitor;
+import cs3500.easyanimator.model.shapes.Oval;
+import cs3500.easyanimator.model.shapes.Rectangle;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -201,4 +205,51 @@ public class EasyAnimator implements IAnimatorModel {
     return this.motions;
   }
 
+  /**
+   * Outputs a String representing a text rendering output of the model.
+   *
+   * @return a text rendering output of the model as a String.
+   */
+  public String textOutput() {
+
+    //output string builder to build.
+    StringBuilder output = new StringBuilder();
+
+
+    //iterate through each shape or entry in
+    for (Map.Entry<String, List<IMotion>> entry: this.motions.entrySet()) {
+
+      String shapeType = this.shapes.get(entry).accept(new ShapeTypeVisitor());
+      String shapeString = "shape " + entry + " " + shapeType;
+
+      //add the shape to the output.
+      output.append(shapeString + "\n");
+
+      Collections.sort(this.motions.get(entry), Comparator.comparingInt(IMotion::getStartTime));
+
+      //now iterate through the list of motions for the given entry.
+      for (IMotion motion: this.motions.get(entry)) {
+        String motionString = "motion " + entry + " " + motion.toString();
+        output.append(motionString + "\n");
+      }
+    }
+
+    return output.toString().trim();
+  }
+
+  /**
+   * Private visitor class to return the type of shape as a string.
+   */
+  private class ShapeTypeVisitor implements IShapeVisitor<String> {
+
+    @Override
+    public String applyToRectangle(Rectangle r) {
+      return "rectangle";
+    }
+
+    @Override
+    public String applyToOval(Oval o) {
+      return "oval";
+    }
+  }
 }

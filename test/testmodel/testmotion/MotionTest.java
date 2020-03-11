@@ -1,5 +1,7 @@
 package testmodel.testmotion;
 
+import cs3500.easyanimator.model.Color;
+import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.motions.BasicMotion;
 import cs3500.easyanimator.model.motions.IMotion;
 import cs3500.easyanimator.model.shapes.WidthHeight;
@@ -7,7 +9,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
-import java.awt.*;
 
 /**
  * Test class for Motion methods.

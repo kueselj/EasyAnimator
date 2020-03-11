@@ -1,6 +1,7 @@
 package cs3500.easyanimator.model.shapes;
 
-import java.awt.*;
+import cs3500.easyanimator.model.Color;
+import cs3500.easyanimator.model.Point;
 
 /**
  * A class representing an Oval Shape.
@@ -16,5 +17,10 @@ public class Oval extends AbstractShape {
    */
   public Oval(WidthHeight size, Color color, Point position) {
     super(size, color, position);
+  }
+
+  @Override
+  public <T> T accept(IShapeVisitor<T> visitor) {
+    return visitor.applyToOval(this);
   }
 }

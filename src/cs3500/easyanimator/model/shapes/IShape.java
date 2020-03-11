@@ -1,7 +1,9 @@
 package cs3500.easyanimator.model.shapes;
 
-import java.awt.Color;
-import java.awt.Point;
+
+import cs3500.easyanimator.model.Color;
+import cs3500.easyanimator.model.Point;
+
 
 /**
  * Interface representing a Shape.
@@ -65,4 +67,13 @@ public interface IShape {
    * @param y the y coordinate of the Shape.
    */
   void setPosition(int x, int y);
+
+  /**
+   * Accepts a visitor then applies the visitor.
+   *
+   * @param visitor the visitor to accept.
+   * @param <T> the parameter to use.
+   * @return something of the parameter T.
+   */
+  <T> T accept(IShapeVisitor<T> visitor);
 }
