@@ -72,4 +72,13 @@ public interface IMotion {
    * @return a string representing the motion.
    */
   String toString();
+
+  /**
+   * Accepts an IMotionVisitor and applys it.
+   *
+   * @param motion the visitor to use.
+   * @param <T> the type to return
+   * @return of type T.
+   */
+  <T> T accept(IMotionVisitor<T> motion);
 }

@@ -1,7 +1,5 @@
 package cs3500.easyanimator.model.motions;
 
-
-
 import cs3500.easyanimator.model.Color;
 import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.shapes.WidthHeight;
@@ -111,5 +109,10 @@ public final class BasicMotion implements IMotion {
             + this.endColor.getRed() + " "
             + this.endColor.getGreen() + " "
             + this.endColor.getBlue();
+  }
+
+  @Override
+  public <T> T accept(IMotionVisitor<T> motion) {
+    return motion.applyToBasicMotion(this);
   }
 }

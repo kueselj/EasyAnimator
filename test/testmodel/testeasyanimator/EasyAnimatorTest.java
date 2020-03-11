@@ -366,7 +366,7 @@ public class EasyAnimatorTest {
             new Color(100, 100, 100), new Color(200, 200, 200));
     // Then we change the position.
     BasicMotion right = new BasicMotion(20, 30,
-            new WidthHeight(100, 100), new WidthHeight(200, 200),
+            new WidthHeight(200, 200), new WidthHeight(200, 200),
             new Point(100, 100), new Point(200, 200),
             new Color(200, 200, 200), new Color(200, 200, 200));
 
@@ -376,5 +376,77 @@ public class EasyAnimatorTest {
     model.addMotion("C", right);
     // Now if we remove the middle, we actually have a broken state.
     model.removeMotion("C", middle);
+  }
+
+  @Test
+  public void testTextOutput() {
+    Oval c = new Oval(new WidthHeight(100, 100),
+            new Color(255,0,0),
+            new Point(100, 100));
+    // We change the size here.
+    BasicMotion left = new BasicMotion(0, 10,
+            new WidthHeight(100, 100),
+            new WidthHeight(200, 200),
+            new Point(100, 100),
+            new Point(100, 100),
+            new Color(100, 100, 100),
+            new Color(100, 100, 100));
+    // Then we change the color.
+    BasicMotion middle = new BasicMotion(10, 20,
+            new WidthHeight(200, 200),
+            new WidthHeight(200, 200),
+            new Point(100, 100),
+            new Point(100, 100),
+            new Color(100, 100, 100),
+            new Color(200, 200, 200));
+    // Then we change the position.
+    BasicMotion right = new BasicMotion(20, 30,
+            new WidthHeight(200, 200),
+            new WidthHeight(200, 200),
+            new Point(100, 100),
+            new Point(200, 200),
+            new Color(200, 200, 200),
+            new Color(200, 200, 200));
+
+    model.addShape("C", c);
+    model.addMotion("C", left);
+    model.addMotion("C", middle);
+    model.addMotion("C", right);
+
+    Rectangle r = new Rectangle(new WidthHeight(100, 100),
+            new Color(255,0,0),
+            new Point(100, 100));
+    // We change the size here.
+    BasicMotion rectangleFirst = new BasicMotion(0, 10,
+            new WidthHeight(100, 100),
+            new WidthHeight(200, 200),
+            new Point(100, 100),
+            new Point(100, 100),
+            new Color(100, 100, 100),
+            new Color(100, 100, 100));
+    // Then we change the color.
+    BasicMotion rectangleLast = new BasicMotion(10, 20,
+            new WidthHeight(200, 200),
+            new WidthHeight(200, 200),
+            new Point(100, 100),
+            new Point(100, 100),
+            new Color(100, 100, 100),
+            new Color(200, 200, 200));
+
+    model.addShape("R", r);
+    model.addMotion("R", rectangleFirst);
+    model.addMotion("R", rectangleLast);
+
+
+    String expectedString = "shape R rectangle\n" +
+            "motion R 0 100 100 100 100 100 100 100    10 100 100 200 200 100 100 100\n" +
+            "motion R 10 100 100 200 200 100 100 100    20 100 100 200 200 200 200 200\n" +
+            "\n" +
+            "shape C oval\n" +
+            "motion C 0 100 100 100 100 100 100 100    10 100 100 200 200 100 100 100\n" +
+            "motion C 10 100 100 200 200 100 100 100    20 100 100 200 200 200 200 200\n" +
+            "motion C 20 100 100 200 200 200 200 200    30 200 200 200 200 200 200 200";
+
+    assertEquals(expectedString, model.textOutput());
   }
 }

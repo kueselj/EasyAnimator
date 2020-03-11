@@ -1,6 +1,8 @@
 package cs3500.easyanimator.model;
 
+import cs3500.easyanimator.model.motions.BasicMotion;
 import cs3500.easyanimator.model.motions.IMotion;
+import cs3500.easyanimator.model.motions.IMotionVisitor;
 import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.model.shapes.IShapeVisitor;
 import cs3500.easyanimator.model.shapes.Oval;
@@ -118,7 +120,7 @@ public class EasyAnimator implements IAnimatorModel {
   private Optional<IMotion> seekForward(String id, IMotion motion) {
     return this.motions.get(id).stream()
             // We only want the ones behind it.
-            .filter(otherMotion -> otherMotion.getStartTime() > motion.getEndTime())
+            .filter(otherMotion -> otherMotion.getStartTime() >= motion.getEndTime())
             // And we want the nearest one.
             .max(Comparator.comparingInt(IMotion::getStartTime));
   }
@@ -214,6 +216,7 @@ public class EasyAnimator implements IAnimatorModel {
    *
    * @return a text rendering output of the model as a String.
    */
+  @Override
   public String textOutput() {
 
     //output string builder to build.
@@ -223,19 +226,22 @@ public class EasyAnimator implements IAnimatorModel {
     //iterate through each shape or entry in
     for (Map.Entry<String, List<IMotion>> entry: this.motions.entrySet()) {
 
-      String shapeType = this.shapes.get(entry).accept(new ShapeTypeVisitor());
-      String shapeString = "shape " + entry + " " + shapeType;
+      String shapeType = this.shapes.get(entry.getKey()).accept(new ShapeTypeVisitor());
+      String shapeString = "shape " + entry.getKey() + " " + shapeType;
 
       //add the shape to the output.
       output.append(shapeString + "\n");
 
-      Collections.sort(this.motions.get(entry), Comparator.comparingInt(IMotion::getStartTime));
+      Collections.sort(entry.getValue(), Comparator.comparingInt(IMotion::getStartTime));
 
       //now iterate through the list of motions for the given entry.
-      for (IMotion motion: this.motions.get(entry)) {
-        String motionString = "motion " + entry + " " + motion.toString();
+      for (IMotion motion: entry.getValue()) {
+        String motionString = "motion " + entry.getKey() + " "
+                + motion.accept(new MotionToTextVisitor());
         output.append(motionString + "\n");
       }
+
+      output.append("\n");
     }
 
     return output.toString().trim();
@@ -254,6 +260,32 @@ public class EasyAnimator implements IAnimatorModel {
     @Override
     public String applyToOval(Oval o) {
       return "oval";
+    }
+  }
+
+  /**
+   * Private visitor class to return the motion as a string
+   */
+  private class MotionToTextVisitor implements IMotionVisitor<String> {
+
+    @Override
+    public String applyToBasicMotion(BasicMotion b) {
+      return b.getStartTime() + " "
+              + b.getStartPosition().getX() + " "
+              + b.getStartPosition().getY() + " "
+              + b.getStartSize().getWidth() + " "
+              + b.getStartSize().getHeight() + " "
+              + b.getStartColor().getRed() + " "
+              + b.getStartColor().getGreen() + " "
+              + b.getStartColor().getBlue() + "    "
+              + b.getEndTime() + " "
+              + b.getEndPosition().getX() + " "
+              + b.getEndPosition().getY() + " "
+              + b.getEndSize().getWidth() + " "
+              + b.getEndSize().getHeight() + " "
+              + b.getEndColor().getRed() + " "
+              + b.getEndColor().getGreen() + " "
+              + b.getEndColor().getBlue();
     }
   }
 }

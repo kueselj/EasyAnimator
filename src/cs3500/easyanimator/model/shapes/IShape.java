@@ -1,6 +1,5 @@
 package cs3500.easyanimator.model.shapes;
 
-
 import cs3500.easyanimator.model.Color;
 import cs3500.easyanimator.model.Point;
 

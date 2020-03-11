@@ -62,4 +62,11 @@ public interface IAnimatorModel {
    * @return the map of shape id's to their motions. This will be a copy to disallow mutation.
    */
   Map<String, List<IMotion>> getMotions();
+
+  /**
+   * Gets the text output of the model.
+   *
+   * @return a string representing a text output.
+   */
+  String textOutput();
 }
