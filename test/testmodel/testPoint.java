@@ -1,13 +1,16 @@
 package testmodel;
+
 import cs3500.easyanimator.model.Point;
+
 import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 /**
  * Test class that test all the methods of the Point class.
  */
-public class testPoint {
+public class TestPoint {
   private Point testPoint = new Point(5, 10);
 
   @Test

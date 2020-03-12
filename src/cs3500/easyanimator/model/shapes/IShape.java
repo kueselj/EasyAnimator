@@ -60,16 +60,7 @@ public interface IShape {
   void setPosition(Point position);
 
   /**
-   * Sets the position of the Shape given an x and a y coordinate;
-   *
-   * @param x the x coordinate of the Shape.
-   * @param y the y coordinate of the Shape.
-   */
-  void setPosition(int x, int y);
-
-  /**
    * Accepts a visitor then applies the visitor.
-   *
    * @param visitor the visitor to accept.
    * @param <T> the parameter to use.
    * @return something of the parameter T.

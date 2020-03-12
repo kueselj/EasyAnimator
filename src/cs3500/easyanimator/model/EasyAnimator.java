@@ -264,7 +264,7 @@ public class EasyAnimator implements IAnimatorModel {
   }
 
   /**
-   * Private visitor class to return the motion as a string
+   * A private visitor class to return an IMotion as represented by a string.
    */
   private class MotionToTextVisitor implements IMotionVisitor<String> {
 

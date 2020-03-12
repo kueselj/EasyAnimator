@@ -4,7 +4,8 @@ import cs3500.easyanimator.model.Color;
 import cs3500.easyanimator.model.Point;
 
 /**
- * Abstract base class for implementation of {@link IShape}
+ * Abstract base class for implementation of {@link IShape}. It includes three properties size,
+ * color, and position.
  */
 public abstract class AbstractShape implements IShape {
 
@@ -57,10 +58,5 @@ public abstract class AbstractShape implements IShape {
   @Override
   public void setPosition(Point position) {
     this.position = position;
-  }
-
-  @Override
-  public void setPosition(int x, int y) {
-    this.position = new Point(x, y);
   }
 }

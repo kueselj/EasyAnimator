@@ -8,8 +8,8 @@ import cs3500.easyanimator.model.shapes.IShape;
 
 /**
  * An IAnimatorModel is an interface describing what the model for an animation program will need
- * to do. It will need the ability to edit motions and shapes (add, remove) as well as observe the motions
- * for some named shape (id).
+ * to do. It will need the ability to edit motions and shapes (add, remove) as well as observe th
+ * motions for some named shape (id).
  */
 public interface IAnimatorModel {
 
@@ -17,7 +17,6 @@ public interface IAnimatorModel {
    * Adds the given named IShape to the model. If a shape already exists at the given id,
    * it is replaced (with the same motions). If it did not originally exist under the same name,
    * then a new blank list of motions is created.
-   * If
    * @param id The id to associate with the added shape.
    * @param shape The shape to add to the model.
    * @throws IllegalArgumentException If the shape or id are uninitialized.
@@ -35,7 +34,7 @@ public interface IAnimatorModel {
   /**
    * Gets all the named shapes in this model.
    * @returns A map between the names of shapes and their instances.
-   * This will be a copy to disallow outside mutation.
+   *          This will be a copy to disallow outside mutation.
    */
   Map<String, IShape> getShapes();
 
@@ -44,7 +43,7 @@ public interface IAnimatorModel {
    * @param id the id of the IShape.
    * @param motion the motion to be added.
    * @throws IllegalArgumentException if the motion is invalid, for example if forces teleportation
-   * or clashes in tick range with other motions.
+   *                                  or clashes in tick range with other motions.
    */
   void addMotion(String id, IMotion motion);
 
@@ -53,7 +52,8 @@ public interface IAnimatorModel {
    * @param id the id of the IShape.
    * @param motion the motion to be removed.
    * @throws IllegalArgumentException if this removal forces us to break our invariants
-   * (teleportation and tick range clashing) or if it does not belong to the given id.
+   *                                  (teleportation and tick range clashing) or if it does not
+   *                                  belong to the given id.
    */
   void removeMotion(String id, IMotion motion);
 

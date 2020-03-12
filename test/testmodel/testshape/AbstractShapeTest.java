@@ -6,11 +6,10 @@ import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.model.shapes.Oval;
 import cs3500.easyanimator.model.shapes.Rectangle;
 import cs3500.easyanimator.model.shapes.WidthHeight;
+
 import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-
-
 
 /**
  * Tests for {@link IShape}s.
@@ -104,7 +103,7 @@ public abstract class AbstractShapeTest {
   public void testSetPositionUsingXY() {
     this.reset();
     assertEquals(new Point(50, 100), testShape.getPosition());
-    testShape.setPosition(150, 175);
+    testShape.setPosition(new Point(150, 175));
     assertEquals(new Point(150, 175), testShape.getPosition());
   }
 

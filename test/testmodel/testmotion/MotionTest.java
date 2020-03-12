@@ -5,14 +5,15 @@ import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.motions.BasicMotion;
 import cs3500.easyanimator.model.motions.IMotion;
 import cs3500.easyanimator.model.shapes.WidthHeight;
+
 import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 
 /**
- * Test class for Motion methods.
- * TODO: may want to make it abstract if we add more types of motions in the future.
+ * Test class for methods described by the IMotion interface. We happen to test BasicMotion here.
+ * Later this test harness will become an abstract class to test multiple types of motions.
  */
 public class MotionTest {
 

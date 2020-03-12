@@ -1,13 +1,16 @@
 package testmodel;
+
 import cs3500.easyanimator.model.Color;
+
 import org.junit.Test;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 /**
  * Tests class for all the methods of the Color class.
  */
-public class testColor {
+public class TestColor {
   private Color testColor = new Color(50, 100, 150);
 
   @Test

@@ -1,7 +1,7 @@
 package cs3500.easyanimator.model.shapes;
 
 /**
- * The interface for the visitor pattern
+ * The interface for the visitor pattern.
  * @param <T> The return type for this visitor function.
  */
 public interface IShapeVisitor<T> {
