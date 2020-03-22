@@ -69,4 +69,23 @@ public interface IAnimatorModel {
    * @return a string representing a text output.
    */
   String textOutput();
+
+  /**
+   * Gets the desired shape's state at the desired tick.
+   *
+   * @param tick the tick to get the specified shape state at.
+   * @param shape the shape to return at a desired tick.
+   * @return the desired shape at a given tick.
+   * @throws IllegalArgumentException if the shape name or tick is invalid.
+   */
+  IShape getShapeAtTick(int tick, String shape);
+
+  /**
+   * Gets a list of shapes and their state at the desired tick.
+   *
+   * @param tick the tick to get the shapes at.
+   * @return a list of shapes with their states at the desired tick.
+   * @throws IllegalArgumentException if the shape name or tick is invalid.
+   */
+  List<IShape> getShapesAtTick(int tick);
 }

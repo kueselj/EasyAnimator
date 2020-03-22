@@ -247,6 +247,16 @@ public class EasyAnimator implements IAnimatorModel {
     return output.toString().trim();
   }
 
+  @Override
+  public IShape getShapeAtTick(int tick, String shape) {
+    return null;
+  }
+
+  @Override
+  public List<IShape> getShapesAtTick(int tick) {
+    return null;
+  }
+
   /**
    * Private visitor class to return the type of shape as a string.
    */
