@@ -10,7 +10,7 @@ import static org.junit.Assert.assertNotEquals;
 /**
  * Tests class for all the methods of the Color class.
  */
-public class TestColor {
+class TestColor {
   private Color testColor = new Color(50, 100, 150);
 
   @Test

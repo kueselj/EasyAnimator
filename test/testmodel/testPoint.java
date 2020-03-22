@@ -10,7 +10,7 @@ import static org.junit.Assert.assertNotEquals;
 /**
  * Test class that test all the methods of the Point class.
  */
-public class TestPoint {
+class TestPoint {
   private Point testPoint = new Point(5, 10);
 
   @Test
