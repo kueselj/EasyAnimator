@@ -6,6 +6,6 @@ package cs3500.easyanimator;
  */
 public final class Excellence {
   public static void main(String[] args) {
-    // FILL IN HERE
+
   }
 }
