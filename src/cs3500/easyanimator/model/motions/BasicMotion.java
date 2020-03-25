@@ -62,22 +62,22 @@ public final class BasicMotion implements IMotion {
 
   @Override
   public Point getStartPosition() {
-    return new Point(this.startPosition);
+    return this.startPosition;
   }
 
   @Override
   public Point getEndPosition() {
-    return new Point(this.endPosition);
+    return this.endPosition;
   }
 
   @Override
   public WidthHeight getStartSize() {
-    return new WidthHeight(this.startSize);
+    return this.startSize;
   }
 
   @Override
   public WidthHeight getEndSize() {
-    return new WidthHeight(this.endSize);
+    return this.endSize;
   }
 
   @Override

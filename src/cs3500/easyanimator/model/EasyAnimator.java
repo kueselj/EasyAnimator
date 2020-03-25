@@ -7,6 +7,7 @@ import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.model.shapes.IShapeVisitor;
 import cs3500.easyanimator.model.shapes.Oval;
 import cs3500.easyanimator.model.shapes.Rectangle;
+import cs3500.easyanimator.model.shapes.WidthHeight;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,12 +31,25 @@ public class EasyAnimator implements IAnimatorModel {
   // match.
   private HashMap<String, List<IMotion>> motions;
 
+  // These are part of the new update.
+  private Point canvasPosition;
+  private WidthHeight canvasSize;
+
   /**
    * Basic constructor for an EasyAnimator, just gives sets both fields to empty HashMaps.
    */
   public EasyAnimator() {
     this.shapes = new HashMap<String, IShape>();
     this.motions = new HashMap<String, List<IMotion>>();
+  }
+
+  @Override
+  public void setCanvas(Point topLeftCorner, WidthHeight widthHeight) {
+    if (topLeftCorner == null || widthHeight == null) {
+      throw new IllegalArgumentException("Attempted to set canvas with uninitialized parameters.");
+    }
+    this.canvasPosition = topLeftCorner;
+    this.canvasSize = widthHeight;
   }
 
   @Override
@@ -69,6 +83,23 @@ public class EasyAnimator implements IAnimatorModel {
       // If there was no matching key.
       throw new IllegalArgumentException("Attempted to removeShape with an id that doesn't match.");
     }
+  }
+
+  @Override
+  public WidthHeight getCanvasSize() {
+    if (this.canvasSize == null) {
+      throw new IllegalStateException("The canvas has yet to be set.");
+    }
+    return this.canvasSize; // I don't copy because these are technically immutable.
+    // This was a mistake of the past.
+  }
+
+  @Override
+  public Point getCanvasPosition() {
+    if (this.canvasPosition == null) {
+      throw new IllegalStateException("The canvas has yet to be set.");
+    }
+    return this.canvasPosition;
   }
 
   @Override

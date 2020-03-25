@@ -19,16 +19,6 @@ public class WidthHeight {
     this.height = height;
   }
 
-  /**
-   * Copy constructor for a WidthHeight, takes in another WidthHeight.
-   *
-   * @param size the WidthHeight to copy.
-   */
-  public WidthHeight(WidthHeight size) {
-    this.width = size.width;
-    this.height = size.height;
-  }
-
   public int getWidth() {
     return this.width;
   }

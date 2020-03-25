@@ -5,6 +5,7 @@ import java.util.Map;
 
 import cs3500.easyanimator.model.motions.IMotion;
 import cs3500.easyanimator.model.shapes.IShape;
+import cs3500.easyanimator.model.shapes.WidthHeight;
 
 /**
  * An IAnimatorModel is an interface describing what the model for an animation program will need
@@ -12,6 +13,16 @@ import cs3500.easyanimator.model.shapes.IShape;
  * motions for some named shape (id).
  */
 public interface IAnimatorModel extends IAnimatorModelViewOnly {
+
+  /**
+   * Sets the canvas for the given animation. This is a viewport for all of our shapes and affects
+   * how getShapesAtTick and getShapeAtTick behave.
+   * @param topLeftCorner The top left corner of the canvas in absolute coordinates like the shapes.
+   * @param widthHeight   The width and height of the canvas viewport.
+   *                      This is added to the top left corner.
+   * @throws IllegalArgumentException If the top left corner or width and height are uninitialized.
+   */
+  void setCanvas(Point topLeftCorner, WidthHeight widthHeight);
 
   /**
    * Adds the given named IShape to the model. If a shape already exists at the given id,

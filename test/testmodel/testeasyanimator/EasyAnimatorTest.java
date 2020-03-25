@@ -449,4 +449,53 @@ public class EasyAnimatorTest {
 
     assertEquals(expectedString, model.textOutput());
   }
+
+  /**
+   * Tests that when attempting to set the canvas for the model with an uninitialized top left
+   * corner that we abort with an IllegalArgumentException.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testSetCanvasUninitializedTopLeftCorner() {
+    model.setCanvas(null, new WidthHeight(100, 100));
+  }
+
+  /**
+   * Tests that when attempting to set the canvas for the model with an uninitialized widthHeight
+   * that we abort with an IllegalArgumentException.
+   */
+  @Test(expected = IllegalArgumentException.class)
+  public void testSetCanvasUninitializedWidthHeight() {
+    model.setCanvas(new Point(0, 0), null);
+  }
+
+  /**
+   * Tests that when attempting to get the canvas position from the model before it has been set is
+   * disallowed with an IllegalStateException.
+   */
+  @Test(expected = IllegalStateException.class)
+  public void testGetCanvasPositionUninitialized() {
+    model.getCanvasPosition();
+  }
+
+  /**
+   * Tests that when attempting to get the canvas size from the model before it has been set is
+   * disallowed with an IllegalStateException.
+   */
+  @Test(expected = IllegalStateException.class)
+  public void testGetCanvasSizeUninitialized() {
+    model.getCanvasSize();
+  }
+
+  /**
+   * Tests that after invoking setCanvas that the result is that it's updated in the model.
+   */
+  @Test
+  public void testSetCanvasWorks() {
+    model.setCanvas(new Point(10, 10), new WidthHeight(100, 100));
+    assertEquals(model.getCanvasPosition(), new Point(10, 10));
+    assertEquals(model.getCanvasSize(), new WidthHeight(100, 100));
+  }
+
+  // TODO: When testing getShapesAtTick be sure to test setCanvas alongside it.
+  // This is an extra behavior that we didn't expect at first.
 }

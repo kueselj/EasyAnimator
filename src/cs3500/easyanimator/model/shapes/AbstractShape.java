@@ -28,7 +28,7 @@ public abstract class AbstractShape implements IShape {
 
   @Override
   public WidthHeight getSize() {
-    return new WidthHeight(this.size);
+    return this.size;
   }
 
   @Override
@@ -46,7 +46,7 @@ public abstract class AbstractShape implements IShape {
     if (size.getWidth() <= 0 || size.getHeight() <= 0) {
       throw new IllegalArgumentException("Width and Height of a shape cannot be zero or below.");
     }
-    this.size = new WidthHeight(size);
+    this.size = size;
   }
 
   @Override

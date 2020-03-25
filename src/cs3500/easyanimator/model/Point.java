@@ -20,11 +20,6 @@ public final class Point {
     this.yCoordinate = y;
   }
 
-  public Point(Point point) {
-    this.xCoordinate = point.getX();
-    this.yCoordinate = point.getY();
-  }
-
   /**
    * Gets the x coordinate of the Point.
    *
