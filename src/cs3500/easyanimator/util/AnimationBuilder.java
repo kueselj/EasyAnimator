@@ -1,5 +1,10 @@
 package cs3500.easyanimator.util;
 
+/**
+ * An AnimationBuilder is an interface that we need to fill in order to connect instructors
+ * animation reader to our model code.
+ * @param <Doc> A generic for the interface of our model. Since we need to return it at the end.
+ */
 public interface AnimationBuilder<Doc> {
   /**
    * Constructs a final document.
