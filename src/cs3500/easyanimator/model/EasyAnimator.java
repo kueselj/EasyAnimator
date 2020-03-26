@@ -308,7 +308,7 @@ public class EasyAnimator implements IAnimatorModel {
     //Try and see if the shape exists, if so grab its motions, sort them, and grab the shape.
     try {
       shapeMotions = this.motions.get(shape);
-      Collections.sort(shapeMotions, Comparator.comparingInt(IMotion::getStartTime));
+      //Collections.sort(shapeMotions, Comparator.comparingInt(IMotion::getStartTime));
       shapeType = this.shapes.get(shape);
     } catch (IllegalArgumentException e) {
       throw new IllegalArgumentException("That shape does not exist.");
@@ -316,7 +316,10 @@ public class EasyAnimator implements IAnimatorModel {
 
     //Try and see if there is a motion for the desired tick.
     try {
+      //System.out.println(shapeMotions);
       desiredMotion = this.getFromMotionTick(tick, shapeMotions);
+      //System.out.println(desiredMotion);
+      //System.out.println(desiredMotion.getStartTime());
     } catch (IllegalArgumentException e) {
       throw new IllegalArgumentException("Not a valid tick");
     }
@@ -350,6 +353,16 @@ public class EasyAnimator implements IAnimatorModel {
 
     private IMotion motion;
     private int tick;
+    private int sT;
+    private int eT;
+    private int width;
+    private int height;
+    private int r;
+    private int b;
+    private int g;
+    private int x;
+    private int y;
+
 
     /**
      * Basic constructor for the visitor, takes in a motion and a tick to use.
@@ -359,25 +372,26 @@ public class EasyAnimator implements IAnimatorModel {
     private getShapeAtMotionTick(IMotion motion, int tick) {
       this.motion = motion;
       this.tick = tick;
+      this.sT = this.motion.getStartTime();
+
+      this.eT = this.motion.getEndTime();
+
+
+      this.width = this.tween(this.motion.getStartSize().getWidth(),
+              sT, this.motion.getEndSize().getWidth(), eT, tick);
+      this.height = this.tween(this.motion.getStartSize().getHeight(),
+              sT, this.motion.getEndSize().getHeight(), eT, tick);
+      this.r = this.tween(this.motion.getStartColor().getRed(), sT,
+              this.motion.getEndColor().getRed(), eT, tick);
+      this.b = this.tween(this.motion.getStartColor().getBlue(), sT,
+              this.motion.getEndColor().getBlue(), eT, tick);
+      this.g = this.tween(this.motion.getStartColor().getGreen(), sT,
+              this.motion.getEndColor().getGreen(), eT, tick);
+      this.x = this.tween(this.motion.getStartPosition().getX(), sT,
+              this.motion.getEndPosition().getX(), eT, tick);
+      this.y = this.tween(this.motion.getStartPosition().getY(), sT,
+              this.motion.getEndPosition().getY(), eT, tick);
     }
-
-    int sT = this.motion.getStartTime();
-    int eT = this.motion.getEndTime();
-
-    int width = this.tween(this.motion.getStartSize().getWidth(),
-            sT, this.motion.getEndSize().getWidth(), eT, tick);
-    int height = this.tween(this.motion.getStartSize().getHeight(),
-            sT, this.motion.getEndSize().getHeight(), eT, tick);
-    int r = this.tween(this.motion.getStartColor().getRed(), sT,
-            this.motion.getEndColor().getRed(), eT, tick);
-    int b = this.tween(this.motion.getStartColor().getBlue(), sT,
-            this.motion.getEndColor().getBlue(), eT, tick);
-    int g = this.tween(this.motion.getStartColor().getGreen(), sT,
-            this.motion.getEndColor().getGreen(), eT, tick);
-    int x = this.tween(this.motion.getStartPosition().getX(), sT,
-            this.motion.getEndPosition().getX(), eT, tick);
-    int y = this.tween(this.motion.getStartPosition().getY(), sT,
-            this.motion.getEndPosition().getY(), eT, tick);
 
     @Override
     public IShape applyToRectangle(Rectangle rect) {
@@ -398,10 +412,21 @@ public class EasyAnimator implements IAnimatorModel {
      * @param t the desired tick time.
      * @return the value at the desired tick.
      */
-    private int tween(int a, int aT, int b, int bT, int t) {
-      int f = a * ((bT - t) / (bT - aT));
-      int g = b * ((t - aT) / (bT - aT));
-      return f + g;
+    private int tween(int val1, int val1T, int val2, int val2T, int tick) {
+
+      double a = (double) val1;
+      double aT = (double) val1T;
+      double b = (double) val2;
+      double bT = (double) val2T;
+      double t = (double) tick;
+
+      double f1 = (bT - t) / (bT - aT);
+      double f2 = a * f1;
+      //System.out.println(f2);
+
+      double g1 = (t - aT) / (bT - aT);
+      double g2 = b * g1;
+      return (int) (f2 + g2);
     }
   }
 

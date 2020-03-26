@@ -37,7 +37,7 @@ public class EasyAnimatorTest {
     Rectangle r = new Rectangle(new WidthHeight(100, 100),
             new Color(0,0,255), new Point(100, 100));
     model.addShape("C", c); // We add an oval named C.
-    model.addShape("R", r); // We add a rectangle named C.
+    model.addShape("R", r); // We add a rectangle named R.
     assertEquals("Expected the # of shapes in the model to be 2 after addition.",
             0, model.getShapes().size(), 2);
     // We add a motion for this shape so we can use it later.
