@@ -321,6 +321,7 @@ public class EasyAnimator implements IAnimatorModel {
       throw new IllegalArgumentException("Not a valid tick");
     }
 
+    //if all is valid, return a new shape with the correct state at a desired tick.
     return shapeType.accept(new getShapeAtMotionTick(desiredMotion, tick));
   }
 
@@ -329,17 +330,22 @@ public class EasyAnimator implements IAnimatorModel {
 
     List<IShape> shapesAtTick = new ArrayList<IShape>();
 
+    //iterate through all the entries in the map.
     for (Map.Entry<String, List<IMotion>> entry: this.motions.entrySet()) {
       try {
+        //try and see if the entry has a state at the given tick and save it
         IShape shapeToAdd = this.getShapeAtTick(tick, entry.getKey());
         shapesAtTick.add(shapeToAdd);
       } catch (IllegalArgumentException e) {
-        //Do nothing.
+        //Do nothing. Not a valid shape at the given tick so just dont add it.
       }
     }
     return shapesAtTick;
   }
 
+  /**
+   * Custom visitor for getting a shape's state at a given tick.
+   */
   private class getShapeAtMotionTick implements IShapeVisitor<IShape> {
 
     private IMotion motion;
