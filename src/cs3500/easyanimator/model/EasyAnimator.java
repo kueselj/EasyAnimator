@@ -279,14 +279,124 @@ public class EasyAnimator implements IAnimatorModel {
     return output.toString().trim();
   }
 
+
+  /**
+   * Gets the motion in the list of motions given that contains the given tick.
+   *
+   * @param tick the tick to find a corresponding motion for.
+   * @param motions the list of motions to find.
+   * @return the motion that contains the desired tick.
+   */
+  private IMotion getFromMotionTick(int tick, List<IMotion> motions) {
+    for (IMotion mt: motions) {
+      if (tick >= mt.getStartTime() && tick <= mt.getEndTime()) {
+        return mt;
+      }
+    }
+    throw new IllegalArgumentException("No motion has that tick!");
+
+  }
+
   @Override
   public IShape getShapeAtTick(int tick, String shape) {
-    return null;
+    //try to get the shapes list of motions
+
+    IShape shapeType;
+    List<IMotion> shapeMotions;
+    IMotion desiredMotion;
+
+    //Try and see if the shape exists, if so grab its motions, sort them, and grab the shape.
+    try {
+      shapeMotions = this.motions.get(shape);
+      Collections.sort(shapeMotions, Comparator.comparingInt(IMotion::getStartTime));
+      shapeType = this.shapes.get(shape);
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException("That shape does not exist.");
+    }
+
+    //Try and see if there is a motion for the desired tick.
+    try {
+      desiredMotion = this.getFromMotionTick(tick, shapeMotions);
+    } catch (IllegalArgumentException e) {
+      throw new IllegalArgumentException("Not a valid tick");
+    }
+
+    return shapeType.accept(new getShapeAtMotionTick(desiredMotion, tick));
   }
 
   @Override
   public List<IShape> getShapesAtTick(int tick) {
-    return null;
+
+    List<IShape> shapesAtTick = new ArrayList<IShape>();
+
+    for (Map.Entry<String, List<IMotion>> entry: this.motions.entrySet()) {
+      try {
+        IShape shapeToAdd = this.getShapeAtTick(tick, entry.getKey());
+        shapesAtTick.add(shapeToAdd);
+      } catch (IllegalArgumentException e) {
+        //Do nothing.
+      }
+    }
+    return shapesAtTick;
+  }
+
+  private class getShapeAtMotionTick implements IShapeVisitor<IShape> {
+
+    private IMotion motion;
+    private int tick;
+
+    /**
+     * Basic constructor for the visitor, takes in a motion and a tick to use.
+     * @param motion the motion to tween for the desired tick.
+     * @param tick the tick to find the shape's shape at.
+     */
+    private getShapeAtMotionTick(IMotion motion, int tick) {
+      this.motion = motion;
+      this.tick = tick;
+    }
+
+    int sT = this.motion.getStartTime();
+    int eT = this.motion.getEndTime();
+
+    int width = this.tween(this.motion.getStartSize().getWidth(),
+            sT, this.motion.getEndSize().getWidth(), eT, tick);
+    int height = this.tween(this.motion.getStartSize().getHeight(),
+            sT, this.motion.getEndSize().getHeight(), eT, tick);
+    int r = this.tween(this.motion.getStartColor().getRed(), sT,
+            this.motion.getEndColor().getRed(), eT, tick);
+    int b = this.tween(this.motion.getStartColor().getBlue(), sT,
+            this.motion.getEndColor().getBlue(), eT, tick);
+    int g = this.tween(this.motion.getStartColor().getGreen(), sT,
+            this.motion.getEndColor().getGreen(), eT, tick);
+    int x = this.tween(this.motion.getStartPosition().getX(), sT,
+            this.motion.getEndPosition().getX(), eT, tick);
+    int y = this.tween(this.motion.getStartPosition().getY(), sT,
+            this.motion.getEndPosition().getY(), eT, tick);
+
+    @Override
+    public IShape applyToRectangle(Rectangle rect) {
+      return new Rectangle(new WidthHeight(width, height), new Color(r, b, g), new Point(x, y));
+    }
+
+    @Override
+    public IShape applyToOval(Oval oval) {
+      return new Oval(new WidthHeight(width, height), new Color(r, b, g), new Point(x, y));
+    }
+
+    /**
+     * Finds the tweened value between the two values at the desired tick.
+     * @param a the first int.
+     * @param aT the tick time for a.
+     * @param b the second int.
+     * @param bT the tick time for b.
+     * @param t the desired tick time.
+     * @return the value at the desired tick.
+     */
+    private int tween(int a, int aT, int b, int bT, int t) {
+      int f = a * ((bT - t) / (bT - aT));
+      int g = b * ((t - aT) / (bT - aT));
+      return f + g;
+    }
   }
 
   /**
