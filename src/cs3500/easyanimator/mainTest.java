@@ -11,12 +11,18 @@ import cs3500.easyanimator.model.shapes.WidthHeight;
 import cs3500.easyanimator.view.IAnimatorView;
 import cs3500.easyanimator.view.SwingView;
 
+/**
+ * Manual test class for a SwingView. Doesn't use builder in order to do quicker testing.
+ */
 public class mainTest {
 
+  /**
+   * Main method.
+   * @param args arguments to use.
+   */
   public static void main(String[] args) {
 
     IAnimatorModel model = new EasyAnimator();
-
 
     Oval c = new Oval(new WidthHeight(100, 100),
             new Color(255, 0, 0), new Point(100, 100));

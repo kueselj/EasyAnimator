@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.List;
 
 /**
- * A visual animation view representing an IAnimatorModel
+ * A visual animation view representing an IAnimatorModel. Uses swing to animate a set model.
  */
 public class SwingView extends JFrame implements IVisualView {
   private IAnimatorModelViewOnly model;
@@ -110,9 +110,7 @@ public class SwingView extends JFrame implements IVisualView {
 
       Collections.sort(entry.getValue(), Comparator.comparingInt(IMotion::getEndTime));
 
-
       List<IMotion> entryList =  motions.get(entry.getKey());
-
 
       if (entryList.get(entryList.size() - 1).getEndTime() > maxTick) {
         maxTick = entryList.get(entryList.size() - 1).getEndTime();

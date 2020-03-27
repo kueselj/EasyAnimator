@@ -24,7 +24,10 @@ public class TextualView implements IAnimatorView {
   Appendable out;
   IAnimatorModelViewOnly model;
 
-
+  /**
+   * Basic constructor for a Textual view, needs an appendable to output to.
+   * @param ap the appendable to output the text view to.
+   */
   public TextualView(Appendable ap) {
     this.out = ap;
   }
