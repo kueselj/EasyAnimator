@@ -15,36 +15,28 @@ public class SwingView extends JFrame implements IVisualView {
   private IAnimatorModelViewOnly model;
   private AnimationPanel mainPanel;
   private Timer timer;
+  private int tickRange;
   private int tick;
 
   /**
    * Basic constructor for the SwingView to use.
    */
-  public SwingView(IAnimatorModel model) {
+  public SwingView() {
     super();
-    this.model = model;
-    this.tick = 0;
     this.setTitle("Your Animation");
-    //TODO get the correctSize for your view.
-    this.setSize(500, 500);
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-    this.mainPanel = new AnimationPanel();
-    this.mainPanel.setPreferredSize(new Dimension(500, 500));
-    this.add(this.mainPanel);
-
-
+    this.tick = 0;
     this.timer = new Timer(50, e -> this.refresh());
-    this.timer.start();
-
-    this.pack();
+    this.mainPanel = new AnimationPanel();
+    this.add(this.mainPanel);
+    this.setResizable(false);
+    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   }
 
   @Override
   public void refresh() {
     //TODO create field for the max length of the animation by looking at the endTime.
     //System.out.println("Test");
-    if (this.tick == 100) {
+    if (this.tick == 500) {
       this.tick = 0;
       this.mainPanel.setShapes(model.getShapesAtTick(this.tick));
       this.repaint();
@@ -63,8 +55,15 @@ public class SwingView extends JFrame implements IVisualView {
 
   @Override
   public void setModel(IAnimatorModelViewOnly model) {
-    //make sure you set the model to have the things
+    if (model == null) {
+      throw new IllegalArgumentException("Cannot set the view to have a uninitialized model");
+    }
+
     this.model = model;
+    //TODO get the correctSize for your view.
+    this.mainPanel.setPreferredSize(new Dimension(500, 500));
+    this.timer.start();
+    this.pack();
 
   }
 }

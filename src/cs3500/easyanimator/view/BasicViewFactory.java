@@ -15,7 +15,7 @@ public class BasicViewFactory implements IViewFactory {
       case "svg":
         return new SVGAnimationView();
       case "visual":
-        return new SwingView(new EasyAnimator());
+        return new SwingView();
       default:
         throw new IllegalArgumentException("Invalid view type given.");
     }

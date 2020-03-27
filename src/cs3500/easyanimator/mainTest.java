@@ -26,18 +26,19 @@ public class mainTest {
     model.addShape("R", r); // We add a rectangle named R.
 
     // We add a motion for this shape so we can use it later.
-    model.addMotion("R", new BasicMotion(0, 100,
+    model.addMotion("R", new BasicMotion(0, 500,
             new WidthHeight(100, 100), new WidthHeight(100, 100),
             new Point(500, 500), new Point(0, 0),
             new Color(20,40,255), new Color(255,0,0)));
 
     // We add a motion for this shape so we can use it later.
-    model.addMotion("C", new BasicMotion(0, 100,
+    model.addMotion("C", new BasicMotion(0, 500,
             new WidthHeight(100, 100), new WidthHeight(100, 100),
             new Point(0, 0), new Point(500, 500),
             new Color(90,150,40), new Color(10,25,100)));
 
-    IAnimatorView view = new SwingView(model);
+    IAnimatorView view = new SwingView();
+    view.setModel(model);
     view.makeVisible();
 
   }
