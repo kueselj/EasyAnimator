@@ -11,7 +11,7 @@ public class BasicViewFactory implements IViewFactory {
   public IAnimatorView getView(String name, Appendable out) {
     switch (name) {
       case "text":
-        return new TextualView();
+        return new TextualView(out);
       case "svg":
         return new SVGAnimationView();
       case "visual":

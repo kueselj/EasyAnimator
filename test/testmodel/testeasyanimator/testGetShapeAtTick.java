@@ -30,13 +30,22 @@ public class testGetShapeAtTick {
     model.addShape("R", r); // We add a rectangle namedR.
 
     model.addMotion("R", new BasicMotion(0, 10,
-            new WidthHeight(100, 100), new WidthHeight(200, 200),
-            new Point(100, 100), new Point(300, 300),
-            new Color(0,0,0), new Color(200,200,200)));
+            new WidthHeight(100, 100), new WidthHeight(200, 300),
+            new Point(100, 100), new Point(300, 400),
+            new Color(0,0,0), new Color(50,100,200)));
 
-    IShape getShape = model.getShapeAtTick(10, "R");
+    this.model.setCanvas(new Point(0,0), new WidthHeight(500, 500));
 
-    assertEquals(200, getShape.getColor().getGreen());
+    IShape getShape = model.getShapeAtTick(5, "R");
+
+    assertEquals(150, getShape.getSize().getWidth());
+    assertEquals(200, getShape.getSize().getHeight());
+    assertEquals(200, getShape.getPosition().getX());
+    assertEquals(250, getShape.getPosition().getY());
+    assertEquals(25, getShape.getColor().getRed());
+    assertEquals(50, getShape.getColor().getGreen());
+    assertEquals(100, getShape.getColor().getBlue());
+
   }
 
   @Test
@@ -59,6 +68,7 @@ public class testGetShapeAtTick {
             new Point(100, 100), new Point(300, 300),
             new Color(0,0,0), new Color(200,200,200)));
 
+    this.model.setCanvas(new Point(0,0), new WidthHeight(500, 500));
     assertEquals(1, model.getShapesAtTick(5).size());
   }
 }
