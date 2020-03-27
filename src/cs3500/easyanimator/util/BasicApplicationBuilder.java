@@ -68,7 +68,7 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
     }
 
     // Now let's make the model.
-    AnimationBuilder<IAnimatorModel> modelBuilder = new IAnimatorModelBuilder();
+    AnimationBuilder<IAnimatorModel> modelBuilder = new AnimatorModelBuilder();
     new AnimationReader().parseFile(input, modelBuilder);
     IAnimatorModel model = modelBuilder.build();
     // We can give that model over to the view.
@@ -83,7 +83,7 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
       visualView.makeVisible();
       // We do the action listener inline to not pollute the public methods of the builder.
       new Timer((int) (1.0 / speed * 1000), // We divide 1s by the tps speed. Then convert to ms.
-              e -> visualView.refresh());
+              e -> visualView.refresh()).start();
     }
   }
 }

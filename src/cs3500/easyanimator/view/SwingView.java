@@ -14,7 +14,6 @@ import java.awt.*;
 public class SwingView extends JFrame implements IVisualView {
   private IAnimatorModelViewOnly model;
   private AnimationPanel mainPanel;
-  private Timer timer;
   private int tickRange;
   private int tick;
 
@@ -25,7 +24,6 @@ public class SwingView extends JFrame implements IVisualView {
     super();
     this.setTitle("Your Animation");
     this.tick = 0;
-    this.timer = new Timer(50, e -> this.refresh());
     this.mainPanel = new AnimationPanel();
     this.add(this.mainPanel);
     this.setResizable(false);
@@ -62,7 +60,6 @@ public class SwingView extends JFrame implements IVisualView {
     this.model = model;
     //TODO get the correctSize for your view.
     this.mainPanel.setPreferredSize(new Dimension(500, 500));
-    this.timer.start();
     this.pack();
 
   }
