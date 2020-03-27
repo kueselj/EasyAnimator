@@ -358,8 +358,8 @@ public class EasyAnimator implements IAnimatorModel {
     private int width;
     private int height;
     private int r;
-    private int b;
     private int g;
+    private int b;
     private int x;
     private int y;
 
@@ -383,10 +383,10 @@ public class EasyAnimator implements IAnimatorModel {
               sT, this.motion.getEndSize().getHeight(), eT, tick);
       this.r = this.tween(this.motion.getStartColor().getRed(), sT,
               this.motion.getEndColor().getRed(), eT, tick);
-      this.b = this.tween(this.motion.getStartColor().getBlue(), sT,
-              this.motion.getEndColor().getBlue(), eT, tick);
       this.g = this.tween(this.motion.getStartColor().getGreen(), sT,
               this.motion.getEndColor().getGreen(), eT, tick);
+      this.b = this.tween(this.motion.getStartColor().getBlue(), sT,
+              this.motion.getEndColor().getBlue(), eT, tick);
       this.x = this.tween(this.motion.getStartPosition().getX(), sT,
               this.motion.getEndPosition().getX(), eT, tick);
       this.y = this.tween(this.motion.getStartPosition().getY(), sT,
@@ -395,21 +395,21 @@ public class EasyAnimator implements IAnimatorModel {
 
     @Override
     public IShape applyToRectangle(Rectangle rect) {
-      return new Rectangle(new WidthHeight(width, height), new Color(r, b, g), new Point(x, y));
+      return new Rectangle(new WidthHeight(width, height), new Color(r, g, b), new Point(x, y));
     }
 
     @Override
     public IShape applyToOval(Oval oval) {
-      return new Oval(new WidthHeight(width, height), new Color(r, b, g), new Point(x, y));
+      return new Oval(new WidthHeight(width, height), new Color(r, g, b), new Point(x, y));
     }
 
     /**
      * Finds the tweened value between the two values at the desired tick.
-     * @param a the first int.
-     * @param aT the tick time for a.
-     * @param b the second int.
-     * @param bT the tick time for b.
-     * @param t the desired tick time.
+     * @param val1 the first int.
+     * @param val1T the tick time for a.
+     * @param val2 the second int.
+     * @param val2T the tick time for b.
+     * @param tick the desired tick time.
      * @return the value at the desired tick.
      */
     private int tween(int val1, int val1T, int val2, int val2T, int tick) {

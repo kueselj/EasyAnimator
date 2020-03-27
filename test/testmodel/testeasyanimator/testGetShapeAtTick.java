@@ -60,6 +60,5 @@ public class testGetShapeAtTick {
             new Color(0,0,0), new Color(200,200,200)));
 
     assertEquals(1, model.getShapesAtTick(5).size());
-
   }
 }
