@@ -46,7 +46,6 @@ public class SwingView extends JFrame implements IVisualView {
   @Override
   public void refresh() {
     //TODO create field for the max length of the animation by looking at the endTime.
-    //System.out.println("Test");
     if (this.tick == tickRange) {
       this.tick = 0;
       this.mainPanel.setShapes(model.getShapesAtTick(this.tick));
@@ -73,9 +72,6 @@ public class SwingView extends JFrame implements IVisualView {
     this.model = model;
     this.tick = 0;
     this.tickRange = this.getTickRange();
-
-    //this are just for testing, setting canvas done in builder, not here.
-    ((IAnimatorModel) this.model).setCanvas(new Point(0,0), new WidthHeight(500, 500));
 
     //get the correctSize for your view.
     WidthHeight wH = this.model.getCanvasSize();

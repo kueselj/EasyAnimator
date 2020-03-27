@@ -31,9 +31,16 @@ public class TextualView implements IAnimatorView {
 
   @Override
   public void makeVisible() {
+
     //output string builder to build.
     StringBuilder output = new StringBuilder();
 
+    String x = Integer.toString(this.model.getCanvasPosition().getX());
+    String y = Integer.toString(this.model.getCanvasPosition().getY());
+    String width = Integer.toString(this.model.getCanvasSize().getWidth());
+    String height = Integer.toString(this.model.getCanvasSize().getHeight());
+
+    output.append(x + y + width + height + "\n");
 
     //iterate through each shape or entry in
     for (Map.Entry<String, List<IMotion>> entry : this.model.getMotions().entrySet()) {

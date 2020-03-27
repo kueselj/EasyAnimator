@@ -50,6 +50,8 @@ public class mainTest {
             new Color(255,0,0), new Color(20,40,255)));
 
 
+
+    model.setCanvas(new Point(0,0), new WidthHeight(500, 500));
     IAnimatorView view = new SwingView();
     view.setModel(model);
     view.makeVisible();
