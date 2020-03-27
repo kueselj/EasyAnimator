@@ -43,7 +43,7 @@ public class TextualView implements IAnimatorView {
     String width = Integer.toString(this.model.getCanvasSize().getWidth());
     String height = Integer.toString(this.model.getCanvasSize().getHeight());
 
-    output.append(x + y + width + height + "\n");
+    output.append("canvas " + x + " " + y + " " + width +  " " + height + "\n");
 
     //iterate through each shape or entry in
     for (Map.Entry<String, List<IMotion>> entry : this.model.getMotions().entrySet()) {
@@ -62,14 +62,13 @@ public class TextualView implements IAnimatorView {
                 + motion.accept(new MotionToTextVisitor());
         output.append(motionString + "\n");
       }
+    }
 
-      output.append("\n");
-
-      try {
-        this.out.append(output.toString().trim());
-      } catch (IOException e) {
-        throw new IllegalArgumentException("Problem Appending to output");
-      }
+    //now append to the appendable output.
+    try {
+      this.out.append(output.toString().trim());
+    } catch (IOException e) {
+      throw new IllegalArgumentException("Problem Appending to output");
     }
   }
 
@@ -77,7 +76,6 @@ public class TextualView implements IAnimatorView {
   public void setModel(IAnimatorModelViewOnly model) {
     this.model = model;
   }
-
 
   /**
    * Private visitor class to return the type of shape as a string.
@@ -109,7 +107,7 @@ public class TextualView implements IAnimatorView {
               + b.getStartSize().getHeight() + " "
               + b.getStartColor().getRed() + " "
               + b.getStartColor().getGreen() + " "
-              + b.getStartColor().getBlue() + "    "
+              + b.getStartColor().getBlue() + " "
               + b.getEndTime() + " "
               + b.getEndPosition().getX() + " "
               + b.getEndPosition().getY() + " "
