@@ -49,6 +49,7 @@ public class TestSVGAnimationView {
     model = new EasyAnimator();
     view.setModel(model);
     view.setSpeed(30);
+
   }
 
   private static Point CANVAS_TL = new Point(100, 100);
@@ -90,7 +91,7 @@ public class TestSVGAnimationView {
     // Width and height.
     model.addMotion("C", new BasicMotion(
             0, 60, // 2 seconds. Depends on the speed though.
-            SMALL, BIG,
+            BIG, SMALL,
             BOTTOM_RIGHT, BOTTOM_RIGHT,
             BLUE, BLUE
     ));
@@ -102,6 +103,7 @@ public class TestSVGAnimationView {
    * @return  A w3 Document.
    */
   private Document parseDocument() {
+    view.makeVisible();
     // We produce our document.
     InputStream outputReader = new ByteArrayInputStream(out.toString()
             .getBytes(StandardCharsets.UTF_8));
@@ -135,6 +137,7 @@ public class TestSVGAnimationView {
   @Test
   public void testSVGRootElement() {
     initialize();
+    model.setCanvas(CANVAS_TL, CANVAS_SIZE);
     Document doc = parseDocument();
 
     assertEquals("Expected document element to be svg like in the spec.",
@@ -193,7 +196,7 @@ public class TestSVGAnimationView {
               attr != null);
       assertEquals(String.format("Expected attribute %s to equal what we had picked out for it.",
               attrName),
-              attrProperties[i], attr.toString());
+              attrProperties[i], attr.getNodeValue());
     }
   }
 
@@ -201,27 +204,74 @@ public class TestSVGAnimationView {
 
   /**
    * Verifies that the given node has the following properties.
-   * @param node          The node to check.
+   * @param e          The node to check.
    * @param attributeName The attributeName of the element.
    * @param from          The start value.
    * @param to            The end value.
    * @param begin         The begin of the animate.
    * @param dur           The duration of the animate.
    */
-  void verifyAnimation(Node node,
+  void verifyAnimation(Element e,
                        String attributeName,
                        String from, String to,
                        String begin, String dur) {
     String attrProperties[] = {attributeName, from, to, begin, dur};
-    NamedNodeMap attributes = node.getAttributes();
+    NamedNodeMap attributes = e.getAttributes();
     for (int i = 0; i < ANIMATE_ATTR_LOOKUP.length; i++) {
       String attrName = ANIMATE_ATTR_LOOKUP[i];
-      Node attr = attributes.getNamedItem(attrName);
+      String attr = e.getAttribute(attrName);
       assertTrue(String.format("Expected animate element to have %s attribute.", attrName),
               attr != null);
       assertEquals(String.format("Expected animate element property %s to match.", attrName),
               attrProperties[i], attr.toString());
     }
+  }
+
+  /**
+   * Gets the first child of the given node.
+   * @param n   The node to search.
+   * @returns   The first element as an Element;
+   */
+  Element getFirstChild(Node n) {
+    NodeList nodes = n.getChildNodes();
+    for (int i = 0; i < nodes.getLength(); i++) {
+      if (nodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
+        return (Element) nodes.item(i);
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Gets the first child of the given node.
+   * @param n   The node to search.
+   * @returns   The first element as an Element;
+   */
+  Element getLastChild(Node n) {
+    NodeList nodes = n.getChildNodes();
+    for (int i = nodes.getLength() - 1; i >= 0 ; i--) {
+      if (nodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
+        return (Element) nodes.item(i);
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Counts the number of children of the given node that are animate objects.
+   * @param n  The node to count the children of.
+   * @return      The number of children that are elements.
+   */
+  private int countChildren(Node n) {
+    int sum = 0;
+    NodeList nodes = n.getChildNodes();
+    for (int i = 0; i < nodes.getLength(); i++) {
+      Node node = nodes.item(i);
+      if (node.getNodeType() == Node.ELEMENT_NODE) {
+        sum += 1;
+      }
+    }
+    return sum;
   }
 
   /**
@@ -258,27 +308,27 @@ public class TestSVGAnimationView {
     // The only children of these nodes (for now since searching is hard),
     // should be our animate elements.
     assertEquals("Expected the rectangle to have 2 (animate) children nodes.",
-            2, rectangle.getChildNodes().getLength());
+            2, countChildren(rectangle));
     assertEquals("Expected the oval to have 2 (animate) children nodes.",
-            2, oval.getChildNodes().getLength());
+            2, countChildren(oval));
     // Note we only have one motion for the oval, BUT it changes two values.
     // We need an animate element per property that is changed.
     // I'm assuming it is an ordered list the way it came out.
     // This will be something I have to then enforce when making it.
-    verifyAnimation(rectangle.getFirstChild(),
+    verifyAnimation(getFirstChild(rectangle),
             "fill",
             "rgb(200, 0, 0)", "rgb(0, 0, 200)",
             "0ms", "1000ms");
-    verifyAnimation(rectangle.getLastChild(),
+    verifyAnimation(getLastChild(rectangle),
             "fill",
             "rgb(0, 0, 200)", "rgb(200, 0, 0)",
-            "1000ms", "2000ms");
+            "1000ms", "1000ms");
     // Now we can go verify that second shape.
-    verifyAnimation(oval.getFirstChild(),
+    verifyAnimation(getFirstChild(oval),
             "width",
             "400", "100",
             "0ms", "2000ms");
-    verifyAnimation(oval.getLastChild(),
+    verifyAnimation(getLastChild(oval),
             "height",
             "200", "50",
             "0ms", "2000ms");
@@ -302,23 +352,23 @@ public class TestSVGAnimationView {
     assertTrue("Expected to be able to find ellipse element in svg node.",
             oval != null);
     assertEquals("Expected the rectangle to have 2 (animate) children nodes.",
-            2, rectangle.getChildNodes().getLength());
+            2, countChildren(rectangle));
     assertEquals("Expected the oval to have 2 (animate) children nodes.",
-            2, oval.getChildNodes().getLength());
-    verifyAnimation(rectangle.getFirstChild(),
+            2, countChildren(oval));
+    verifyAnimation(getFirstChild(rectangle),
             "fill",
             "rgb(200, 0, 0)", "rgb(0, 0, 200)",
             "0ms", "500ms");
-    verifyAnimation(rectangle.getLastChild(),
+    verifyAnimation(getLastChild(rectangle),
             "fill",
             "rgb(0, 0, 200)", "rgb(200, 0, 0)",
-            "500ms", "1000ms");
+            "500ms", "500ms");
     // Now we can go verify that second shape.
-    verifyAnimation(oval.getFirstChild(),
+    verifyAnimation(getFirstChild(oval),
             "width",
             "400", "100",
             "0ms", "1000ms");
-    verifyAnimation(oval.getLastChild(),
+    verifyAnimation(getLastChild(oval),
             "height",
             "200", "50",
             "0ms", "1000ms");
