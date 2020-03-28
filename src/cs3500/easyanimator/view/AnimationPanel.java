@@ -1,16 +1,13 @@
 package cs3500.easyanimator.view;
 
-import com.sun.jdi.VoidType;
 import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.model.shapes.IShapeVisitor;
 import cs3500.easyanimator.model.shapes.Oval;
 import cs3500.easyanimator.model.shapes.Rectangle;
-
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;

@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests the getShapeAtTick and getShapesAtTick methods.
  */
-public class testGetShapeAtTick {
+public class GetShapeAtTickTest {
   IAnimatorModel model = new EasyAnimator();
 
 

@@ -25,6 +25,7 @@ public interface IAnimatorView {
    * Sets the "speed" for the given view if applicable.
    * @param speed   The ticks per second of the animation. Since the model understands animation
    *                in terms of unitless ticks we need to convert to seconds.
+   * @throws IllegalArgumentException if the speed is below 0.
    */
   void setSpeed(double speed);
 }

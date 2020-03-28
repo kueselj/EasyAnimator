@@ -14,7 +14,7 @@ import cs3500.easyanimator.view.SwingView;
 /**
  * Manual test class for a SwingView. Doesn't use builder in order to do quicker testing.
  */
-public class mainTest {
+public class MainTest {
 
   /**
    * Main method.

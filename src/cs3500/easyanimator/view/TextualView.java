@@ -121,6 +121,7 @@ public class TextualView implements IAnimatorView {
 
   @Override
   public void setSpeed(double speed) {
-
+    //this does nothing, textual view should not be
+    // able to have a speed as it is just a text output of the model
   }
 }

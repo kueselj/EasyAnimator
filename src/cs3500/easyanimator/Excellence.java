@@ -2,10 +2,10 @@ package cs3500.easyanimator;
 
 import java.io.IOException;
 
-import javax.swing.*;
-
 import cs3500.easyanimator.util.BasicApplicationBuilder;
 import cs3500.easyanimator.util.IApplicationBuilder;
+
+import javax.swing.JOptionPane;
 
 /**
  * Main class for EasyAnimator. Will take in command line arguments run the

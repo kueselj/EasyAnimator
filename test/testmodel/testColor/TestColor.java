@@ -1,4 +1,4 @@
-package testmodel;
+package testmodel.testColor;
 
 import cs3500.easyanimator.model.Color;
 
@@ -39,5 +39,4 @@ class TestColor {
     assertNotEquals(color2, color3);
 
   }
-
 }
