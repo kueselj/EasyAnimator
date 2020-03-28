@@ -1,8 +1,5 @@
 package cs3500.easyanimator.model;
 
-import java.util.List;
-import java.util.Map;
-
 import cs3500.easyanimator.model.motions.IMotion;
 import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.model.shapes.WidthHeight;

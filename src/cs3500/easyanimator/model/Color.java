@@ -67,8 +67,8 @@ public final class Color {
     }
 
     Color otherColor = (Color) o;
-    return otherColor.red == this.red && otherColor.blue == this.blue &&
-            otherColor.green == this.green;
+    return otherColor.red == this.red && otherColor.blue == this.blue
+            && otherColor.green == this.green;
   }
 
   @Override

@@ -7,6 +7,9 @@ import cs3500.easyanimator.model.motions.IMotion;
 import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.model.shapes.WidthHeight;
 
+/**
+ * View Only interface for an IAnimatorView, only has getter methods.
+ */
 public interface IAnimatorModelViewOnly {
   /**
    * Gives the width and height of the canvas. This might be necessary for some views.

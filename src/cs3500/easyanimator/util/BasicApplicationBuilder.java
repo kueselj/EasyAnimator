@@ -7,8 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import javax.swing.*;
-
 import cs3500.easyanimator.model.IAnimatorModel;
 import cs3500.easyanimator.model.IAnimatorModelViewOnly;
 import cs3500.easyanimator.view.BasicViewFactory;

@@ -1,7 +1,10 @@
 package cs3500.easyanimator.view;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JScrollPane;
+import javax.swing.JFrame;
+import javax.swing.Timer;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
@@ -17,7 +20,6 @@ import cs3500.easyanimator.model.shapes.WidthHeight;
 public class SwingView extends JFrame implements IVisualView {
   private IAnimatorModelViewOnly model;
   private AnimationPanel mainPanel;
-  private JScrollPane scrollPane;
   private Timer timer;
   private int tickRange;
   private int tick;
@@ -32,8 +34,8 @@ public class SwingView extends JFrame implements IVisualView {
     this.mainPanel = new AnimationPanel();
     this.add(this.mainPanel);
 
-    this.scrollPane = new JScrollPane(this.mainPanel);
-    this.add(this.scrollPane, BorderLayout.CENTER);
+    JScrollPane scrollPane = new JScrollPane(this.mainPanel);
+    this.add(scrollPane, BorderLayout.CENTER);
 
     this.setResizable(true);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -85,13 +87,13 @@ public class SwingView extends JFrame implements IVisualView {
   }
 
   @Override
-  public void setSpeed(int speed) {
+  public void setSpeed(double speed) {
 
-    if (speed <= 0) {
+    if (speed <= 0.0) {
       throw new IllegalArgumentException("Speed must be integer greater than 0");
     }
 
-    this.timer = new Timer(speed, e -> this.refresh());
+    this.timer = new Timer((int) (1.0 / speed * 1000), e -> this.refresh());
     this.timer.start();
   }
 
@@ -115,10 +117,5 @@ public class SwingView extends JFrame implements IVisualView {
     }
 
     return maxTick;
-  }
-
-  @Override
-  public void setSpeed(double speed) {
-
   }
 }

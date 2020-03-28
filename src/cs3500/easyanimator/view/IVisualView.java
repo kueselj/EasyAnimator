@@ -11,9 +11,4 @@ public interface IVisualView extends IAnimatorView {
    */
   void refresh();
 
-  /**
-   * Sets the speed of the animation to the given speed.
-   * @throws IllegalArgumentException if the speed is invalid.
-   */
-  void setSpeed(int speed);
 }

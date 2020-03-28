@@ -121,10 +121,10 @@ public class EasyAnimator implements IAnimatorModel {
     return this.motions.get(id)
             .stream()
             .anyMatch(otherMotion ->
-                    (motion.getStartTime() >= otherMotion.getStartTime() &&
-                     otherMotion.getEndTime() > motion.getStartTime()) ||
-                    (motion.getStartTime() <= otherMotion.getStartTime() &&
-                     otherMotion.getStartTime() <= motion.getEndTime()));
+                    (motion.getStartTime() >= otherMotion.getStartTime()
+                            && otherMotion.getEndTime() > motion.getStartTime())
+                            || (motion.getStartTime() <= otherMotion.getStartTime()
+                            && otherMotion.getStartTime() <= motion.getEndTime()));
   }
 
   /**
@@ -164,9 +164,9 @@ public class EasyAnimator implements IAnimatorModel {
    * @return  True if the end state and start state match, false otherwise.
    */
   private boolean endStartStateMatch(IMotion first, IMotion second) {
-    return (first.getEndSize().equals(second.getStartSize()) &&
-            first.getEndPosition().equals(second.getStartPosition()) &&
-            first.getEndColor().equals(second.getStartColor()));
+    return (first.getEndSize().equals(second.getStartSize())
+            && first.getEndPosition().equals(second.getStartPosition())
+            && first.getEndColor().equals(second.getStartColor()));
   }
 
   @Override
@@ -190,14 +190,14 @@ public class EasyAnimator implements IAnimatorModel {
       Optional<IMotion> next = seekForward(id, motion);
       if (previous.isPresent()) {
         if (!endStartStateMatch(previous.get(), motion)) {
-          throw new IllegalArgumentException("Attempted to add a motion that creates a state" +
-                  " mismatch.");
+          throw new IllegalArgumentException("Attempted to add a motion that creates a state"
+                  + " mismatch.");
         }
       }
       if (next.isPresent()) {
         if (!endStartStateMatch(motion, next.get())) {
-          throw new IllegalArgumentException("Attempted to add a motion that creates a state" +
-                  " mismatch.");
+          throw new IllegalArgumentException("Attempted to add a motion that creates a state"
+                  + " mismatch.");
         }
       }
 
@@ -325,7 +325,7 @@ public class EasyAnimator implements IAnimatorModel {
     }
 
     //if all is valid, return a new shape with the correct state at a desired tick.
-    return shapeType.accept(new getShapeAtMotionTick(desiredMotion, tick,
+    return shapeType.accept(new GetShapeAtMotionTick(desiredMotion, tick,
             this.getCanvasPosition().getX(), this.getCanvasPosition().getY()));
   }
 
@@ -350,7 +350,7 @@ public class EasyAnimator implements IAnimatorModel {
   /**
    * Custom visitor for getting a shape's state at a given tick.
    */
-  private class getShapeAtMotionTick implements IShapeVisitor<IShape> {
+  private class GetShapeAtMotionTick implements IShapeVisitor<IShape> {
 
     private IMotion motion;
     private int tick;
@@ -370,7 +370,7 @@ public class EasyAnimator implements IAnimatorModel {
      * @param motion the motion to tween for the desired tick.
      * @param tick the tick to find the shape's shape at.
      */
-    private getShapeAtMotionTick(IMotion motion, int tick, int canvasX, int canvasY) {
+    private GetShapeAtMotionTick(IMotion motion, int tick, int canvasX, int canvasY) {
       this.motion = motion;
       this.tick = tick;
       this.sT = this.motion.getStartTime();
