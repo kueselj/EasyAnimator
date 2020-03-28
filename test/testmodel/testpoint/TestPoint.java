@@ -1,4 +1,4 @@
-package testmodel.testPoint;
+package testmodel.testpoint;
 
 import cs3500.easyanimator.model.Point;
 
