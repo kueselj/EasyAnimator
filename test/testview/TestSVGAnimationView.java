@@ -11,8 +11,6 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 
-import javax.xml.parsers.*;
-
 import cs3500.easyanimator.model.Color;
 import cs3500.easyanimator.model.EasyAnimator;
 import cs3500.easyanimator.model.IAnimatorModel;
@@ -23,6 +21,10 @@ import cs3500.easyanimator.model.shapes.Rectangle;
 import cs3500.easyanimator.model.shapes.WidthHeight;
 import cs3500.easyanimator.view.IAnimatorView;
 import cs3500.easyanimator.view.SVGAnimationView;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -146,7 +148,7 @@ public class TestSVGAnimationView {
             SVG_VERSION, doc.getDocumentElement().getAttribute("version"));
   }
 
-  String[] ESSENTIAL_ATTRIBUTES = new String[]{"from", "to", "attributeName", "attributeType"};
+  static String[] ESSENTIAL_ATTRIBUTES = new String[]{"from", "to", "attributeName", "attributeType"};
 
   /**
    * Verify that all animate elements have a from, to, attributeName, and attributeType set.
@@ -168,7 +170,7 @@ public class TestSVGAnimationView {
     }
   }
 
-  String ATTR_NAME_LOOKUP[] = new String[]{"id", "x", "y", "width", "height", "fill"};
+  static String ATTR_NAME_LOOKUP[] = new String[]{"id", "x", "y", "width", "height", "fill"};
 
   /**
    * A helper method to verify the properties of a shape element in the document.
@@ -200,7 +202,7 @@ public class TestSVGAnimationView {
     }
   }
 
-  String ANIMATE_ATTR_LOOKUP[] = new String[]{"attributeName", "from", "to", "begin", "dur"};
+  static String ANIMATE_ATTR_LOOKUP[] = new String[]{"attributeName", "from", "to", "begin", "dur"};
 
   /**
    * Verifies that the given node has the following properties.
@@ -223,7 +225,7 @@ public class TestSVGAnimationView {
       assertTrue(String.format("Expected animate element to have %s attribute.", attrName),
               attr != null);
       assertEquals(String.format("Expected animate element property %s to match.", attrName),
-              attrProperties[i], attr.toString());
+              attrProperties[i], attr);
     }
   }
 

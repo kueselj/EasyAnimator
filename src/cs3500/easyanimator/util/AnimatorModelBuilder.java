@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import cs3500.easyanimator.model.Color;
 import cs3500.easyanimator.model.EasyAnimator;
