@@ -305,7 +305,7 @@ public class EasyAnimator implements IAnimatorModel {
     List<IMotion> shapeMotions;
     IMotion desiredMotion;
 
-    //Try and see if the shape exists, if so grab its motions, sort them, and grab the shape.
+    // Try and see if the shape exists, if so grab its motions, sort them, and grab the shape.
     try {
       shapeMotions = this.motions.get(shape);
       //Collections.sort(shapeMotions, Comparator.comparingInt(IMotion::getStartTime));
@@ -314,7 +314,7 @@ public class EasyAnimator implements IAnimatorModel {
       throw new IllegalArgumentException("That shape does not exist.");
     }
 
-    //Try and see if there is a motion for the desired tick.
+    // Try and see if there is a motion for the desired tick.
     try {
       //System.out.println(shapeMotions);
       desiredMotion = this.getFromMotionTick(tick, shapeMotions);

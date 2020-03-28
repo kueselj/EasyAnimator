@@ -13,7 +13,7 @@ public class BasicViewFactory implements IViewFactory {
       case "text":
         return new TextualView();
       case "svg":
-        return new SVGAnimationView();
+        return new SVGAnimationView(out);
       case "visual":
         return new SwingView();
       default:

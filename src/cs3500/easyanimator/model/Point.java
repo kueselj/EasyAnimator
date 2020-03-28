@@ -41,7 +41,7 @@ public final class Point {
   @Override
   public boolean equals(Object o) {
     if (this == o) {
-      return false; // Fast pointer comparison.
+      return true; // Fast pointer comparison.
     }
 
     if (!(o instanceof Point)) {

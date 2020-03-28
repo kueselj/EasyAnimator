@@ -1,5 +1,7 @@
 package cs3500.easyanimator.util;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -11,7 +13,6 @@ import cs3500.easyanimator.model.IAnimatorModel;
 import cs3500.easyanimator.model.IAnimatorModelViewOnly;
 import cs3500.easyanimator.view.BasicViewFactory;
 import cs3500.easyanimator.view.IAnimatorView;
-import cs3500.easyanimator.view.IVisualView;
 
 /**
  * An implementation of the application builder that doesn't do anything complicated. It actually
@@ -26,12 +27,12 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
 
   @Override
   public void setInput(String pathname) throws FileNotFoundException {
-    this.input = new FileReader(pathname);
+    this.input = new BufferedReader(new FileReader(pathname));
   }
 
   @Override
   public void setOutput(String pathname) throws IOException {
-    this.output = new FileWriter(pathname);
+    this.output = new BufferedWriter(new FileWriter(pathname, false));
   }
 
   @Override
@@ -74,16 +75,8 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
     // We can give that model over to the view.
     // We need to cast down because it takes the readonly version.
     view.setModel((IAnimatorModelViewOnly) model);
+    view.setSpeed(speed);
     // I think we are ready to launch.
     view.makeVisible();
-
-    // If this is a visual view then we need to use the speed.
-    if (view instanceof IVisualView) {
-      IVisualView visualView = (IVisualView) view;
-      visualView.makeVisible();
-      // We do the action listener inline to not pollute the public methods of the builder.
-      new Timer((int) (1.0 / speed * 1000), // We divide 1s by the tps speed. Then convert to ms.
-              e -> visualView.refresh());
-    }
   }
 }

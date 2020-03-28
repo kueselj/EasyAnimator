@@ -1,10 +1,6 @@
 package cs3500.easyanimator.view;
 
-import cs3500.easyanimator.model.IAnimatorModel;
 import cs3500.easyanimator.model.IAnimatorModelViewOnly;
-import cs3500.easyanimator.model.Point;
-import cs3500.easyanimator.model.shapes.WidthHeight;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -64,6 +60,11 @@ public class SwingView extends JFrame implements IVisualView {
     this.mainPanel.setPreferredSize(new Dimension(500, 500));
     this.timer.start();
     this.pack();
+
+  }
+
+  @Override
+  public void setSpeed(double speed) {
 
   }
 }

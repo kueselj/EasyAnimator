@@ -16,4 +16,9 @@ public class TextualView implements IAnimatorView {
   public void setModel(IAnimatorModelViewOnly model) {
 
   }
+
+  @Override
+  public void setSpeed(double speed) {
+
+  }
 }

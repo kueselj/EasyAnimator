@@ -20,4 +20,11 @@ public interface IAnimatorView {
    * @throws IllegalArgumentException If the model is uninitialized.
    */
   void setModel(IAnimatorModelViewOnly model);
+
+  /**
+   * Sets the "speed" for the given view if applicable.
+   * @param speed   The ticks per second of the animation. Since the model understands animation
+   *                in terms of unitless ticks we need to convert to seconds.
+   */
+  void setSpeed(double speed);
 }
