@@ -60,8 +60,9 @@ public class AnimationPanel extends JPanel {
     //the order of transforms is bottom-to-top
     //so as a result of the two lines below,
     //each y will first be scaled, and then translated
-    g2d.translate(0, this.getPreferredSize().getHeight());
-    g2d.scale(1, -1);
+    //Uncomment these if you want to change to draw from bottom left.
+    //g2d.translate(0, this.getPreferredSize().getHeight());
+    //g2d.scale(1, -1);
 
     for (IShape s : this.shapes) {
 

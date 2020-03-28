@@ -1,28 +1,33 @@
-package cs3500.easyanimator;
+package testview;
 
-import cs3500.easyanimator.model.Color;
-import cs3500.easyanimator.model.EasyAnimator;
-import cs3500.easyanimator.model.IAnimatorModel;
-import cs3500.easyanimator.model.Point;
+import cs3500.easyanimator.model.*;
 import cs3500.easyanimator.model.motions.BasicMotion;
 import cs3500.easyanimator.model.shapes.Oval;
 import cs3500.easyanimator.model.shapes.Rectangle;
 import cs3500.easyanimator.model.shapes.WidthHeight;
 import cs3500.easyanimator.view.IAnimatorView;
-import cs3500.easyanimator.view.SwingView;
+import cs3500.easyanimator.view.TextualView;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+
+
 
 /**
- * Manual test class for a SwingView. Doesn't use builder in order to do quicker testing.
+ * Tests that the textualView works properly.
  */
-public class mainTest {
+public class testTextualView {
 
-  /**
-   * Main method.
-   * @param args arguments to use.
-   */
-  public static void main(String[] args) {
+  StringBuilder stringBuilder = new StringBuilder();
+  IAnimatorView textView = new TextualView(stringBuilder);
+
+
+  @Test
+  public void testMakeVisible() {
 
     IAnimatorModel model = new EasyAnimator();
+    model.setCanvas(new Point(0,0), new WidthHeight(100, 200));
+    textView.setModel(model);
 
     Oval c = new Oval(new WidthHeight(100, 100),
             new Color(255, 0, 0), new Point(100, 100));
@@ -55,12 +60,16 @@ public class mainTest {
             new Point(0, 0), new Point(400, 400),
             new Color(255,0,0), new Color(20,40,255)));
 
+    textView.makeVisible();
 
+    String expected = "canvas 0 0 100 200\n" +
+            "shape R rectangle\n" +
+            "motion R 0 400 400 200 50 20 40 255 100 0 0 50 200 255 0 0\n" +
+            "motion R 100 0 0 50 200 255 0 0 200 400 400 200 50 20 40 255\n" +
+            "shape C oval\n" +
+            "motion C 0 0 0 100 50 90 150 40 200 400 400 50 100 10 25 100\n" +
+            "motion C 200 400 400 50 100 10 25 100 500 0 0 100 50 90 150 40";
 
-    model.setCanvas(new Point(0,0), new WidthHeight(500, 500));
-    IAnimatorView view = new SwingView();
-    view.setModel(model);
-    view.makeVisible();
-
+    assertEquals(expected, stringBuilder.toString());
   }
 }

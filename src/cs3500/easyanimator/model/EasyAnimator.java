@@ -325,7 +325,8 @@ public class EasyAnimator implements IAnimatorModel {
     }
 
     //if all is valid, return a new shape with the correct state at a desired tick.
-    return shapeType.accept(new getShapeAtMotionTick(desiredMotion, tick));
+    return shapeType.accept(new getShapeAtMotionTick(desiredMotion, tick,
+            this.getCanvasPosition().getX(), this.getCanvasPosition().getY()));
   }
 
   @Override
@@ -369,7 +370,7 @@ public class EasyAnimator implements IAnimatorModel {
      * @param motion the motion to tween for the desired tick.
      * @param tick the tick to find the shape's shape at.
      */
-    private getShapeAtMotionTick(IMotion motion, int tick) {
+    private getShapeAtMotionTick(IMotion motion, int tick, int canvasX, int canvasY) {
       this.motion = motion;
       this.tick = tick;
       this.sT = this.motion.getStartTime();
@@ -388,9 +389,9 @@ public class EasyAnimator implements IAnimatorModel {
       this.b = this.tween(this.motion.getStartColor().getBlue(), sT,
               this.motion.getEndColor().getBlue(), eT, tick);
       this.x = this.tween(this.motion.getStartPosition().getX(), sT,
-              this.motion.getEndPosition().getX(), eT, tick);
+              this.motion.getEndPosition().getX(), eT, tick) - canvasX;
       this.y = this.tween(this.motion.getStartPosition().getY(), sT,
-              this.motion.getEndPosition().getY(), eT, tick);
+              this.motion.getEndPosition().getY(), eT, tick) - canvasY;
     }
 
     @Override
