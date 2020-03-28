@@ -55,7 +55,7 @@ public class SVGAnimationView implements IAnimatorView {
     // We could use the library, but I prefer to write this by hand.
     StringBuilder document = new StringBuilder();
     // Start my svg block.
-    document.append(String.format("<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"%d %d %d %d\">\n",
+    document.append(String.format("<svg version=\"1.1\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"%d %d %d %d\">\n",
             model.getCanvasPosition().getX(), model.getCanvasPosition().getY(),
             model.getCanvasSize().getWidth(), model.getCanvasSize().getHeight()));
 
@@ -129,7 +129,7 @@ class SVGMotionVisitor implements IMotionVisitor<String> {
    */
   private String getTime(int tick) {
     int timems = (int) ((1.0 / speed) * tick * 1000);
-    return String.format("%d", timems);
+    return String.format("%dms", timems);
   }
 
   // A list of property names we will use.
@@ -154,7 +154,7 @@ class SVGMotionVisitor implements IMotionVisitor<String> {
             {Integer.toString(sp.getY()), Integer.toString(ep.getY())}, // y
 
             {SVGAnimationView.colorConvertSVG(b.getStartColor()),
-                    SVGAnimationView.colorConvertSVG(b.getStartColor())}, // fill
+                    SVGAnimationView.colorConvertSVG(b.getEndColor())}, // fill
     };
 
     for (int j = 0; j < propertyChanges.length; j++) {
