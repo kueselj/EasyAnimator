@@ -63,8 +63,8 @@ public final class Excellence {
    */
   public static void main(String[] args) {
     if (args.length % 2 != 0) {
-      errorOut("There are not an even number of arguments meaning the command line argument pairs " +
-              "are malformed.");
+      errorOut("There are not an even number of arguments meaning the command line argument pairs "
+              + "are malformed.");
     }
 
     // We spin up our builder.

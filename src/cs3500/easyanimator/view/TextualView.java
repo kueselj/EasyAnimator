@@ -1,7 +1,5 @@
 package cs3500.easyanimator.view;
 
-import cs3500.easyanimator.model.EasyAnimator;
-import cs3500.easyanimator.model.IAnimatorModel;
 import cs3500.easyanimator.model.IAnimatorModelViewOnly;
 import cs3500.easyanimator.model.motions.BasicMotion;
 import cs3500.easyanimator.model.motions.IMotion;

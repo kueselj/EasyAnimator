@@ -1,4 +1,4 @@
-package testmodel.testColor;
+package testmodel.testcolor;
 
 import cs3500.easyanimator.model.Color;
 

@@ -1,6 +1,9 @@
 package testview;
 
-import cs3500.easyanimator.model.*;
+import cs3500.easyanimator.model.Color;
+import cs3500.easyanimator.model.EasyAnimator;
+import cs3500.easyanimator.model.IAnimatorModel;
+import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.motions.BasicMotion;
 import cs3500.easyanimator.model.shapes.Oval;
 import cs3500.easyanimator.model.shapes.Rectangle;
@@ -16,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 /**
  * Tests that the textualView works properly.
  */
-public class testTextualView {
+public class TestTextualView {
 
   StringBuilder stringBuilder = new StringBuilder();
   IAnimatorView textView = new TextualView(stringBuilder);

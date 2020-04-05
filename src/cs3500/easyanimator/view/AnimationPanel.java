@@ -12,6 +12,9 @@ import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * JPanel specific to an animation, has a list of shapes that will be drawn onto the panel.
+ */
 public class AnimationPanel extends JPanel {
   List<IShape> shapes;
 
@@ -63,21 +66,22 @@ public class AnimationPanel extends JPanel {
 
     for (IShape s : this.shapes) {
 
-      s.accept(new drawShapeVisitor(g2d));
+      s.accept(new DrawShapeVisitor(g2d));
     }
   }
 
   /**
-   * Custom visitor to draw the desired shape on the given Graphics2D
+   * Custom visitor to draw the desired shape on the given Graphics2D.
    */
-  private class drawShapeVisitor implements IShapeVisitor<Void> {
+  private class DrawShapeVisitor implements IShapeVisitor<Void> {
 
     Graphics2D g2d;
 
     /**
-     * Empty Constructor.
+     * Constructor giving the visitor a graphics 2D to draw onto.
+     * @param g2d the graphics to use.
      */
-    public drawShapeVisitor(Graphics2D g2d) {
+    public DrawShapeVisitor(Graphics2D g2d) {
       this.g2d = g2d;
     }
 

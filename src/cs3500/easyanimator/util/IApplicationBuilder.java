@@ -17,9 +17,8 @@ public interface IApplicationBuilder {
   void setInput(String pathname) throws FileNotFoundException;
 
   /**
-   * Set the output for the given application as
+   * Set the output for the given application as.
    * @param pathname  The pathname of the file we should write to with this application.
-   * @param IOException If there was any io-related exception to readying this path for writing.
    */
   void setOutput(String pathname) throws IOException;
 
@@ -38,8 +37,8 @@ public interface IApplicationBuilder {
 
   /**
    * Launch the application with the parameters supplied.
-   * @throws IllegalStateException If certain parameters were needed but not supplied, for example
-   *    the input file to use, or the type of view to use.
+   *
+   * @throws IllegalStateException If certain parameters were needed but not supplied.
    */
   void launch() throws IllegalStateException, IllegalArgumentException;
 }

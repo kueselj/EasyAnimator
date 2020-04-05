@@ -185,7 +185,7 @@ class SVGShapeVisitor implements IShapeVisitor<String> {
 
   /**
    * A little private method to return a suffix for what should be the svg element.
-   * You just need to add "<rect " or "<ellipse " at the beginning.
+   * You just need to add at the beginning.
    * @param s   The shape to apply to.
    * @return    The string svg.
    */
