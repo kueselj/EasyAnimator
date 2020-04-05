@@ -25,7 +25,7 @@ public class GetShapeAtTickTest {
     //Oval c = new Oval(new WidthHeight(100, 100),
     //new Color(255, 0, 0), new Point(100, 100));
     Rectangle r = new Rectangle(new WidthHeight(100, 100),
-            new Color(100,100,100), new Point(100, 100));
+            new Point(100, 100), new Color(100,100,100));
     //model.addShape("C", c); // We add an oval named C.
     model.addShape("R", r); // We add a rectangle namedR.
 
@@ -51,10 +51,10 @@ public class GetShapeAtTickTest {
   @Test
   public void testGetShapesAtTick() {
     Oval c = new Oval(new WidthHeight(100, 100),
-            new Color(255, 0, 0), new Point(100, 100));
+            new Point(100, 100), new Color(255, 0, 0));
 
     Rectangle r = new Rectangle(new WidthHeight(100, 100),
-            new Color(100,100,100), new Point(100, 100));
+            new Point(100, 100), new Color(100,100,100));
     model.addShape("C", c); // We add an oval named C.
     model.addShape("R", r); // We add a rectangle namedR.
 

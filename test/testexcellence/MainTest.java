@@ -1,4 +1,4 @@
-package cs3500.easyanimator;
+package testexcellence;
 
 import cs3500.easyanimator.model.Color;
 import cs3500.easyanimator.model.EasyAnimator;
@@ -25,9 +25,9 @@ public class MainTest {
     IAnimatorModel model = new EasyAnimator();
 
     Oval c = new Oval(new WidthHeight(100, 100),
-            new Color(255, 0, 0), new Point(100, 100));
+            new Point(100, 100), new Color(255, 0, 0));
     Rectangle r = new Rectangle(new WidthHeight(100, 100),
-            new Color(0,0,255), new Point(100, 100));
+            new Point(100, 100), new Color(0,0,255));
     model.addShape("C", c); // We add an oval named C.
     model.addShape("R", r); // We add a rectangle named R.
 

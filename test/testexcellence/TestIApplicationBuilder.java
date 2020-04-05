@@ -3,6 +3,7 @@ package testexcellence;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import cs3500.easyanimator.util.IApplicationBuilder;
@@ -46,6 +47,10 @@ public abstract class TestIApplicationBuilder {
     try {
       in = createTemporaryLocation("input");
       out = createTemporaryLocation("out");
+      // Every model actually needs a model.
+      FileWriter writer = new FileWriter(in);
+      writer.write("canvas 0 0 200 200\n");
+      writer.close();
     } catch (IOException ie) {
       ie.printStackTrace();
       fail("Unable to create temporary files to use.");

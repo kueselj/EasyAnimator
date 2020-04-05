@@ -1,7 +1,5 @@
 package cs3500.easyanimator.util;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -18,19 +16,26 @@ import cs3500.easyanimator.view.IAnimatorView;
  * the output when going to the factory.
  */
 public class BasicApplicationBuilder implements IApplicationBuilder {
+  private FileReader inputReader; // Necessary to close.
   private Readable input;
+  private FileWriter outputWriter; // This is necessary to close it. I'd love to not keep it.
   private Appendable output = System.out; // These parameters have defaults.
   private double speed = 1; // These parameters have defaults.
   private String viewType;
 
   @Override
   public void setInput(String pathname) throws FileNotFoundException {
-    this.input = new BufferedReader(new FileReader(pathname));
+    this.inputReader = new FileReader(pathname);
+    this.input = this.inputReader;
   }
 
   @Override
   public void setOutput(String pathname) throws IOException {
-    this.output = new BufferedWriter(new FileWriter(pathname, false));
+    if (this.outputWriter != null) {
+      this.outputWriter.close(); // We don't forget to close the writer we opened here.
+    }
+    this.outputWriter = new FileWriter(pathname, false);
+    this.output = this.outputWriter; // This does the needed cast to appendable.
   }
 
   @Override
@@ -67,7 +72,7 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
     }
 
     // Now let's make the model.
-    AnimationBuilder<IAnimatorModel> modelBuilder = new AnimatorModelBuilder();
+    AnimationBuilder<IAnimatorModel> modelBuilder = new EasyAnimatorModelBuilder();
     new AnimationReader().parseFile(input, modelBuilder);
     IAnimatorModel model = modelBuilder.build();
     // We can give that model over to the view.
@@ -76,5 +81,13 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
     view.setSpeed(speed);
     // I think we are ready to launch.
     view.makeVisible();
+    // If we opened a file writer we have to close it to get those writes out.
+    if (outputWriter != null) {
+      try {
+        outputWriter.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
   }
 }

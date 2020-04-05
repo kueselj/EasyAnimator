@@ -18,9 +18,9 @@ public class BasicShapeFactory implements IShapeFactory {
     switch (name) {
       case "ellipse": // We tailor it to their descriptions.
       case "oval":
-        return new Oval(size, color, position);
+        return new Oval(size, position, color);
       case "rectangle":
-        return new Rectangle(size, color, position);
+        return new Rectangle(size, position, color);
       default :
         throw new IllegalArgumentException(String.format("The specified named shape %s does " +
                 "not exist.", name));

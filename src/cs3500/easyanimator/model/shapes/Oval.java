@@ -10,13 +10,12 @@ public class Oval extends AbstractShape {
 
   /**
    * Abstract constructor for a Shape.
-   *
-   * @param size    the size of the Shape.
-   * @param color    the color of the Shape.
+   *  @param size    the size of the Shape.
    * @param position the position of the Shape.
+   * @param color    the color of the Shape.
    */
-  public Oval(WidthHeight size, Color color, Point position) {
-    super(size, color, position);
+  public Oval(WidthHeight size, Point position, Color color) {
+    super(size, position, color);
   }
 
   @Override
@@ -26,6 +25,6 @@ public class Oval extends AbstractShape {
 
   @Override
   public IShape copy() {
-    return new Oval(this.size, this.color, this.position);
+    return new Oval(this.size, this.position, this.color);
   }
 }

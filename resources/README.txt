@@ -25,3 +25,25 @@ and setters in IShape. To traverse the different implementations we have an ISha
 
 Currently we implement a text view by a method on the model. We plan to re-use our visitor code
 to implement in a view.
+
+===
+
+New edits.
+
+We decided to make our views work based of our visitor patterns previously described.
+
+We didn't change much about our model design, but noticed that it would potentially be easier
+to animate things with a keyframe based design. That would at least be easier to conform to
+in the AnimationBuilder.
+
+The views all use the IAnimatorView interface which describes a setModel method and a makeVisible
+method. The second method having a bunch of different interpretations across the diff type
+of views. Visual makeVisual means make the window visible, whereas for a text view it prints
+out the text. We also have the method setSpeed which is supressed in the text view since all the
+other views have an interpretation for it.
+
+The views at the moment are controlled by an "ApplicationBuilder" which has a variety of methods
+to add different settings as they come in from the command line parser. Having a builder meant
+we didn't have a bunch of static code that went untested. At the end of adding a bunch of
+parameters we use the build method which launches the application with those settings applied.
+

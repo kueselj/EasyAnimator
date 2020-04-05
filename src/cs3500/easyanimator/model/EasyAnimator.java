@@ -396,12 +396,12 @@ public class EasyAnimator implements IAnimatorModel {
 
     @Override
     public IShape applyToRectangle(Rectangle rect) {
-      return new Rectangle(new WidthHeight(width, height), new Color(r, g, b), new Point(x, y));
+      return new Rectangle(new WidthHeight(width, height), new Point(x, y), new Color(r, g, b));
     }
 
     @Override
     public IShape applyToOval(Oval oval) {
-      return new Oval(new WidthHeight(width, height), new Color(r, g, b), new Point(x, y));
+      return new Oval(new WidthHeight(width, height), new Point(x, y), new Color(r, g, b));
     }
 
     /**

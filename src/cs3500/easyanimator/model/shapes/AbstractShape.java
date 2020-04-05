@@ -15,12 +15,11 @@ public abstract class AbstractShape implements IShape {
 
   /**
    * Abstract constructor for a Shape.
-   *
-   * @param size the size of the Shape.
-   * @param color the color of the Shape.
+   *  @param size the size of the Shape.
    * @param position the position of the Shape.
+   * @param color the color of the Shape.
    */
-  AbstractShape(WidthHeight size, Color color, Point position) {
+  AbstractShape(WidthHeight size, Point position, Color color) {
     this.size = size;
     this.color = color;
     this.position = position;

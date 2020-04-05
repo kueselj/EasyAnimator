@@ -20,7 +20,7 @@ import cs3500.easyanimator.model.shapes.WidthHeight;
  * to the correct model construction method calls for an IAnimatorModel (we specifically do it with
  * an EasyAnimator).
  */
-public class AnimatorModelBuilder implements AnimationBuilder<IAnimatorModel> {
+public class EasyAnimatorModelBuilder implements AnimationBuilder<IAnimatorModel> {
 
   /**
    * A State is a collection of properties of a shape but without a method or constructor or
@@ -47,7 +47,7 @@ public class AnimatorModelBuilder implements AnimationBuilder<IAnimatorModel> {
   /**
    * Construct a new EasyAnimatorBuilder. This initializes all the things we will need.
    */
-  public AnimatorModelBuilder() {
+  public EasyAnimatorModelBuilder() {
     this.model = new EasyAnimator();
     this.keyframes = new HashMap<>();
   }
@@ -58,7 +58,6 @@ public class AnimatorModelBuilder implements AnimationBuilder<IAnimatorModel> {
     // This is kind of hacky so turn away kids.
 
     // TODO: This assumes we don't mix motions and keyframes. So I hope that doesn't happen.
-    // That would require a lot of extra calculation to make work with our model.
 
     for (Map.Entry<String, Map<Integer, State>> entry: this.keyframes.entrySet()) {
       String name = entry.getKey();
@@ -76,7 +75,6 @@ public class AnimatorModelBuilder implements AnimationBuilder<IAnimatorModel> {
                 currentState.color, nextState.color));
       }
     }
-
     // Now we can return the model we are done with it.
     return this.model;
   }
@@ -115,7 +113,6 @@ public class AnimatorModelBuilder implements AnimationBuilder<IAnimatorModel> {
                                                       int x, int y,
                                                       int w, int h,
                                                       int r, int g, int b) {
-    // We use the Oval as a collection of all these properties. I'm sorry.
     if (!this.keyframes.containsKey(name)) {
       this.keyframes.put(name, new HashMap<>());
     }

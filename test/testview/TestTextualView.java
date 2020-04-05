@@ -33,9 +33,9 @@ public class TestTextualView {
     textView.setModel(model);
 
     Oval c = new Oval(new WidthHeight(100, 100),
-            new Color(255, 0, 0), new Point(100, 100));
+            new Point(100, 100), new Color(255, 0, 0));
     Rectangle r = new Rectangle(new WidthHeight(100, 100),
-            new Color(0,0,255), new Point(100, 100));
+            new Point(100, 100), new Color(0,0,255));
     model.addShape("C", c); // We add an oval named C.
     model.addShape("R", r); // We add a rectangle named R.
 
