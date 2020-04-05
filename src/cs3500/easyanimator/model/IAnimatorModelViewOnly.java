@@ -1,5 +1,7 @@
 package cs3500.easyanimator.model;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -63,4 +65,31 @@ public interface IAnimatorModelViewOnly {
    * @throws IllegalArgumentException if the shape name or tick is invalid.
    */
   List<IShape> getShapesAtTick(int tick);
+
+  /**
+   * Gets the maxTick of the model.
+   *
+   * @return the max tick of the model.
+   */
+  default int getMaxTick() {
+
+    Map<String, List<IMotion>> motions = this.getMotions();
+
+    int maxTick = 0;
+
+    //iterate through each shape or entry in
+    for (Map.Entry<String, List<IMotion>> entry: motions.entrySet()) {
+
+      Collections.sort(entry.getValue(), Comparator.comparingInt(IMotion::getEndTime));
+
+      List<IMotion> entryList =  motions.get(entry.getKey());
+
+      if (entryList.get(entryList.size() - 1).getEndTime() > maxTick) {
+        maxTick = entryList.get(entryList.size() - 1).getEndTime();
+      }
+    }
+
+    return maxTick;
+  }
+
 }
