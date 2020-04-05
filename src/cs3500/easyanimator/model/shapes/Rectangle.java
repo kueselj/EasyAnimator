@@ -10,13 +10,12 @@ public class Rectangle extends AbstractShape {
 
   /**
    * Abstract constructor for a Shape.
-   *
-   * @param size    the size of the Shape.
-   * @param color    the color of the Shape.
+   *  @param size    the size of the Shape.
    * @param position the position of the Shape.
+   * @param color    the color of the Shape.
    */
-  public Rectangle(WidthHeight size, Color color, Point position) {
-    super(size, color, position);
+  public Rectangle(WidthHeight size, Point position, Color color) {
+    super(size, position, color);
   }
 
   @Override
@@ -26,6 +25,6 @@ public class Rectangle extends AbstractShape {
 
   @Override
   public IShape copy() {
-    return new Rectangle(this.size, this.color, this.position);
+    return new Rectangle(this.size, this.position, this.color);
   }
 }

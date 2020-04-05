@@ -73,8 +73,8 @@ public class TestSVGAnimationView {
     model.setCanvas(CANVAS_TL, CANVAS_SIZE);
     // We give the rectangle and circle some initial states.
     // These are properties we can test for.
-    model.addShape("R", new Rectangle(SMALL, RED, TOP_LEFT));
-    model.addShape("C", new Oval(BIG, BLUE, BOTTOM_RIGHT));
+    model.addShape("R", new Rectangle(SMALL, TOP_LEFT, RED));
+    model.addShape("C", new Oval(BIG, BOTTOM_RIGHT, BLUE));
     // We give the rectangle two motions on a single variable.
     model.addMotion("R", new BasicMotion(
             0, 30, // At a speed of 1, this should be 1 seconds.

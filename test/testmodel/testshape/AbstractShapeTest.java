@@ -139,12 +139,12 @@ public abstract class AbstractShapeTest {
 
     @Override
     protected IShape rec(WidthHeight size, Color color, Point position) {
-      return new Rectangle(size, color, position);
+      return new Rectangle(size, position, color);
     }
 
     @Override
     protected IShape oval(WidthHeight size, Color color, Point position) {
-      return new Rectangle(size, color, position);
+      return new Rectangle(size, position, color);
     }
 
     /**
@@ -154,12 +154,12 @@ public abstract class AbstractShapeTest {
 
       @Override
       protected IShape rec(WidthHeight size, Color color, Point position) {
-        return new Oval(size, color, position);
+        return new Oval(size, position, color);
       }
 
       @Override
       protected IShape oval(WidthHeight size, Color color, Point position) {
-        return new Oval(size, color, position);
+        return new Oval(size, position, color);
       }
     }
   }

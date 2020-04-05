@@ -72,7 +72,7 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
     }
 
     // Now let's make the model.
-    AnimationBuilder<IAnimatorModel> modelBuilder = new AnimatorModelBuilder();
+    AnimationBuilder<IAnimatorModel> modelBuilder = new EasyAnimatorModelBuilder();
     new AnimationReader().parseFile(input, modelBuilder);
     IAnimatorModel model = modelBuilder.build();
     // We can give that model over to the view.

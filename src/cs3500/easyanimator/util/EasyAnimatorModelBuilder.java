@@ -20,7 +20,7 @@ import cs3500.easyanimator.model.shapes.WidthHeight;
  * to the correct model construction method calls for an IAnimatorModel (we specifically do it with
  * an EasyAnimator).
  */
-public class AnimatorModelBuilder implements AnimationBuilder<IAnimatorModel> {
+public class EasyAnimatorModelBuilder implements AnimationBuilder<IAnimatorModel> {
 
   /**
    * A State is a collection of properties of a shape but without a method or constructor or
@@ -47,7 +47,7 @@ public class AnimatorModelBuilder implements AnimationBuilder<IAnimatorModel> {
   /**
    * Construct a new EasyAnimatorBuilder. This initializes all the things we will need.
    */
-  public AnimatorModelBuilder() {
+  public EasyAnimatorModelBuilder() {
     this.model = new EasyAnimator();
     this.keyframes = new HashMap<>();
   }
