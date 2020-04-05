@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
 * An EasyAnimator is an implementation of the animator model that works via maps.
@@ -118,13 +119,18 @@ public class EasyAnimator implements IAnimatorModel {
    * @return  A boolean indicating if there is a time conflict (true) or not (false).
    */
   private boolean conflictingTime(String id, IMotion motion) {
-    return this.motions.get(id)
-            .stream()
-            .anyMatch(otherMotion ->
-                    (motion.getStartTime() >= otherMotion.getStartTime()
-                            && otherMotion.getEndTime() > motion.getStartTime())
-                            || (motion.getStartTime() <= otherMotion.getStartTime()
-                            && otherMotion.getStartTime() <= motion.getEndTime()));
+    Predicate<IMotion> fn = otherMotion ->
+            // The first situation [ oldmotion [ newmotion )
+            // We need to verify where the old motion ends.
+            (motion.getStartTime() >= otherMotion.getStartTime() &&
+                    // It is conflicting if the end time is past our start time.
+                    otherMotion.getEndTime() > motion.getStartTime()) ||
+            // The second situation [ newmotion [ oldmotion )
+            // We need to verify the newmotion ends before the old motion starts.
+            (motion.getStartTime() < otherMotion.getStartTime() &&
+                    // The newmotion is conflicting if it ends after the other start time.
+                    motion.getEndTime() > otherMotion.getStartTime());
+    return motions.get(id).stream().anyMatch(fn);
   }
 
   /**
@@ -294,7 +300,6 @@ public class EasyAnimator implements IAnimatorModel {
       }
     }
     throw new IllegalArgumentException("No motion has that tick!");
-
   }
 
   @Override
@@ -305,23 +310,20 @@ public class EasyAnimator implements IAnimatorModel {
     List<IMotion> shapeMotions;
     IMotion desiredMotion;
 
-    // Try and see if the shape exists, if so grab its motions, sort them, and grab the shape.
-    try {
-      shapeMotions = this.motions.get(shape);
-      //Collections.sort(shapeMotions, Comparator.comparingInt(IMotion::getStartTime));
-      shapeType = this.shapes.get(shape);
-    } catch (IllegalArgumentException e) {
+    if (!this.motions.containsKey(shape) || !this.shapes.containsKey(shape)) {
       throw new IllegalArgumentException("That shape does not exist.");
     }
 
+    // Grab its motions, sort them, and grab the shape.
+    shapeMotions = this.motions.get(shape);
+    //Collections.sort(shapeMotions, Comparator.comparingInt(IMotion::getStartTime));
+    shapeType = this.shapes.get(shape);
+
     // Try and see if there is a motion for the desired tick.
     try {
-      //System.out.println(shapeMotions);
       desiredMotion = this.getFromMotionTick(tick, shapeMotions);
-      //System.out.println(desiredMotion);
-      //System.out.println(desiredMotion.getStartTime());
     } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException("Not a valid tick");
+      throw new IllegalArgumentException("Not a valid tick.");
     }
 
     //if all is valid, return a new shape with the correct state at a desired tick.
@@ -331,7 +333,6 @@ public class EasyAnimator implements IAnimatorModel {
 
   @Override
   public List<IShape> getShapesAtTick(int tick) {
-
     List<IShape> shapesAtTick = new ArrayList<IShape>();
 
     //iterate through all the entries in the map.
