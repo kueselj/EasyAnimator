@@ -58,7 +58,6 @@ public class AnimatorModelBuilder implements AnimationBuilder<IAnimatorModel> {
     // This is kind of hacky so turn away kids.
 
     // TODO: This assumes we don't mix motions and keyframes. So I hope that doesn't happen.
-    // That would require a lot of extra calculation to make work with our model.
 
     for (Map.Entry<String, Map<Integer, State>> entry: this.keyframes.entrySet()) {
       String name = entry.getKey();
@@ -76,7 +75,6 @@ public class AnimatorModelBuilder implements AnimationBuilder<IAnimatorModel> {
                 currentState.color, nextState.color));
       }
     }
-
     // Now we can return the model we are done with it.
     return this.model;
   }
@@ -115,7 +113,6 @@ public class AnimatorModelBuilder implements AnimationBuilder<IAnimatorModel> {
                                                       int x, int y,
                                                       int w, int h,
                                                       int r, int g, int b) {
-    // We use the Oval as a collection of all these properties. I'm sorry.
     if (!this.keyframes.containsKey(name)) {
       this.keyframes.put(name, new HashMap<>());
     }
