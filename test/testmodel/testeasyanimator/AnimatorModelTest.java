@@ -20,7 +20,7 @@ import static org.junit.Assert.fail;
 /**
  * Test class for EasyAnimator methods.
  */
-public class EasyAnimatorTest {
+public class AnimatorModelTest {
   IAnimatorModel model = new EasyAnimator();
 
   /**
@@ -495,7 +495,4 @@ public class EasyAnimatorTest {
     assertEquals(model.getCanvasPosition(), new Point(10, 10));
     assertEquals(model.getCanvasSize(), new WidthHeight(100, 100));
   }
-
-  // TODO: When testing getShapesAtTick be sure to test setCanvas alongside it.
-  // This is an extra behavior that we didn't expect at first.
 }
