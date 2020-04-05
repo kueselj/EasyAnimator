@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import cs3500.easyanimator.model.IAnimatorModel;
 import cs3500.easyanimator.model.motions.BasicMotion;
+import cs3500.easyanimator.model.motions.IMotion;
 import cs3500.easyanimator.model.shapes.Oval;
 import cs3500.easyanimator.model.shapes.Rectangle;
 import cs3500.easyanimator.model.shapes.WidthHeight;
@@ -400,77 +401,9 @@ public abstract class AnimatorModelTest {
     model.removeMotion("C", middle);
   }
 
-  @Test
-  public void testTextOutput() {
-    Oval c = new Oval(new WidthHeight(100, 100),
-            new Point(100, 100), new Color(255,0,0)
-    );
-    // We change the size here.
-    BasicMotion left = new BasicMotion(0, 10,
-            new WidthHeight(100, 100),
-            new WidthHeight(200, 200),
-            new Point(100, 100),
-            new Point(100, 100),
-            new Color(100, 100, 100),
-            new Color(100, 100, 100));
-    // Then we change the color.
-    BasicMotion middle = new BasicMotion(10, 20,
-            new WidthHeight(200, 200),
-            new WidthHeight(200, 200),
-            new Point(100, 100),
-            new Point(100, 100),
-            new Color(100, 100, 100),
-            new Color(200, 200, 200));
-    // Then we change the position.
-    BasicMotion right = new BasicMotion(20, 30,
-            new WidthHeight(200, 200),
-            new WidthHeight(200, 200),
-            new Point(100, 100),
-            new Point(200, 200),
-            new Color(200, 200, 200),
-            new Color(200, 200, 200));
-
-    model.addShape("C", c);
-    model.addMotion("C", left);
-    model.addMotion("C", middle);
-    model.addMotion("C", right);
-
-    Rectangle r = new Rectangle(new WidthHeight(100, 100),
-            new Point(100, 100), new Color(255,0,0)
-    );
-    // We change the size here.
-    BasicMotion rectangleFirst = new BasicMotion(0, 10,
-            new WidthHeight(100, 100),
-            new WidthHeight(200, 200),
-            new Point(100, 100),
-            new Point(100, 100),
-            new Color(100, 100, 100),
-            new Color(100, 100, 100));
-    // Then we change the color.
-    BasicMotion rectangleLast = new BasicMotion(10, 20,
-            new WidthHeight(200, 200),
-            new WidthHeight(200, 200),
-            new Point(100, 100),
-            new Point(100, 100),
-            new Color(100, 100, 100),
-            new Color(200, 200, 200));
-
-    model.addShape("R", r);
-    model.addMotion("R", rectangleFirst);
-    model.addMotion("R", rectangleLast);
-
-
-    String expectedString = "shape R rectangle\n" +
-            "motion R 0 100 100 100 100 100 100 100    10 100 100 200 200 100 100 100\n" +
-            "motion R 10 100 100 200 200 100 100 100    20 100 100 200 200 200 200 200\n" +
-            "\n" +
-            "shape C oval\n" +
-            "motion C 0 100 100 100 100 100 100 100    10 100 100 200 200 100 100 100\n" +
-            "motion C 10 100 100 200 200 100 100 100    20 100 100 200 200 200 200 200\n" +
-            "motion C 20 100 100 200 200 200 200 200    30 200 200 200 200 200 200 200";
-
-    assertEquals(expectedString, model.textOutput());
-  }
+  // This was moved outside the model interface.
+  // @Test
+  // public void testTextOutput() {}
 
   /**
    * Tests that when attempting to set the canvas for the model with an uninitialized top left
@@ -543,5 +476,86 @@ public abstract class AnimatorModelTest {
             startWH, endWH,
             startPoint, startPoint,
             startColor, startColor));
+  }
+
+  // New utility method checks.
+
+  /**
+   * A small set of tests around the getMaxTick method.
+   */
+  @Test
+  public void testGetMaxTick() {
+    // We don't throw exceptions because it's possible that the model doesn't have any shapes
+    //  and isn't in some sort of illegal state.
+    WidthHeight widthHeight = new WidthHeight(100, 100);
+    Point point = new Point(100, 100);
+    Color color = new Color(255, 255, 255);
+    model.addShape("sample", new Rectangle(widthHeight,
+            point, color));
+    assertEquals("The max tick of a model without any motions should be 0 (n.a).",
+            0, model.getMaxTick());
+    IMotion m = new BasicMotion(0, 100,
+            widthHeight, widthHeight,
+            point, point,
+            color, color);
+    model.addMotion("sample", m);
+    assertEquals("The max tick of a model with one motion should be " +
+                    "the end time of the motion.",
+            m.getEndTime(), model.getMaxTick());
+    IMotion m2 = new BasicMotion(100, 200,
+            widthHeight, widthHeight,
+            point, point,
+            color, color);
+    model.addMotion("sample", m2);
+    assertEquals("The max tick of a model with two motions should be " +
+                    "the end time of the latest motion.",
+            m2.getEndTime(), model.getMaxTick());
+    model.addShape("sample2", new Oval(widthHeight, point, color));
+    IMotion m3 = new BasicMotion(0, 300,
+            widthHeight, widthHeight,
+            point, point,
+            color, color);
+    model.addMotion("sample2", m3);
+    assertEquals("The max tick of a model with many motions should be " +
+                    "the end time of the latest motion for any shape.",
+            m3.getEndTime(), model.getMaxTick());
+  }
+
+  /**
+   * A small set of tests around the getShapeMaxTick method. This is very similar to getMaxTick
+   * tests except we don't add new shapes.
+   */
+  @Test
+  public void testGetShapeMaxTick() {
+    WidthHeight widthHeight = new WidthHeight(100, 100);
+    Point point = new Point(100, 100);
+    Color color = new Color(255, 255, 255);
+    try {
+      this.model.getShapeMaxTick("sample");
+      fail("Expected to fail with an exception when fetching the max tick of a nonexistent shape.");
+    } catch (IllegalArgumentException iae) {
+      // This was supposed to happen.
+    }
+
+    model.addShape("sample", new Rectangle(widthHeight,
+            point, color));
+    assertEquals("The max tick of a shape without any motions should be 0 (n.a).",
+            0, model.getShapeMaxTick("sample"));
+    IMotion m = new BasicMotion(0, 100,
+            widthHeight, widthHeight,
+            point, point,
+            color, color);
+    model.addMotion("sample", m);
+    assertEquals("The max tick of a shape with one motion should be " +
+                    "the end time of the motion.",
+            m.getEndTime(), model.getMaxTick());
+    IMotion m2 = new BasicMotion(100, 200,
+            widthHeight, widthHeight,
+            point, point,
+            color, color);
+    model.addMotion("sample", m2);
+    assertEquals("The max tick of a shape with two motions should be " +
+                    "the end time of the latest motion.",
+            m2.getEndTime(), model.getMaxTick());
   }
 }

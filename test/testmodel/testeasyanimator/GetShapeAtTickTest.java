@@ -19,7 +19,6 @@ import static org.junit.Assert.assertEquals;
 public class GetShapeAtTickTest {
   IAnimatorModel model = new EasyAnimator();
 
-
   @Test
   public void testGetShapeAtTick() {
     //Oval c = new Oval(new WidthHeight(100, 100),

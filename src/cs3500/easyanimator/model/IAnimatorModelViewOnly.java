@@ -1,7 +1,5 @@
 package cs3500.easyanimator.model;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -41,13 +39,6 @@ public interface IAnimatorModelViewOnly {
   Map<String, List<IMotion>> getMotions();
 
   /**
-   * Gets the text output of the model.
-   *
-   * @return a string representing a text output.
-   */
-  String textOutput();
-
-  /**
    * Gets the desired shape's state at the desired tick.
    *
    * @param tick the tick to get the specified shape state at.
@@ -67,29 +58,28 @@ public interface IAnimatorModelViewOnly {
   List<IShape> getShapesAtTick(int tick);
 
   /**
-   * Gets the maxTick of the model.
-   *
-   * @return the max tick of the model.
+   * Gets the last tick used by any motion in the model.
+   * @return the max tick of the model. 0 if not applicable.
    */
-  default int getMaxTick() {
-
-    Map<String, List<IMotion>> motions = this.getMotions();
-
-    int maxTick = 0;
-
-    //iterate through each shape or entry in
-    for (Map.Entry<String, List<IMotion>> entry: motions.entrySet()) {
-
-      Collections.sort(entry.getValue(), Comparator.comparingInt(IMotion::getEndTime));
-
-      List<IMotion> entryList =  motions.get(entry.getKey());
-
-      if (entryList.get(entryList.size() - 1).getEndTime() > maxTick) {
-        maxTick = entryList.get(entryList.size() - 1).getEndTime();
+  default long getMaxTick() {
+    long maxTick = 0;
+    // Iterate through each shape.
+    for (String key: getShapes().keySet()) {
+      long maxEndTime = this.getShapeMaxTick(key);
+      if (maxEndTime > maxTick) {
+        maxTick = maxEndTime;
       }
     }
-
     return maxTick;
   }
+
+  /**
+   * Gets the last tick used by the named shape in the model. This utility function does not do
+   * key validation.
+   * @param id  The id of the shape to lookup.
+   * @return    The last tick of motion for the given shape, or null if non applicable.
+   * @throws IllegalArgumentException If the given id doesn't match up to anything in the model.
+   */
+  long getShapeMaxTick(String id);
 
 }

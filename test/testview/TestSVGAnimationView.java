@@ -51,7 +51,6 @@ public class TestSVGAnimationView {
     model = new EasyAnimator();
     view.setModel(model);
     view.setSpeed(30);
-
   }
 
   private static Point CANVAS_TL = new Point(100, 100);
@@ -66,6 +65,12 @@ public class TestSVGAnimationView {
   private static Point TOP_LEFT = CANVAS_TL;
   private static Point BOTTOM_RIGHT = new Point(900, 700);
 
+  // A string that should precede nearly every time enable loopback with the trick they showed.
+  private static String LOOPX = "base.end+";
+  // The number of animate children added per element to enable loopback.
+  private static int LOOP_CHILDREN = 1;
+  // We need two elements to make elements appear and disappear at the end of their motion.
+  private static int VISIBILITY_CHILDREN = 2;
   /**
    * Initializes the model with a standard set of rectangles and circles that we know how to test.
    */
@@ -232,28 +237,18 @@ public class TestSVGAnimationView {
   /**
    * Gets the first child of the given node.
    * @param n   The node to search.
+   * @param index The index of the element to retrieve.
    * @returns   The first element as an Element;
    */
-  Element getFirstChild(Node n) {
+  Element getNChild(Node n, int index) {
     NodeList nodes = n.getChildNodes();
-    for (int i = 0; i < nodes.getLength(); i++) {
-      if (nodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
-        return (Element) nodes.item(i);
-      }
-    }
-    return null;
-  }
-
-  /**
-   * Gets the first child of the given node.
-   * @param n   The node to search.
-   * @returns   The first element as an Element;
-   */
-  Element getLastChild(Node n) {
-    NodeList nodes = n.getChildNodes();
+    int elements = 0;
     for (int i = nodes.getLength() - 1; i >= 0 ; i--) {
       if (nodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
-        return (Element) nodes.item(i);
+        elements += 1;
+        if (index + 1 == elements) {
+          return (Element) nodes.item(i);
+        }
       }
     }
     return null;
@@ -310,30 +305,30 @@ public class TestSVGAnimationView {
     // The only children of these nodes (for now since searching is hard),
     // should be our animate elements.
     assertEquals("Expected the rectangle to have 2 (animate) children nodes.",
-            2, countChildren(rectangle));
+            VISIBILITY_CHILDREN + LOOP_CHILDREN + 2, countChildren(rectangle));
     assertEquals("Expected the oval to have 2 (animate) children nodes.",
-            2, countChildren(oval));
+            VISIBILITY_CHILDREN + LOOP_CHILDREN + 2, countChildren(oval));
     // Note we only have one motion for the oval, BUT it changes two values.
     // We need an animate element per property that is changed.
     // I'm assuming it is an ordered list the way it came out.
     // This will be something I have to then enforce when making it.
-    verifyAnimation(getFirstChild(rectangle),
+    verifyAnimation(getNChild(rectangle, 1),
             "fill",
             "rgb(200, 0, 0)", "rgb(0, 0, 200)",
-            "0ms", "1000ms");
-    verifyAnimation(getLastChild(rectangle),
+            LOOPX + "0ms", "1000ms");
+    verifyAnimation(getNChild(rectangle, 2),
             "fill",
             "rgb(0, 0, 200)", "rgb(200, 0, 0)",
-            "1000ms", "1000ms");
+            LOOPX + "1000ms", "1000ms");
     // Now we can go verify that second shape.
-    verifyAnimation(getFirstChild(oval),
+    verifyAnimation(getNChild(oval, 1),
             "width",
             "400", "100",
-            "0ms", "2000ms");
-    verifyAnimation(getLastChild(oval),
+            LOOPX + "0ms", "2000ms");
+    verifyAnimation(getNChild(oval, 2),
             "height",
             "200", "50",
-            "0ms", "2000ms");
+            LOOPX + "0ms", "2000ms");
   }
 
   /**
@@ -341,7 +336,7 @@ public class TestSVGAnimationView {
    * times are correctly adjusted.
    */
   @Test
-  public void verifyStandardShapes60TPS() {
+  public void testStandardShapes60TPS() {
     // Copied_PASTED code from verifyStandard but with a TWEEST.
     initialize();
     view.setSpeed(60); // We are now at 60 TPS.
@@ -354,33 +349,33 @@ public class TestSVGAnimationView {
     assertTrue("Expected to be able to find ellipse element in svg node.",
             oval != null);
     assertEquals("Expected the rectangle to have 2 (animate) children nodes.",
-            2, countChildren(rectangle));
+            VISIBILITY_CHILDREN + LOOP_CHILDREN + 2, countChildren(rectangle));
     assertEquals("Expected the oval to have 2 (animate) children nodes.",
-            2, countChildren(oval));
-    verifyAnimation(getFirstChild(rectangle),
+            VISIBILITY_CHILDREN + LOOP_CHILDREN + 2, countChildren(oval));
+    verifyAnimation(getNChild(rectangle, 1),
             "fill",
             "rgb(200, 0, 0)", "rgb(0, 0, 200)",
-            "0ms", "500ms");
-    verifyAnimation(getLastChild(rectangle),
+            LOOPX + "0ms", "500ms");
+    verifyAnimation(getNChild(rectangle, 2),
             "fill",
             "rgb(0, 0, 200)", "rgb(200, 0, 0)",
-            "500ms", "500ms");
+            LOOPX + "500ms", "500ms");
     // Now we can go verify that second shape.
-    verifyAnimation(getFirstChild(oval),
+    verifyAnimation(getNChild(oval, 1),
             "width",
             "400", "100",
-            "0ms", "1000ms");
-    verifyAnimation(getLastChild(oval),
+            LOOPX + "0ms", "1000ms");
+    verifyAnimation(getNChild(oval, 2),
             "height",
             "200", "50",
-            "0ms", "1000ms");
+            LOOPX + "0ms", "1000ms");
   }
 
   /**
    * A test to verify that the viewbox property and the canvas match.
    */
   @Test
-  public void verifyCanvasViewboxMatch() {
+  public void testCanvasViewboxMatch() {
     initialize();
     standardShapes(); // This sets a canvas with some constants.
     Document doc = parseDocument();
@@ -395,4 +390,33 @@ public class TestSVGAnimationView {
                     viewbox);
   }
 
+  /**
+   * A test to verify that when shapes are added that there is that extra hacked element to loop.
+   */
+  @Test
+  public void testSpecialBox() {
+    initialize();
+    standardShapes();
+    Document doc = parseDocument();
+    Element svg = doc.getDocumentElement();
+    // We check for the special box.
+    Node specialBox = doc.getDocumentElement().getElementsByTagName("loopingline").item(0);
+    assertTrue("Expected root element to contain the special box!",
+            specialBox != null);
+    // We check our special box has that animation.
+    assertEquals("Expected special box to contain one animate element.",
+            1, countChildren(specialBox));
+    // We check that animation has the special properties we need.
+    Element loopAnimate = getNChild(specialBox, 1);
+    verifyAnimation(getNChild(specialBox, 1),
+            "visibility",
+            "hide",
+            "hide",
+            "0;base.end",
+            "2000ms");
+    // We assume 30 TPS, so it should only take 2 seconds.
+    assertTrue("Expected the special looping animate element to have an id of base.",
+            "base".equals(loopAnimate.getAttribute("id")));
+    // I use that that weird incantation since getAttribute could return null.
+  }
 }

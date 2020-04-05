@@ -115,4 +115,56 @@ public final class BasicMotion implements IMotion {
   public <T> T accept(IMotionVisitor<T> motion) {
     return motion.applyToBasicMotion(this);
   }
+
+  // To give the position at a certain time tick, we use linear interpolation.
+  /**
+   * Finds the tweened value between the two values at the desired tick.
+   * @param val1 the first int.
+   * @param val1T the tick time for a.
+   * @param val2 the second int.
+   * @param val2T the tick time for b.
+   * @param tick the desired tick time.
+   * @return the value at the desired tick.
+   */
+  private int tween(int val1, int val1T, int val2, int val2T, int tick) {
+
+    double a = (double) val1;
+    double aT = (double) val1T;
+    double b = (double) val2;
+    double bT = (double) val2T;
+    double t = (double) tick;
+
+    double f1 = (bT - t) / (bT - aT);
+    double f2 = a * f1;
+    //System.out.println(f2);
+
+    double g1 = (t - aT) / (bT - aT);
+    double g2 = b * g1;
+    return (int) (f2 + g2);
+  }
+
+  @Override
+  public Point getPosition(int tick) {
+    return new Point(tween(startPosition.getX(), startTime, endPosition.getX(), endTime, tick),
+            tween(startPosition.getY(), startTime, endPosition.getY(), endTime, tick));
+  }
+
+  @Override
+  public WidthHeight getSize(int tick) {
+    return new WidthHeight(tween(startSize.getWidth(), startTime,
+            endSize.getWidth(), endTime, tick),
+            tween(startSize.getWidth(), startTime,
+                    endSize.getHeight(), endTime, tick));
+  }
+
+  @Override
+  public Color getColor(int tick) {
+    // Renaming just to make the next a little smaller.
+    return new Color(tween(startColor.getRed(), startTime,
+            endColor.getRed(), endTime, tick),
+            tween(startColor.getGreen(), startTime,
+                    endColor.getGreen(), endTime, tick),
+            tween(startColor.getBlue(), startTime,
+                    endColor.getBlue(), endTime, tick));
+  }
 }
