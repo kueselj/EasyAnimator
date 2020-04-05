@@ -1,4 +1,4 @@
-package cs3500.easyanimator;
+package testexcellence;
 
 import cs3500.easyanimator.model.Color;
 import cs3500.easyanimator.model.EasyAnimator;
