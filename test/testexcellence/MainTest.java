@@ -1,5 +1,7 @@
 package testexcellence;
 
+import cs3500.easyanimator.controller.IController;
+import cs3500.easyanimator.controller.MVCController;
 import cs3500.easyanimator.model.Color;
 import cs3500.easyanimator.model.EasyAnimator;
 import cs3500.easyanimator.model.IAnimatorModel;
@@ -8,7 +10,9 @@ import cs3500.easyanimator.model.motions.BasicMotion;
 import cs3500.easyanimator.model.shapes.Oval;
 import cs3500.easyanimator.model.shapes.Rectangle;
 import cs3500.easyanimator.model.shapes.WidthHeight;
+import cs3500.easyanimator.view.EnhancedSwingView;
 import cs3500.easyanimator.view.IAnimatorView;
+import cs3500.easyanimator.view.IVisualView;
 import cs3500.easyanimator.view.SwingView;
 
 /**
@@ -58,9 +62,9 @@ public class MainTest {
 
 
     model.setCanvas(new Point(0,0), new WidthHeight(500, 500));
-    IAnimatorView view = new SwingView();
-    view.setModel(model);
-    view.makeVisible();
+    IVisualView view = new EnhancedSwingView();
+    IController controller = new MVCController(model, view);
+    controller.go();
 
   }
 }
