@@ -1,8 +1,6 @@
 package cs3500.easyanimator.model;
 
-import cs3500.easyanimator.model.motions.BasicMotion;
 import cs3500.easyanimator.model.motions.IMotion;
-import cs3500.easyanimator.model.motions.IMotionVisitor;
 import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.model.shapes.IShapeVisitor;
 import cs3500.easyanimator.model.shapes.Oval;
@@ -10,7 +8,6 @@ import cs3500.easyanimator.model.shapes.Rectangle;
 import cs3500.easyanimator.model.shapes.WidthHeight;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -39,8 +36,8 @@ public class EasyAnimator implements IAnimatorModel {
    * Basic constructor for an EasyAnimator, just gives sets both fields to empty HashMaps.
    */
   public EasyAnimator() {
-    this.shapes = new HashMap<String, IShape>();
-    this.motions = new HashMap<String, List<IMotion>>();
+    this.shapes = new HashMap<>();
+    this.motions = new HashMap<>();
   }
 
   @Override
@@ -63,8 +60,6 @@ public class EasyAnimator implements IAnimatorModel {
     if (previous == null) {
       // We will need to add a blank list to motions.
       this.motions.put(id, new ArrayList<>());
-    } else {
-      // Do nothing. We preserve the motions.
     }
   }
 
@@ -111,6 +106,21 @@ public class EasyAnimator implements IAnimatorModel {
     return newMap;
   }
 
+  @Override
+  public long getShapeMaxTick(String id) {
+    if (!getShapes().keySet().contains(id)) {
+      throw new IllegalArgumentException("Unable to fetch max tick for nonexistent shape.");
+    }
+    long maxTick = 0;
+    for (IMotion motion: getMotions().get(id)) {
+      long motionEndTime = motion.getEndTime();
+      if (motionEndTime > maxTick) {
+        maxTick = motionEndTime;
+      }
+    }
+    return maxTick;
+  }
+
   /**
    * A private helper that checks if the given motion when added would cause any conflicts of time.
    * @param id      The id of the shape being animated.
@@ -118,13 +128,12 @@ public class EasyAnimator implements IAnimatorModel {
    * @return  A boolean indicating if there is a time conflict (true) or not (false).
    */
   private boolean conflictingTime(String id, IMotion motion) {
-    return this.motions.get(id)
-            .stream()
-            .anyMatch(otherMotion ->
-                    (motion.getStartTime() >= otherMotion.getStartTime()
-                            && otherMotion.getEndTime() > motion.getStartTime())
-                            || (motion.getStartTime() <= otherMotion.getStartTime()
-                            && otherMotion.getStartTime() <= motion.getEndTime()));
+    for (IMotion otherMotion: motions.get(id)) {
+      if (IMotion.timeConflict(motion, otherMotion)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /**
@@ -157,18 +166,6 @@ public class EasyAnimator implements IAnimatorModel {
             .max(Comparator.comparingInt(IMotion::getStartTime));
   }
 
-  /**
-   * Tests if the end state of the first motion matches the start state of the second motion.
-   * @param first   The first motion.
-   * @param second  The second motion.
-   * @return  True if the end state and start state match, false otherwise.
-   */
-  private boolean endStartStateMatch(IMotion first, IMotion second) {
-    return (first.getEndSize().equals(second.getStartSize())
-            && first.getEndPosition().equals(second.getStartPosition())
-            && first.getEndColor().equals(second.getStartColor()));
-  }
-
   @Override
   public void addMotion(String id, IMotion motion) {
     if (id == null || motion == null) {
@@ -178,7 +175,7 @@ public class EasyAnimator implements IAnimatorModel {
     if (this.motions.containsKey(id)) {
       // We then need to check that we now don't violate our two invariants with this motion.
 
-      // The first is easy, do we conflict with any other motions in range of time.
+      // The first is easy, do we conflict with any other motions in range of time?
       boolean conflict = conflictingTime(id, motion);
       if (conflict) {
         throw new IllegalArgumentException("Unable to add motion, conflicts in time ranges.");
@@ -189,13 +186,13 @@ public class EasyAnimator implements IAnimatorModel {
       Optional<IMotion> previous = seekBackward(id, motion);
       Optional<IMotion> next = seekForward(id, motion);
       if (previous.isPresent()) {
-        if (!endStartStateMatch(previous.get(), motion)) {
+        if (!IMotion.endStartStateMatch(previous.get(), motion)) {
           throw new IllegalArgumentException("Attempted to add a motion that creates a state"
                   + " mismatch.");
         }
       }
       if (next.isPresent()) {
-        if (!endStartStateMatch(motion, next.get())) {
+        if (!IMotion.endStartStateMatch(motion, next.get())) {
           throw new IllegalArgumentException("Attempted to add a motion that creates a state"
                   + " mismatch.");
         }
@@ -230,7 +227,7 @@ public class EasyAnimator implements IAnimatorModel {
     Optional<IMotion> next = seekForward(id, motion);
 
     if (previous.isPresent() && next.isPresent() &&
-            !endStartStateMatch(previous.get(), next.get())) {
+            !IMotion.endStartStateMatch(previous.get(), next.get())) {
       throw new IllegalArgumentException("Attempted to removeMotion that would lead to invalid " +
               "state.");
     }
@@ -242,43 +239,6 @@ public class EasyAnimator implements IAnimatorModel {
   public Map<String, List<IMotion>> getMotions() {
     return this.motions;
   }
-
-  /**
-   * Outputs a String representing a text rendering output of the model.
-   *
-   * @return a text rendering output of the model as a String.
-   */
-  @Override
-  public String textOutput() {
-
-    //output string builder to build.
-    StringBuilder output = new StringBuilder();
-
-
-    //iterate through each shape or entry in
-    for (Map.Entry<String, List<IMotion>> entry: this.motions.entrySet()) {
-
-      String shapeType = this.shapes.get(entry.getKey()).accept(new ShapeTypeVisitor());
-      String shapeString = "shape " + entry.getKey() + " " + shapeType;
-
-      //add the shape to the output.
-      output.append(shapeString + "\n");
-
-      Collections.sort(entry.getValue(), Comparator.comparingInt(IMotion::getStartTime));
-
-      //now iterate through the list of motions for the given entry.
-      for (IMotion motion: entry.getValue()) {
-        String motionString = "motion " + entry.getKey() + " "
-                + motion.accept(new MotionToTextVisitor());
-        output.append(motionString + "\n");
-      }
-
-      output.append("\n");
-    }
-
-    return output.toString().trim();
-  }
-
 
   /**
    * Gets the motion in the list of motions given that contains the given tick.
@@ -294,7 +254,6 @@ public class EasyAnimator implements IAnimatorModel {
       }
     }
     throw new IllegalArgumentException("No motion has that tick!");
-
   }
 
   @Override
@@ -305,33 +264,29 @@ public class EasyAnimator implements IAnimatorModel {
     List<IMotion> shapeMotions;
     IMotion desiredMotion;
 
-    // Try and see if the shape exists, if so grab its motions, sort them, and grab the shape.
-    try {
-      shapeMotions = this.motions.get(shape);
-      //Collections.sort(shapeMotions, Comparator.comparingInt(IMotion::getStartTime));
-      shapeType = this.shapes.get(shape);
-    } catch (IllegalArgumentException e) {
+    if (!this.motions.containsKey(shape) || !this.shapes.containsKey(shape)) {
       throw new IllegalArgumentException("That shape does not exist.");
     }
 
+    // Grab its motions, sort them, and grab the shape.
+    shapeMotions = this.motions.get(shape);
+    //Collections.sort(shapeMotions, Comparator.comparingInt(IMotion::getStartTime));
+    shapeType = this.shapes.get(shape);
+
     // Try and see if there is a motion for the desired tick.
     try {
-      //System.out.println(shapeMotions);
       desiredMotion = this.getFromMotionTick(tick, shapeMotions);
-      //System.out.println(desiredMotion);
-      //System.out.println(desiredMotion.getStartTime());
     } catch (IllegalArgumentException e) {
-      throw new IllegalArgumentException("Not a valid tick");
+      throw new IllegalArgumentException("Not a valid tick.");
     }
 
     //if all is valid, return a new shape with the correct state at a desired tick.
-    return shapeType.accept(new GetShapeAtMotionTick(desiredMotion, tick,
+    return shapeType.accept(new GetShapeAtTick(desiredMotion, tick,
             this.getCanvasPosition().getX(), this.getCanvasPosition().getY()));
   }
 
   @Override
   public List<IShape> getShapesAtTick(int tick) {
-
     List<IShape> shapesAtTick = new ArrayList<IShape>();
 
     //iterate through all the entries in the map.
@@ -350,126 +305,38 @@ public class EasyAnimator implements IAnimatorModel {
   /**
    * Custom visitor for getting a shape's state at a given tick.
    */
-  private class GetShapeAtMotionTick implements IShapeVisitor<IShape> {
-
-    private IMotion motion;
-    private int tick;
-    private int sT;
-    private int eT;
-    private int width;
-    private int height;
-    private int r;
-    private int g;
-    private int b;
-    private int x;
-    private int y;
-
+  private class GetShapeAtTick implements IShapeVisitor<IShape> {
+    private WidthHeight size;
+    private Point position;
+    private Color color;
 
     /**
      * Basic constructor for the visitor, takes in a motion and a tick to use.
      * @param motion the motion to tween for the desired tick.
      * @param tick the tick to find the shape's shape at.
      */
-    private GetShapeAtMotionTick(IMotion motion, int tick, int canvasX, int canvasY) {
-      this.motion = motion;
-      this.tick = tick;
-      this.sT = this.motion.getStartTime();
+    private GetShapeAtTick(IMotion motion, int tick, int canvasX, int canvasY) {
+      this.size = motion.getSize(tick);
+      this.color = motion.getColor(tick);
 
-      this.eT = this.motion.getEndTime();
-
-
-      this.width = this.tween(this.motion.getStartSize().getWidth(),
-              sT, this.motion.getEndSize().getWidth(), eT, tick);
-      this.height = this.tween(this.motion.getStartSize().getHeight(),
-              sT, this.motion.getEndSize().getHeight(), eT, tick);
-      this.r = this.tween(this.motion.getStartColor().getRed(), sT,
-              this.motion.getEndColor().getRed(), eT, tick);
-      this.g = this.tween(this.motion.getStartColor().getGreen(), sT,
-              this.motion.getEndColor().getGreen(), eT, tick);
-      this.b = this.tween(this.motion.getStartColor().getBlue(), sT,
-              this.motion.getEndColor().getBlue(), eT, tick);
-      this.x = this.tween(this.motion.getStartPosition().getX(), sT,
-              this.motion.getEndPosition().getX(), eT, tick) - canvasX;
-      this.y = this.tween(this.motion.getStartPosition().getY(), sT,
-              this.motion.getEndPosition().getY(), eT, tick) - canvasY;
+      // We need to reposition.
+      if (canvasX != 0 || canvasY != 0) {
+        Point preTransPosition = motion.getPosition(tick);
+        this.position = new Point(preTransPosition.getX() - canvasX,
+                preTransPosition.getY() - canvasY);
+      } else {
+        this.position = motion.getPosition(tick);
+      }
     }
 
     @Override
     public IShape applyToRectangle(Rectangle rect) {
-      return new Rectangle(new WidthHeight(width, height), new Point(x, y), new Color(r, g, b));
+      return new Rectangle(this.size, this.position, this.color);
     }
 
     @Override
     public IShape applyToOval(Oval oval) {
-      return new Oval(new WidthHeight(width, height), new Point(x, y), new Color(r, g, b));
-    }
-
-    /**
-     * Finds the tweened value between the two values at the desired tick.
-     * @param val1 the first int.
-     * @param val1T the tick time for a.
-     * @param val2 the second int.
-     * @param val2T the tick time for b.
-     * @param tick the desired tick time.
-     * @return the value at the desired tick.
-     */
-    private int tween(int val1, int val1T, int val2, int val2T, int tick) {
-
-      double a = (double) val1;
-      double aT = (double) val1T;
-      double b = (double) val2;
-      double bT = (double) val2T;
-      double t = (double) tick;
-
-      double f1 = (bT - t) / (bT - aT);
-      double f2 = a * f1;
-      //System.out.println(f2);
-
-      double g1 = (t - aT) / (bT - aT);
-      double g2 = b * g1;
-      return (int) (f2 + g2);
-    }
-  }
-
-  /**
-   * Private visitor class to return the type of shape as a string.
-   */
-  private class ShapeTypeVisitor implements IShapeVisitor<String> {
-
-    @Override
-    public String applyToRectangle(Rectangle r) {
-      return "rectangle";
-    }
-
-    @Override
-    public String applyToOval(Oval o) {
-      return "oval";
-    }
-  }
-
-  /**
-   * A private visitor class to return an IMotion as represented by a string.
-   */
-  private class MotionToTextVisitor implements IMotionVisitor<String> {
-
-    @Override
-    public String applyToBasicMotion(BasicMotion b) {
-      return b.getStartTime() + " "
-              + b.getStartPosition().getX() + " "
-              + b.getStartPosition().getY() + " "
-              + b.getStartSize().getWidth() + " "
-              + b.getStartSize().getHeight() + " "
-              + b.getStartColor().getRed() + " "
-              + b.getStartColor().getGreen() + " "
-              + b.getStartColor().getBlue() + "    "
-              + b.getEndTime() + " "
-              + b.getEndPosition().getX() + " "
-              + b.getEndPosition().getY() + " "
-              + b.getEndSize().getWidth() + " "
-              + b.getEndSize().getHeight() + " "
-              + b.getEndColor().getRed() + " "
-              + b.getEndColor().getGreen() + " "
-              + b.getEndColor().getBlue();
+      return new Oval(this.size, this.position, this.color);
     }
   }
 }
