@@ -27,7 +27,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 /**
@@ -65,12 +65,6 @@ public class TestSVGAnimationView {
   private static Point TOP_LEFT = CANVAS_TL;
   private static Point BOTTOM_RIGHT = new Point(900, 700);
 
-  // A string that should precede nearly every time enable loopback with the trick they showed.
-  private static String LOOPX = "base.end+";
-  // The number of animate children added per element to enable loopback.
-  private static int LOOP_CHILDREN = 1;
-  // We need two elements to make elements appear and disappear at the end of their motion.
-  private static int VISIBILITY_CHILDREN = 2;
   /**
    * Initializes the model with a standard set of rectangles and circles that we know how to test.
    */
@@ -111,6 +105,7 @@ public class TestSVGAnimationView {
    */
   private Document parseDocument() {
     view.makeVisible();
+    System.out.println(out.toString());
     // We produce our document.
     InputStream outputReader = new ByteArrayInputStream(out.toString()
             .getBytes(StandardCharsets.UTF_8));
@@ -137,6 +132,8 @@ public class TestSVGAnimationView {
 
   // The string of the svg version that we saw and developed around the spec for.
   private static String SVG_VERSION = "1.1";
+  // The namespace.
+  private static String XMLNS = "http://www.w3.org/2000/svg";
 
   /**
    * Verify that the root node is an svg element. Even for a blank document.
@@ -149,105 +146,59 @@ public class TestSVGAnimationView {
 
     assertEquals("Expected document element to be svg like in the spec.",
             "svg", doc.getDocumentElement().getTagName());
-    assertEquals(String.format("Expected svg element to be version %s", SVG_VERSION),
-            SVG_VERSION, doc.getDocumentElement().getAttribute("version"));
+    assertEquals("Expected svg element to be version" + SVG_VERSION,
+            SVG_VERSION,
+            doc.getDocumentElement().getAttribute("version"));
+    assertEquals("Expected svg element to contain xmls property.",
+            XMLNS,
+            doc.getDocumentElement().getAttribute("xmlns"));
   }
 
-  static String[] ESSENTIAL_ATTRIBUTES = new String[]{"from", "to", "attributeName", "attributeType"};
-
   /**
-   * Verify that all animate elements have a from, to, attributeName, and attributeType set.
-   */
-  @Test
-  public void verifyAnimates() {
-    initialize();
-    standardShapes();
-    Document doc = parseDocument();
-    NodeList animates = doc.getElementsByTagName("animate");
-    for (int i = 0; i < animates.getLength(); i++) {
-      NamedNodeMap attributes = animates.item(i).getAttributes();
-      for (int j = 0; j < ESSENTIAL_ATTRIBUTES.length; j++) {
-        String essential_attribute = ESSENTIAL_ATTRIBUTES[j];
-        assertTrue(String.format("Expected animate element to have attribute %s.",
-                essential_attribute),
-                attributes.getNamedItem(essential_attribute) != null);
-      }
-    }
-  }
-
-  static String ATTR_NAME_LOOKUP[] = new String[]{"id", "x", "y", "width", "height", "fill"};
-
-  /**
-   * A helper method to verify the properties of a shape element in the document.
-   * @param shape The shape element to get the attributes of.
-   * @param id    What the id parameter should equal.
-   * @param x     What the x coordinate should equal.
-   * @param y     What the y coordinate should equal.
-   * @param width What the width property should equal.
-   * @param height  What the height property should be.
-   * @param fill  The color fill of the shape.
-   */
-  void verifyShapeElement(Node shape,
-                          String id,
-                          String x, String y,
-                          String width, String height,
-                          String fill) {
-    // The indices of this array match that of ATTR_NAME_LOOKUP.
-    String attrProperties[] = {id, x, y, width, height, fill};
-    NamedNodeMap attributes = shape.getAttributes();
-    for (int i = 0; i < ATTR_NAME_LOOKUP.length; i++) {
-      String attrName = ATTR_NAME_LOOKUP[i];
-      Node attr = attributes.getNamedItem(attrName);
-      assertTrue(String.format("Expected attribute %s to exist in one of our shapes.",
-              attrName),
-              attr != null);
-      assertEquals(String.format("Expected attribute %s to equal what we had picked out for it.",
-              attrName),
-              attrProperties[i], attr.getNodeValue());
-    }
-  }
-
-  static String ANIMATE_ATTR_LOOKUP[] = new String[]{"attributeName", "from", "to", "begin", "dur"};
-
-  /**
-   * Verifies that the given node has the following properties.
-   * @param e          The node to check.
-   * @param attributeName The attributeName of the element.
+   * Verifies that the given node contains an animate element with the following properties.
+   * @param e             The node to check.
    * @param from          The start value.
    * @param to            The end value.
    * @param begin         The begin of the animate.
    * @param dur           The duration of the animate.
    */
-  void verifyAnimation(Element e,
+  private void verifyAnimation(Element e,
                        String attributeName,
                        String from, String to,
                        String begin, String dur) {
-    String attrProperties[] = {attributeName, from, to, begin, dur};
-    NamedNodeMap attributes = e.getAttributes();
-    for (int i = 0; i < ANIMATE_ATTR_LOOKUP.length; i++) {
-      String attrName = ANIMATE_ATTR_LOOKUP[i];
-      String attr = e.getAttribute(attrName);
-      assertTrue(String.format("Expected animate element to have %s attribute.", attrName),
-              attr != null);
-      assertEquals(String.format("Expected animate element property %s to match.", attrName),
-              attrProperties[i], attr);
+    NodeList list = e.getChildNodes();
+    for (int i = 0; i < list.getLength(); i++){
+      Node item = list.item(i);
+      if (item.getNodeType() == Node.ELEMENT_NODE) {
+        Element child = (Element) item;
+        if (attributeName.equals(child.getAttribute("attributeName")) &&
+                from.equals(child.getAttribute("from")) &&
+                to.equals(child.getAttribute("to")) &&
+                begin.equals(child.getAttribute("begin")) &&
+                dur.equals(child.getAttribute("dur"))) {
+          // We found it.
+          return;
+        }
+      }
     }
+
+    fail("Unable to find an animate element with the given properties.");
   }
 
   /**
-   * Gets the first child of the given node.
-   * @param n   The node to search.
-   * @param index The index of the element to retrieve.
-   * @returns   The first element as an Element;
+   * Fetch an element by it's unique id in the document by searching the children of the given root.
+   * @param id      The id of the element to search for.
+   * @param root    The root to start searching at.
+   * @return  The element or null.
    */
-  Element getNChild(Node n, int index) {
-    NodeList nodes = n.getChildNodes();
-    int elements = 0;
-    for (int i = nodes.getLength() - 1; i >= 0 ; i--) {
-      if (nodes.item(i).getNodeType() == Node.ELEMENT_NODE) {
-        elements += 1;
-        if (index + 1 == elements) {
-          return (Element) nodes.item(i);
+  private Element getElementById(String id, Element root) {
+    NodeList list = root.getChildNodes();
+    for (int i = 0; i < list.getLength(); i++) {
+      Node item = list.item(i);
+      if (item.getNodeType() == Node.ELEMENT_NODE) {
+        Element element = (Element) item;
+        if (id.equals(element.getAttribute("id"))) {
+          return element;
         }
       }
     }
@@ -255,168 +206,117 @@ public class TestSVGAnimationView {
   }
 
   /**
-   * Counts the number of children of the given node that are animate objects.
-   * @param n  The node to count the children of.
-   * @return      The number of children that are elements.
-   */
-  private int countChildren(Node n) {
-    int sum = 0;
-    NodeList nodes = n.getChildNodes();
-    for (int i = 0; i < nodes.getLength(); i++) {
-      Node node = nodes.item(i);
-      if (node.getNodeType() == Node.ELEMENT_NODE) {
-        sum += 1;
-      }
-    }
-    return sum;
-  }
-
-  /**
-   * Verify a pre-built animation has all the elements we expect. We assume the 30 TPS with this
-   * version.
+   * Tests the standard shapes at 30 FPS.
    */
   @Test
-  public void testStandardShapeElements() {
+  public void testStandardShapeAnimates() {
     initialize();
     standardShapes();
-    // We are at 30 TPS.
     Document doc = parseDocument();
-    // First we verify our shapes are there.
-    Node rectangle = doc.getDocumentElement().getElementsByTagName("rect").item(0);
-    assertTrue("Expected to be able to find rectangle element in svg node.",
-            rectangle != null);
-    Node oval = doc.getDocumentElement().getElementsByTagName("ellipse").item(0);
-    assertTrue("Expected to be able to find ellipse element in svg node.",
-            oval != null);
-    // Let's verify their properties.
-    verifyShapeElement(rectangle, "R",
-            Integer.toString(TOP_LEFT.getX()),
-            Integer.toString(TOP_LEFT.getY()),
-            Integer.toString(SMALL.getWidth()),
-            Integer.toString(SMALL.getHeight()),
-            "rgb(200, 0, 0)");
-    verifyShapeElement(oval, "C",
-            Integer.toString(BOTTOM_RIGHT.getX()),
-            Integer.toString(BOTTOM_RIGHT.getY()),
-            Integer.toString(BIG.getWidth()),
-            Integer.toString(BIG.getHeight()),
-            "rgb(0, 0, 200)");
-    // Let's verify their animations.
-    // The only children of these nodes (for now since searching is hard),
-    // should be our animate elements.
-    assertEquals("Expected the rectangle to have 2 (animate) children nodes.",
-            VISIBILITY_CHILDREN + LOOP_CHILDREN + 2, countChildren(rectangle));
-    assertEquals("Expected the oval to have 2 (animate) children nodes.",
-            VISIBILITY_CHILDREN + LOOP_CHILDREN + 2, countChildren(oval));
-    // Note we only have one motion for the oval, BUT it changes two values.
-    // We need an animate element per property that is changed.
-    // I'm assuming it is an ordered list the way it came out.
-    // This will be something I have to then enforce when making it.
-    verifyAnimation(getNChild(rectangle, 1),
-            "fill",
-            "rgb(200, 0, 0)", "rgb(0, 0, 200)",
-            LOOPX + "0ms", "1000ms");
-    verifyAnimation(getNChild(rectangle, 2),
-            "fill",
-            "rgb(0, 0, 200)", "rgb(200, 0, 0)",
-            LOOPX + "1000ms", "1000ms");
-    // Now we can go verify that second shape.
-    verifyAnimation(getNChild(oval, 1),
-            "width",
-            "400", "100",
-            LOOPX + "0ms", "2000ms");
-    verifyAnimation(getNChild(oval, 2),
-            "height",
-            "200", "50",
-            LOOPX + "0ms", "2000ms");
-  }
 
-  /**
-   * Verify a pre-built animation has all the elements we expect, but after changing the TPS, the
-   * times are correctly adjusted.
-   */
-  @Test
-  public void testStandardShapes60TPS() {
-    // Copied_PASTED code from verifyStandard but with a TWEEST.
-    initialize();
-    view.setSpeed(60); // We are now at 60 TPS.
-    standardShapes();
-    Document doc = parseDocument();
-    Node rectangle = doc.getDocumentElement().getElementsByTagName("rect").item(0);
-    assertTrue("Expected to be able to find rectangle element in svg node.",
-            rectangle != null);
-    Node oval = doc.getDocumentElement().getElementsByTagName("ellipse").item(0);
-    assertTrue("Expected to be able to find ellipse element in svg node.",
-            oval != null);
-    assertEquals("Expected the rectangle to have 2 (animate) children nodes.",
-            VISIBILITY_CHILDREN + LOOP_CHILDREN + 2, countChildren(rectangle));
-    assertEquals("Expected the oval to have 2 (animate) children nodes.",
-            VISIBILITY_CHILDREN + LOOP_CHILDREN + 2, countChildren(oval));
-    verifyAnimation(getNChild(rectangle, 1),
-            "fill",
-            "rgb(200, 0, 0)", "rgb(0, 0, 200)",
-            LOOPX + "0ms", "500ms");
-    verifyAnimation(getNChild(rectangle, 2),
-            "fill",
-            "rgb(0, 0, 200)", "rgb(200, 0, 0)",
-            LOOPX + "500ms", "500ms");
-    // Now we can go verify that second shape.
-    verifyAnimation(getNChild(oval, 1),
-            "width",
-            "400", "100",
-            LOOPX + "0ms", "1000ms");
-    verifyAnimation(getNChild(oval, 2),
-            "height",
-            "200", "50",
-            LOOPX + "0ms", "1000ms");
-  }
-
-  /**
-   * A test to verify that the viewbox property and the canvas match.
-   */
-  @Test
-  public void testCanvasViewboxMatch() {
-    initialize();
-    standardShapes(); // This sets a canvas with some constants.
-    Document doc = parseDocument();
     Element svg = doc.getDocumentElement();
-    String viewbox = svg.getAttribute("viewBox");
-    assertTrue("Expected viewBox property of svg element to be set.",
-            viewbox != null);
-    assertEquals("Expected viewBox property to match canvas.",
-            String.format("%d %d %d %d",
-                    CANVAS_TL.getX(), CANVAS_TL.getY(),
-                    CANVAS_SIZE.getWidth(), CANVAS_SIZE.getHeight()),
-                    viewbox);
-  }
 
-  /**
-   * A test to verify that when shapes are added that there is that extra hacked element to loop.
-   */
-  @Test
-  public void testSpecialBox() {
-    initialize();
-    standardShapes();
-    Document doc = parseDocument();
-    Element svg = doc.getDocumentElement();
-    // We check for the special box.
-    Node specialBox = doc.getDocumentElement().getElementsByTagName("loopingline").item(0);
-    assertTrue("Expected root element to contain the special box!",
-            specialBox != null);
-    // We check our special box has that animation.
-    assertEquals("Expected special box to contain one animate element.",
-            1, countChildren(specialBox));
-    // We check that animation has the special properties we need.
-    Element loopAnimate = getNChild(specialBox, 1);
-    verifyAnimation(getNChild(specialBox, 1),
-            "visibility",
-            "hide",
-            "hide",
-            "0;base.end",
+    // First we test for elements.
+
+    Element rectangle = getElementById("R", svg);
+    assertNotNull("Expected there to exist an element with an id of R.",
+            rectangle);
+    assertEquals("100",
+            rectangle.getAttribute("width"));
+    assertEquals("50",
+            rectangle.getAttribute("height"));
+    assertEquals("100",
+            rectangle.getAttribute("x"));
+    assertEquals("100",
+            rectangle.getAttribute("y"));
+    assertEquals("rgb(200, 0, 0)",
+            rectangle.getAttribute("fill"));
+
+    Element ellipse = getElementById("C", svg);
+    assertNotNull("Expected there to exist an element with an id of C.",
+            ellipse);
+    assertEquals("200",
+            ellipse.getAttribute("rx"));
+    assertEquals("100",
+            ellipse.getAttribute("ry"));
+    assertEquals("1100",
+            ellipse.getAttribute("cx"));
+    assertEquals("800",
+            ellipse.getAttribute("cy"));
+    assertEquals("rgb(0, 0, 200)",
+            ellipse.getAttribute("fill"));
+
+    // Now we check their motions.
+    // I don't really mind extraneous motions, but I'm not going to test for them.
+    // First the rectangle, we changed it's color.
+    verifyAnimation(rectangle,
+            "fill",
+            "rgb(200, 0, 0)",
+            "rgb(0, 0, 200)",
+            "base.begin+0ms",
+            "1000ms");
+    verifyAnimation(rectangle,
+            "fill",
+            "rgb(0, 0, 200)",
+            "rgb(200, 0, 0)",
+            "base.begin+1000ms",
+            "1000ms");
+
+    // Next the ellipse, we changed it's size.
+    // This should trigger a position change since the center will be different.
+    verifyAnimation(ellipse,
+            "rx",
+            "200",
+            "50",
+            "base.begin+0ms",
             "2000ms");
-    // We assume 30 TPS, so it should only take 2 seconds.
-    assertTrue("Expected the special looping animate element to have an id of base.",
-            "base".equals(loopAnimate.getAttribute("id")));
-    // I use that that weird incantation since getAttribute could return null.
+    verifyAnimation(ellipse,
+            "ry",
+            "100",
+            "25",
+            "base.begin+0ms",
+            "2000ms");
+
+    verifyAnimation(ellipse,
+            "cx",
+            "1100",
+            "950",
+            "base.begin+0ms",
+            "2000ms");
+    verifyAnimation(ellipse,
+            "cy",
+            "800",
+            "725",
+            "base.begin+0ms",
+            "2000ms");
+  }
+
+  /**
+   * Tests the standard shapes at 60 FPS. We test a snipper of the normal standard
+   * shapes test suite to verify times have shrunk.
+   */
+  @Test
+  public void testStandardShapesAnimatesSpeedup() {
+    initialize();
+    standardShapes();
+    view.setSpeed(60);
+    Document doc = parseDocument();
+    Element svg = doc.getDocumentElement();
+    Element rectangle = getElementById("R", svg);
+    assertNotNull("Expected there to exist an element with an id of R.",
+            rectangle);
+
+    verifyAnimation(rectangle,
+            "fill",
+            "rgb(200, 0, 0)",
+            "rgb(0, 0, 200)",
+            "base.begin+0ms",
+            "500ms");
+    verifyAnimation(rectangle,
+            "fill",
+            "rgb(0, 0, 200)",
+            "rgb(200, 0, 0)",
+            "base.begin+500ms",
+            "500ms");
   }
 }
