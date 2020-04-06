@@ -19,7 +19,7 @@ public class MVCController implements IController {
   IVisualView view;
 
   private int tick;
-  private int tickRange;
+  private long tickRange;
   private Timer timer;
 
   private boolean shouldLoop;
