@@ -127,7 +127,6 @@ public final class BasicMotion implements IMotion {
    * @return the value at the desired tick.
    */
   private int tween(int val1, int val1T, int val2, int val2T, int tick) {
-
     double a = (double) val1;
     double aT = (double) val1T;
     double b = (double) val2;
@@ -136,11 +135,10 @@ public final class BasicMotion implements IMotion {
 
     double f1 = (bT - t) / (bT - aT);
     double f2 = a * f1;
-    //System.out.println(f2);
 
     double g1 = (t - aT) / (bT - aT);
     double g2 = b * g1;
-    return (int) (f2 + g2);
+    return (int) Math.ceil(f2 + g2);
   }
 
   @Override
@@ -153,7 +151,7 @@ public final class BasicMotion implements IMotion {
   public WidthHeight getSize(int tick) {
     return new WidthHeight(tween(startSize.getWidth(), startTime,
             endSize.getWidth(), endTime, tick),
-            tween(startSize.getWidth(), startTime,
+            tween(startSize.getHeight(), startTime,
                     endSize.getHeight(), endTime, tick));
   }
 

@@ -270,7 +270,7 @@ public class EasyAnimator implements IAnimatorModel {
 
     // Grab its motions, sort them, and grab the shape.
     shapeMotions = this.motions.get(shape);
-    //Collections.sort(shapeMotions, Comparator.comparingInt(IMotion::getStartTime));
+    // Collections.sort(shapeMotions, Comparator.comparingInt(IMotion::getStartTime));
     shapeType = this.shapes.get(shape);
 
     // Try and see if there is a motion for the desired tick.
@@ -280,7 +280,7 @@ public class EasyAnimator implements IAnimatorModel {
       throw new IllegalArgumentException("Not a valid tick.");
     }
 
-    //if all is valid, return a new shape with the correct state at a desired tick.
+    // if all is valid, return a new shape with the correct state at a desired tick.
     return shapeType.accept(new GetShapeAtTick(desiredMotion, tick,
             this.getCanvasPosition().getX(), this.getCanvasPosition().getY()));
   }

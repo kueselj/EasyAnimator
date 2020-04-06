@@ -85,7 +85,7 @@ public class SwingView extends JFrame implements IVisualView {
     this.setMaximumSize(canvasDimension);
     this.mainPanel.setMaximumSize(canvasDimension);
 
-    this.timer = new Timer(5, e -> this.refresh());
+    this.timer = new Timer(1000, e -> this.refresh());
     this.timer.start();
 
     this.pack();
@@ -98,8 +98,7 @@ public class SwingView extends JFrame implements IVisualView {
       throw new IllegalArgumentException("Speed must be integer greater than 0");
     }
 
-    this.timer = new Timer((int) (1.0 / speed * 1000), e -> this.refresh());
-    this.timer.start();
+    this.timer.setDelay(((int) (1.0 / speed * 1000)));
   }
 
   @Override
@@ -114,7 +113,6 @@ public class SwingView extends JFrame implements IVisualView {
 
   //Gets the max tick that the model has.
   private int getTickRange() {
-
     Map<String, List<IMotion>> motions = this.model.getMotions();
 
     int maxTick = 0;
@@ -123,9 +121,7 @@ public class SwingView extends JFrame implements IVisualView {
     for (Map.Entry<String, List<IMotion>> entry: motions.entrySet()) {
 
       Collections.sort(entry.getValue(), Comparator.comparingInt(IMotion::getEndTime));
-
       List<IMotion> entryList =  motions.get(entry.getKey());
-
       if (entryList.get(entryList.size() - 1).getEndTime() > maxTick) {
         maxTick = entryList.get(entryList.size() - 1).getEndTime();
       }

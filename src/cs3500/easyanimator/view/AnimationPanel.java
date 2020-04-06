@@ -65,7 +65,6 @@ public class AnimationPanel extends JPanel {
     //g2d.scale(1, -1);
 
     for (IShape s : this.shapes) {
-
       s.accept(new DrawShapeVisitor(g2d));
     }
   }
