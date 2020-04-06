@@ -1,10 +1,9 @@
 package cs3500.easyanimator.view;
 
-import javax.swing.JScrollPane;
-import javax.swing.JFrame;
-import javax.swing.Timer;
+import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionListener;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
@@ -12,6 +11,7 @@ import java.util.List;
 
 import cs3500.easyanimator.model.IAnimatorModelViewOnly;
 import cs3500.easyanimator.model.motions.IMotion;
+import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.model.shapes.WidthHeight;
 
 /**
@@ -58,6 +58,11 @@ public class SwingView extends JFrame implements IVisualView {
   }
 
   @Override
+  public void setViewSize(WidthHeight wH) {
+    //TODO nothing, this is an old view.
+  }
+
+  @Override
   public void makeVisible() {
     this.setVisible(true);
   }
@@ -95,6 +100,16 @@ public class SwingView extends JFrame implements IVisualView {
 
     this.timer = new Timer((int) (1.0 / speed * 1000), e -> this.refresh());
     this.timer.start();
+  }
+
+  @Override
+  public void setShapes(List<IShape> shapesAtTick) {
+
+  }
+
+  @Override
+  public void addActionListeners(ActionListener... listeners) {
+
   }
 
   //Gets the max tick that the model has.
