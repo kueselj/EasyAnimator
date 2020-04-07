@@ -10,10 +10,7 @@ import cs3500.easyanimator.model.motions.BasicMotion;
 import cs3500.easyanimator.model.shapes.Oval;
 import cs3500.easyanimator.model.shapes.Rectangle;
 import cs3500.easyanimator.model.shapes.WidthHeight;
-import cs3500.easyanimator.view.EnhancedSwingView;
-import cs3500.easyanimator.view.IAnimatorView;
-import cs3500.easyanimator.view.IVisualView;
-import cs3500.easyanimator.view.SwingView;
+import cs3500.easyanimator.view.*;
 
 /**
  * Manual test class for a SwingView. Doesn't use builder in order to do quicker testing.
@@ -62,7 +59,7 @@ public class MainTest {
 
 
     model.setCanvas(new Point(0,0), new WidthHeight(500, 500));
-    IVisualView view = new EnhancedSwingView();
+    IEnhancedVisualView view = new EnhancedSwingView();
     IController controller = new MVCController(model, view);
     controller.go();
 

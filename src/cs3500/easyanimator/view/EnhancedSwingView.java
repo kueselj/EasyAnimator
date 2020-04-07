@@ -9,19 +9,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of an EnhancedView that delegates base operations to a VisualView.
  */
-public class EnhancedSwingView extends JFrame implements IVisualView {
+public class EnhancedSwingView extends JFrame implements IEnhancedVisualView {
 
   private AnimationPanel mainPanel;
+  private List<String> availableShapes;
+  private List<String> availableShapeTicks;
 
   //TODO add a field for the shapes.
-
   private JPanel buttonPanel;
 
   private JButton startButton;
@@ -34,6 +35,9 @@ public class EnhancedSwingView extends JFrame implements IVisualView {
 
   private JPanel editorPanel;
 
+  //TODO make this bring up a popup or something.
+  private JButton addShapeButton;
+
   private JComboBox selectShape;
   private JComboBox selectTick;
   private JTextField keyFrameTick;
@@ -44,12 +48,14 @@ public class EnhancedSwingView extends JFrame implements IVisualView {
   private JTextField keyFrameR;
   private JTextField keyFrameG;
   private JTextField keyFrameB;
+  private JButton saveModification;
 
   //only delete it if it is selected
   private JButton deleteKeyFrame;
 
-  //TODO make this bring up a popup or something.
-  private JButton addShapeButton;
+  private JButton deleteShape;
+
+
 
 
 
@@ -74,12 +80,13 @@ public class EnhancedSwingView extends JFrame implements IVisualView {
     this.editorPanel.setMaximumSize(new Dimension(300, 500));
     this.editorPanel.setBackground(Color.DARK_GRAY);
 
-    this.addShapeButton = new JButton("test");
+    this.addShapeButton = new JButton("Add Shape");
 
     String[] petStrings = { "Bird", "Cat", "Dog", "Rabbit", "Pig" };
     this.selectShape = new JComboBox(petStrings);
-    Integer[] ticks = {1,2,3,4,5};
+    String[] ticks = {"1","2","3","4","5"};
     this.selectTick = new JComboBox(ticks);
+
     Dimension textFieldDimension = new Dimension(100, 25);
     this.keyFrameTick = new JTextField();
     this.keyFrameTick.setMaximumSize(textFieldDimension);
@@ -98,8 +105,9 @@ public class EnhancedSwingView extends JFrame implements IVisualView {
     this.keyFrameB = new JTextField();
     this.keyFrameB.setMaximumSize(textFieldDimension);
 
+    this.saveModification = new JButton("Save KeyFrame Modification");
     this.deleteKeyFrame = new JButton("Delete KeyFrame");
-
+    this.deleteShape = new JButton("Delete Shape");
 
     this.editorPanel.add(addShapeButton, BorderLayout.CENTER);
     this.editorPanel.add(selectShape);
@@ -112,16 +120,16 @@ public class EnhancedSwingView extends JFrame implements IVisualView {
     this.editorPanel.add(keyFrameR);
     this.editorPanel.add(keyFrameG);
     this.editorPanel.add(keyFrameB);
+    this.editorPanel.add(saveModification);
     this.editorPanel.add(deleteKeyFrame);
+    this.editorPanel.add(deleteShape);
 
     this.add(editorPanel, BorderLayout.LINE_END);
     //////////////////////////////////////////////////////////
 
-
     this.mainPanel = new AnimationPanel();
     //this.mainPanel.setLayout(new BorderLayout());
     this.add(this.mainPanel, BorderLayout.LINE_START);
-
 
     JScrollPane scrollPane = new JScrollPane(this.mainPanel);
     this.add(scrollPane, BorderLayout.CENTER);
@@ -166,6 +174,8 @@ public class EnhancedSwingView extends JFrame implements IVisualView {
     decreaseSpeedButton = new JButton("Decrease Speed");
     buttonPanel.add(decreaseSpeedButton);
 
+
+
   }
 
   @Override
@@ -201,10 +211,43 @@ public class EnhancedSwingView extends JFrame implements IVisualView {
     //DO NOTHING TRY AND REMOVE
   }
 
+  @Override
+  public void setAvailableShapes(List<String> shapes) {
+    this.availableShapes = shapes;
+    String[] shapeArray = shapes.toArray(new String[0]);
+    DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel(shapeArray);
+    this.selectShape.setModel(comboBoxModel);
+
+  }
 
   @Override
-  public void setShapes(java.util.List<IShape> shapesAtTick) {
+  public void setAvailableShapeTicks(List<String> shapeTicks) {
+
+    this.availableShapeTicks = shapeTicks;
+    String[] tickArray = shapeTicks.toArray(new String[0]);
+    DefaultComboBoxModel comboBoxModel = new DefaultComboBoxModel(tickArray);
+    this.selectTick.setModel(comboBoxModel);
+
+  }
+
+
+  @Override
+  public void setShapes(List<IShape> shapesAtTick) {
     this.mainPanel.setShapes(shapesAtTick);
+  }
+
+  @Override
+  public void setTextFields(List<String> fields) {
+    this.keyFrameTick.setText(fields.get(0));
+    this.keyFrameX.setText(fields.get(1));
+    this.keyFrameY.setText(fields.get(2));
+    this.keyFrameWidth.setText(fields.get(3));
+    this.keyFrameHeight.setText(fields.get(4));
+    this.keyFrameR.setText(fields.get(5));
+    this.keyFrameG.setText(fields.get(6));
+    this.keyFrameB.setText(fields.get(7));
+
+
   }
 
   @Override
@@ -216,5 +259,44 @@ public class EnhancedSwingView extends JFrame implements IVisualView {
     this.toggleLoopingButton.addActionListener(listeners[4]);
     this.increaseSpeedButton.addActionListener(listeners[5]);
     this.decreaseSpeedButton.addActionListener(listeners[6]);
+  }
+
+  @Override
+  public String getShapeSelected() {
+    return (String) this.selectShape.getSelectedItem();
+  }
+
+  @Override
+  public String getTickSelected() {
+    return (String) this.selectTick.getSelectedItem();
+  }
+
+  @Override
+  public List<String> getTextFields() {
+    List<String> fields = new ArrayList<String>();
+    fields.add(this.keyFrameTick.getText());
+    fields.add(this.keyFrameX.getText());
+    fields.add(this.keyFrameY.getText());
+    fields.add(this.keyFrameWidth.getText());
+    fields.add(this.keyFrameHeight.getText());
+    fields.add(this.keyFrameR.getText());
+    fields.add(this.keyFrameG.getText());
+    fields.add(this.keyFrameB.getText());
+    return fields;
+  }
+
+  @Override
+  public void addSelectShapeActionListener(ActionListener listener) {
+    this.selectShape.addActionListener(listener);
+  }
+
+  @Override
+  public void addSelectTickActionListener(ActionListener listener) {
+    this.selectTick.addActionListener(listener);
+  }
+
+  @Override
+  public void addSaveKeyFrameActionListener(ActionListener listener) {
+    this.saveModification.addActionListener(listener);
   }
 }
