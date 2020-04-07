@@ -369,7 +369,7 @@ public class EasyAnimator implements IAnimatorModel {
 
     @Override
     public IShape applyToOval(Oval o) {
-      return new Rectangle(size, position, color);
+      return new Oval(size, position, color);
     }
   }
 
