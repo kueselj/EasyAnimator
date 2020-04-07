@@ -9,7 +9,7 @@ import cs3500.easyanimator.model.Point;
 public class BasicShapeFactory implements IShapeFactory {
 
   @Override
-  public IShape getShape(String name, WidthHeight size, Color color, Point position) {
+  public IShape getShape(String name, WidthHeight size, Point position, Color color) {
     if (name == null || size == null || color == null || position == null) {
       throw new IllegalArgumentException("Unable to create the given shape with uninitialized" +
               " values.");

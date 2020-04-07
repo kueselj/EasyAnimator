@@ -12,11 +12,11 @@ public interface IShapeFactory {
    * @param name      The name of the shape to fetch. Implementations
    *                  should support oval, rectangle.
    * @param size      The size of the shape to create.
-   * @param color     The color of the shape to create.
    * @param position  The position of the shape.
+   * @param color     The color of the shape to create.
    * @return an IShape
    * @throws IllegalArgumentException If the given name is not a shape.
    *                                  Or if any of the parameters are uninitialized.
    */
-  IShape getShape(String name, WidthHeight size, Color color, Point position);
+  IShape getShape(String name, WidthHeight size, Point position, Color color);
 }

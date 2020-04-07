@@ -12,6 +12,7 @@ import cs3500.easyanimator.model.shapes.WidthHeight;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * Tests the getShapeAtTick and getShapesAtTick methods.
@@ -28,6 +29,9 @@ public class GetShapeAtTickTest {
     //model.addShape("C", c); // We add an oval named C.
     model.addShape("R", r); // We add a rectangle namedR.
 
+    assertNull("Before the shape has any motions there shouldn't be a shape.",
+            model.getShapeAtTick("R", 0));
+
     model.addMotion("R", new BasicMotion(0, 10,
             new WidthHeight(100, 100), new WidthHeight(200, 300),
             new Point(100, 100), new Point(300, 400),
@@ -35,7 +39,7 @@ public class GetShapeAtTickTest {
 
     this.model.setCanvas(new Point(0,0), new WidthHeight(500, 500));
 
-    IShape getShape = model.getShapeAtTick(5, "R");
+    IShape getShape = model.getShapeAtTick("R", 5);
 
     assertEquals(150, getShape.getSize().getWidth());
     assertEquals(200, getShape.getSize().getHeight());
