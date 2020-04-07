@@ -1,6 +1,7 @@
 package cs3500.easyanimator.controller;
 
 import cs3500.easyanimator.model.IAnimatorModel;
+import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.model.shapes.WidthHeight;
 import cs3500.easyanimator.view.IVisualView;
 
@@ -8,6 +9,7 @@ import cs3500.easyanimator.view.IVisualView;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.SortedMap;
 
 public class MVCController implements IController {
 
@@ -32,12 +34,11 @@ public class MVCController implements IController {
     this.tickRange = this.model.getMaxTick();
 
     this.timer = new Timer(30, e -> this.refresh());
-    this.addListeners();
+    this.addPlayBackListeners();
   }
 
   @Override
   public void go() {
-
     //get the correctSize for your view.
     WidthHeight wH = this.model.getCanvasSize();
     this.view.setViewSize(wH);
@@ -65,7 +66,21 @@ public class MVCController implements IController {
     }
   }
 
-  private void addListeners(){
+  @Override
+  public void addKeyFrame(String id, IShape state, int tick) {
+    this.model.addKeyframe(id, state, tick);
+    //reset tickRange as it may have changed now.
+    this.tickRange = this.model.getMaxTick();
+  }
+
+  @Override
+  public void removeKeyFrame(String id, int tick) {
+    this.model.removeKeyframe(id, tick);
+    //reset tickRange as it may have changed now.
+    this.tickRange = this.model.getMaxTick();
+  }
+
+  private void addPlayBackListeners(){
     view.addActionListeners(new ActionListener() {
       public void actionPerformed(ActionEvent start) {
         timer.start();

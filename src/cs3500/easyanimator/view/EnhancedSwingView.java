@@ -16,11 +16,11 @@ import java.util.Map;
 /**
  * Implementation of an EnhancedView that delegates base operations to a VisualView.
  */
-public class EnhancedSwingView extends JFrame implements IEnhancedVisualView {
-
-
+public class EnhancedSwingView extends JFrame implements IVisualView {
 
   private AnimationPanel mainPanel;
+
+  //TODO add a field for the shapes.
 
   private JPanel buttonPanel;
 
@@ -32,6 +32,26 @@ public class EnhancedSwingView extends JFrame implements IEnhancedVisualView {
   private JButton increaseSpeedButton;
   private JButton decreaseSpeedButton;
 
+  private JPanel editorPanel;
+
+  private JComboBox selectShape;
+  private JComboBox selectTick;
+  private JTextField keyFrameTick;
+  private JTextField keyFrameX;
+  private JTextField keyFrameY;
+  private JTextField keyFrameWidth;
+  private JTextField keyFrameHeight;
+  private JTextField keyFrameR;
+  private JTextField keyFrameG;
+  private JTextField keyFrameB;
+
+  //only delete it if it is selected
+  private JButton deleteKeyFrame;
+
+  //TODO make this bring up a popup or something.
+  private JButton addShapeButton;
+
+
 
   /**
    * Constructor for an enhanced view, takes in a IVisualVew to delegate base operations to.
@@ -39,13 +59,69 @@ public class EnhancedSwingView extends JFrame implements IEnhancedVisualView {
   public EnhancedSwingView() {
     super();
     this.setTitle("Your Animation");
-    this.mainPanel = new AnimationPanel();
+
 
     this.setResizable(true);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     this.setLayout(new BorderLayout());
-    this.add(this.mainPanel);
+
+    //PUT this in custom class perhaps. Def Actually./////////////////////////
+    this.editorPanel = new JPanel();
+    this.editorPanel.setLayout(new BoxLayout(editorPanel, BoxLayout.Y_AXIS));
+    this.editorPanel.setSize(300, 500);
+    this.editorPanel.setPreferredSize(new Dimension(300, 500));
+    this.editorPanel.setMaximumSize(new Dimension(300, 500));
+    this.editorPanel.setBackground(Color.DARK_GRAY);
+
+    this.addShapeButton = new JButton("test");
+
+    String[] petStrings = { "Bird", "Cat", "Dog", "Rabbit", "Pig" };
+    this.selectShape = new JComboBox(petStrings);
+    Integer[] ticks = {1,2,3,4,5};
+    this.selectTick = new JComboBox(ticks);
+    Dimension textFieldDimension = new Dimension(100, 25);
+    this.keyFrameTick = new JTextField();
+    this.keyFrameTick.setMaximumSize(textFieldDimension);
+    this.keyFrameX = new JTextField();
+    this.keyFrameX.setMaximumSize(textFieldDimension);
+    this.keyFrameY = new JTextField();
+    this.keyFrameY.setMaximumSize(textFieldDimension);
+    this.keyFrameWidth = new JTextField();
+    this.keyFrameWidth.setMaximumSize(textFieldDimension);
+    this.keyFrameHeight = new JTextField();
+    this.keyFrameHeight.setMaximumSize(textFieldDimension);
+    this.keyFrameR = new JTextField();
+    this.keyFrameR.setMaximumSize(textFieldDimension);
+    this.keyFrameG = new JTextField();
+    this.keyFrameG.setMaximumSize(textFieldDimension);
+    this.keyFrameB = new JTextField();
+    this.keyFrameB.setMaximumSize(textFieldDimension);
+
+    this.deleteKeyFrame = new JButton("Delete KeyFrame");
+
+
+    this.editorPanel.add(addShapeButton, BorderLayout.CENTER);
+    this.editorPanel.add(selectShape);
+    this.editorPanel.add(selectTick);
+    this.editorPanel.add(keyFrameTick);
+    this.editorPanel.add(keyFrameX);
+    this.editorPanel.add(keyFrameY);
+    this.editorPanel.add(keyFrameWidth);
+    this.editorPanel.add(keyFrameHeight);
+    this.editorPanel.add(keyFrameR);
+    this.editorPanel.add(keyFrameG);
+    this.editorPanel.add(keyFrameB);
+    this.editorPanel.add(deleteKeyFrame);
+
+    this.add(editorPanel, BorderLayout.LINE_END);
+    //////////////////////////////////////////////////////////
+
+
+    this.mainPanel = new AnimationPanel();
+    //this.mainPanel.setLayout(new BorderLayout());
+    this.add(this.mainPanel, BorderLayout.LINE_START);
+
 
     JScrollPane scrollPane = new JScrollPane(this.mainPanel);
     this.add(scrollPane, BorderLayout.CENTER);
@@ -55,12 +131,15 @@ public class EnhancedSwingView extends JFrame implements IEnhancedVisualView {
     //button panel
     buttonPanel = new JPanel();
     buttonPanel.setLayout(new GridLayout());
-    buttonPanel.setBackground(new Color(200, 200, 255));
-    this.add(buttonPanel, BorderLayout.SOUTH);
+    buttonPanel.setBackground(new Color(106, 35, 38));
+    this.add(buttonPanel, BorderLayout.PAGE_END);
 
     //start button.
     startButton = new JButton("Start");
     buttonPanel.add(startButton);
+    //startButton.setOpaque(false);
+    //startButton.setContentAreaFilled(false);
+    //startButton.setBorderPainted(false);
 
     //pause button.
     pauseButton = new JButton("Pause");
@@ -106,9 +185,10 @@ public class EnhancedSwingView extends JFrame implements IEnhancedVisualView {
 
     this.mainPanel.setPreferredSize(canvasDimension);
     this.mainPanel.setMaximumSize(canvasDimension);
-    this.setMinimumSize(frameDimension);
-    this.setPreferredSize(frameDimension);
-    this.setMaximumSize(frameDimension);
+
+    //this.setMinimumSize(frameDimension);
+    //this.setPreferredSize(frameDimension);
+    //this.setMaximumSize(frameDimension);
   }
 
   @Override
@@ -117,43 +197,10 @@ public class EnhancedSwingView extends JFrame implements IEnhancedVisualView {
   }
 
   @Override
-  public void start() {
-    //
-  }
-
-  @Override
-  public void pause() {
-    //
-  }
-
-  @Override
-  public void resume() {
-    //
-  }
-
-  @Override
-  public void restart() {
-    //
-  }
-
-  @Override
-  public void enableLooping() {
-    //
-  }
-
-  @Override
-  public void disableLooping() {
-    //
-  }
-
-  @Override
   public void setSpeed(double speed) {
-    if (speed <= 0.0) {
-      throw new IllegalArgumentException("Speed must be integer greater than 0");
-    }
-
-    //this.timer = new Timer((int) (1.0 / 100000), e -> this.refresh());
+    //DO NOTHING TRY AND REMOVE
   }
+
 
   @Override
   public void setShapes(java.util.List<IShape> shapesAtTick) {
@@ -169,7 +216,5 @@ public class EnhancedSwingView extends JFrame implements IEnhancedVisualView {
     this.toggleLoopingButton.addActionListener(listeners[4]);
     this.increaseSpeedButton.addActionListener(listeners[5]);
     this.decreaseSpeedButton.addActionListener(listeners[6]);
-
-
   }
 }
