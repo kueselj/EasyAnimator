@@ -57,4 +57,21 @@ public interface IAnimatorModel extends IAnimatorModelViewOnly {
    *                                  belong to the given id.
    */
   void removeMotion(String id, IMotion motion);
+
+  /**
+   * Adds a keyframe to the model (splitting a motion if necessary or creating new ones).
+   * @param id    The id of the shape to add a keyframe to.
+   * @param state   The state of the the shape at the given time.
+   * @param tick    The tick to add the keyframe at.
+   * @throws IllegalArgumentException If the id is invalid, or the id and state are uninitialized.
+   */
+  void addKeyframe(String id, IShape state, int tick);
+
+  /**
+   * Deletes the keyframe in the model at the given time (joining motions if necessary).
+   * @param id      The id of the shape to remove a keyframe from.
+   * @param tick    The tick at which we wish to remove a keyframe.
+   * @throws IllegalArgumentException If the id is invalid, or the id and state are uninitialized.
+   */
+  void removeKeyframe(String id, int tick);
 }

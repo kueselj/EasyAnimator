@@ -1,5 +1,7 @@
 package cs3500.easyanimator.model.motions;
 
+import java.util.Objects;
+
 import cs3500.easyanimator.model.Color;
 import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.shapes.WidthHeight;
@@ -117,52 +119,60 @@ public final class BasicMotion implements IMotion {
   }
 
   // To give the position at a certain time tick, we use linear interpolation.
-  /**
-   * Finds the tweened value between the two values at the desired tick.
-   * @param val1 the first int.
-   * @param val1T the tick time for a.
-   * @param val2 the second int.
-   * @param val2T the tick time for b.
-   * @param tick the desired tick time.
-   * @return the value at the desired tick.
-   */
-  private int tween(int val1, int val1T, int val2, int val2T, int tick) {
-    double a = (double) val1;
-    double aT = (double) val1T;
-    double b = (double) val2;
-    double bT = (double) val2T;
-    double t = (double) tick;
-
-    double f1 = (bT - t) / (bT - aT);
-    double f2 = a * f1;
-
-    double g1 = (t - aT) / (bT - aT);
-    double g2 = b * g1;
-    return (int) Math.ceil(f2 + g2);
-  }
 
   @Override
   public Point getPosition(int tick) {
-    return new Point(tween(startPosition.getX(), startTime, endPosition.getX(), endTime, tick),
-            tween(startPosition.getY(), startTime, endPosition.getY(), endTime, tick));
+    return new Point(IMotion.tween(startPosition.getX(), startTime, endPosition.getX(), endTime, tick),
+            IMotion.tween(startPosition.getY(), startTime, endPosition.getY(), endTime, tick));
   }
 
   @Override
   public WidthHeight getSize(int tick) {
-    return new WidthHeight(tween(startSize.getWidth(), startTime,
+    return new WidthHeight(IMotion.tween(startSize.getWidth(), startTime,
             endSize.getWidth(), endTime, tick),
-            tween(startSize.getHeight(), startTime,
+            IMotion.tween(startSize.getHeight(), startTime,
                     endSize.getHeight(), endTime, tick));
   }
 
   @Override
   public Color getColor(int tick) {
     // Renaming just to make the next a little smaller.
-    return new Color(tween(startColor.getRed(), startTime,
+    return new Color(IMotion.tween(startColor.getRed(), startTime,
             endColor.getRed(), endTime, tick),
-            tween(startColor.getGreen(), startTime,
+            IMotion.tween(startColor.getGreen(), startTime,
                     endColor.getGreen(), endTime, tick),
-            tween(startColor.getBlue(), startTime,
+            IMotion.tween(startColor.getBlue(), startTime,
                     endColor.getBlue(), endTime, tick));
+  }
+
+  @Override
+  /**
+   * We override the existing equals behavior so that it is equals if the fields match.
+   * @param o   The object to compare to.
+   * @return    True if the objects are equal otherwise false.
+   */
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
+    } else if (!(o instanceof BasicMotion)) {
+      return false;
+    } else {
+      BasicMotion otherMotion = (BasicMotion) o;
+      return otherMotion.startTime == this.startTime &&
+              otherMotion.endTime == this.endTime &&
+              otherMotion.startSize == this.startSize &&
+              otherMotion.endSize == this.endSize &&
+              otherMotion.startPosition == this.startPosition &&
+              otherMotion.endPosition == this.endPosition &&
+              otherMotion.startColor == this.startColor &&
+              otherMotion.endColor == this.endColor;
+    }
+  }
+
+  public int hashCode() {
+    return Objects.hash(this.startTime, this.endTime,
+            this.startSize,this.endSize,
+            this.startPosition, this.endPosition,
+            this.startColor, this.endColor);
   }
 }

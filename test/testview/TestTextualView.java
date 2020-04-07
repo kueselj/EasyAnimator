@@ -45,19 +45,16 @@ public class TestTextualView {
             new Point(0, 0), new Point(400, 400),
             new Color(90,150,40), new Color(10,25,100)));
 
-    // We add a motion for this shape so we can use it later.
     model.addMotion("C", new BasicMotion(200, 500,
             new WidthHeight(50, 100), new WidthHeight(100, 50),
             new Point(400, 400), new Point(0, 0),
             new Color(10,25,100), new Color(90,150,40)));
 
-    // We add a motion for this shape so we can use it later.
     model.addMotion("R", new BasicMotion(0, 100,
             new WidthHeight(200, 50), new WidthHeight(50, 200),
             new Point(400, 400), new Point(0, 0),
             new Color(20,40,255), new Color(255,0,0)));
 
-    // We add a motion for this shape so we can use it later.
     model.addMotion("R", new BasicMotion(100, 200,
             new WidthHeight(50, 200), new WidthHeight(200, 50),
             new Point(0, 0), new Point(400, 400),

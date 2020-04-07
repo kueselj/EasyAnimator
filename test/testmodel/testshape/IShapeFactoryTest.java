@@ -27,7 +27,7 @@ public abstract class IShapeFactoryTest {
    */
   @Test(expected = IllegalArgumentException.class)
   public void testInvalidShapeName() {
-    getInstance().getShape("Invalid Shape!", size, color, position);
+    getInstance().getShape("Invalid Shape!", size, position, color);
   }
 
   /**
@@ -36,6 +36,6 @@ public abstract class IShapeFactoryTest {
    */
   @Test(expected = IllegalArgumentException.class)
   public void testUninitializedArguments() {
-    getInstance().getShape(null, size, null, position);
+    getInstance().getShape(null, size, position, null);
   }
 }

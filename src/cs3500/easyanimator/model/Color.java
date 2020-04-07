@@ -33,6 +33,14 @@ public final class Color {
   }
 
   /**
+   * A useful override of toString to make debugging easier.
+   * @return  The color in the format r g b
+   */
+  public String toString() {
+    return String.format("%d %d %d", this.red, this.green, this.blue);
+  }
+
+  /**
    * Gets the red value of the color.
    * @return an int representing the red value of the color.
    */

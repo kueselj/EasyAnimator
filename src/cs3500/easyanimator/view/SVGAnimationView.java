@@ -3,11 +3,13 @@ package cs3500.easyanimator.view;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -50,7 +52,7 @@ public class SVGAnimationView implements IAnimatorView {
    * @param tagName     The tag name for an element.
    * @param attributes  The attributes of that element as a map.
    * @param elements    The child elements as a list of a strings.
-   * @return
+   * @return            Returns a string of the element.
    */
   private static String createElement(String tagName,
                                       Map<String, String> attributes,
@@ -72,7 +74,7 @@ public class SVGAnimationView implements IAnimatorView {
 
   /**
    * Give the color code for the given color instance.
-   * @parma color The color to return the code of.
+   * @param c     The color to return the code of.
    * @return      A string in the format rgb(r,g,b)
    */
   private static String getColorCode(Color c) {
@@ -83,7 +85,7 @@ public class SVGAnimationView implements IAnimatorView {
    * Get a localized time given the given tick and speed.
    * @param tick  The tick.
    * @param speed The ticks per second to interpret the tick by.
-   * @return
+   * @return      The time in the correct format.
    */
   private static String getTime(long tick, double speed) {
     return String.format("%dms", (long) ((double) tick / speed * 1000.0));
@@ -96,7 +98,7 @@ public class SVGAnimationView implements IAnimatorView {
    * @param from    The function used to transform the motion into a value for from.
    * @param to      The same as from but for to.
    * @param speed   The speed of animation.
-   * @return
+   * @return        A string of animates from a motion.
    */
   private static String motionToAnimate(IMotion motion, String attributeName, Function<IMotion, String> from,
                                         Function<IMotion, String> to, double speed) {
@@ -160,7 +162,7 @@ public class SVGAnimationView implements IAnimatorView {
             model.getCanvasSize().getWidth(), model.getCanvasSize().getHeight()));
     List<String> svgElements = new ArrayList<>();
     // We populate the elements array with entries from the model.
-    Map<String, List<IMotion>> motions = model.getMotions();
+    Map<String, SortedSet<IMotion>> motions = model.getSortedMotions();
     // We find the last motion in the bunch since it will affect the elements of our shapes.
     long loopback = model.getMaxTick();
 
@@ -209,7 +211,7 @@ public class SVGAnimationView implements IAnimatorView {
    */
   private static class SVGTagCreator implements IShapeVisitor<String> {
     private final String id;
-    private final List<IMotion> motions;
+    private final SortedSet<IMotion> motions;
     private final double speed;
     private final long loopback;
 
@@ -220,13 +222,11 @@ public class SVGAnimationView implements IAnimatorView {
      * @param speed   The speed of the element.
      * @param loopback  When to loop elements back.
      */
-    SVGTagCreator(String id, List<IMotion> motions, double speed, long loopback) {
+    SVGTagCreator(String id, SortedSet<IMotion> motions, double speed, long loopback) {
       this.id = id;
       this.motions = motions;
       this.speed = speed;
       this.loopback = loopback;
-
-      Collections.sort(motions, Comparator.comparingInt(IMotion::getStartTime));
     }
 
     @Override
@@ -240,8 +240,8 @@ public class SVGAnimationView implements IAnimatorView {
       }
       // Motions is sorted. So we can initialize our shape with the first state properties.
       // We will re-use this variable later.
-      IMotion initialMotion = motions.get(0);
-      IMotion lastMotion = motions.get(motions.size() - 1);
+      IMotion initialMotion = motions.first();
+      IMotion lastMotion = motions.last();
       rectangleAttributes.put("id", id);
       rectangleAttributes.put("width", Integer.toString(initialMotion.getStartSize().getWidth()));
       rectangleAttributes.put("height", Integer.toString(initialMotion.getStartSize().getHeight()));
@@ -310,7 +310,7 @@ public class SVGAnimationView implements IAnimatorView {
      * @param initialTick The first motion tick of the element.
      * @param finalTick The final motion tick of the element
      */
-    private void addVisibilityAnimates(List elements, long initialTick, long finalTick) {
+    private void addVisibilityAnimates(List<String> elements, long initialTick, long finalTick) {
       if (initialTick > 0) {
         Map<String, String> toggleOnAttributes = new HashMap<>(defaultAnimateProperties);
         toggleOnAttributes.put("begin", "base.begin+0ms");
@@ -345,8 +345,8 @@ public class SVGAnimationView implements IAnimatorView {
       }
       // Motions is sorted. So we can initialize our shape with the first state properties.
       // We will re-use this variable later.
-      IMotion initialMotion = motions.get(0);
-      IMotion lastMotion = motions.get(motions.size() - 1);
+      IMotion initialMotion = motions.first();
+      IMotion lastMotion = motions.last();
       ellipseAttributes.put("id", id);
       ellipseAttributes.put("rx", Integer.toString(initialMotion.getStartSize().getWidth() / 2));
       ellipseAttributes.put("ry", Integer.toString(initialMotion.getStartSize().getHeight() / 2));

@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedSet;
 
 /**
  * A textual representation view of an IAnimatorModel.
@@ -51,8 +52,6 @@ public class TextualView implements IAnimatorView {
 
       //add the shape to the output.
       output.append(shapeString + "\n");
-
-      Collections.sort(entry.getValue(), Comparator.comparingInt(IMotion::getStartTime));
 
       //now iterate through the list of motions for the given entry.
       for (IMotion motion : entry.getValue()) {

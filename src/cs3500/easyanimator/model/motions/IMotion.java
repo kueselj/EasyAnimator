@@ -125,4 +125,28 @@ public interface IMotion {
             && first.getEndPosition().equals(second.getStartPosition())
             && first.getEndColor().equals(second.getStartColor()));
   }
+
+  /**
+   * Finds the tweened value between the two values at the desired tick.
+   * @param val1 the first int.
+   * @param val1T the tick time for a.
+   * @param val2 the second int.
+   * @param val2T the tick time for b.
+   * @param tick the desired tick time.
+   * @return the value at the desired tick.
+   */
+  static int tween(int val1, int val1T, int val2, int val2T, int tick) {
+    double a = (double) val1;
+    double aT = (double) val1T;
+    double b = (double) val2;
+    double bT = (double) val2T;
+    double t = (double) tick;
+
+    double f1 = (bT - t) / (bT - aT);
+    double f2 = a * f1;
+
+    double g1 = (t - aT) / (bT - aT);
+    double g2 = b * g1;
+    return (int) Math.ceil(f2 + g2);
+  }
 }
