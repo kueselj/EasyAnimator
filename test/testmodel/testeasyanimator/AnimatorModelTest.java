@@ -5,6 +5,8 @@ import cs3500.easyanimator.model.EasyAnimator;
 import cs3500.easyanimator.model.Point;
 import org.junit.Test;
 
+import java.util.List;
+
 import cs3500.easyanimator.model.IAnimatorModel;
 import cs3500.easyanimator.model.motions.BasicMotion;
 import cs3500.easyanimator.model.motions.IMotion;
@@ -558,5 +560,48 @@ public abstract class AnimatorModelTest {
     assertEquals("The max tick of a shape with two motions should be " +
                     "the end time of the latest motion.",
             m2.getEndTime(), model.getMaxTick());
+  }
+
+  /**
+   * A small test to verify the default implementation of getShapeNames.
+   */
+  @Test
+  public void testGetShapeNames() {
+    WidthHeight widthHeight = new WidthHeight(100, 100);
+    Point point = new Point(100, 100);
+    Color color = new Color(255, 255, 255);
+    model.addShape("example", new Rectangle(widthHeight, point, color));
+    model.addShape("example2", new Rectangle(widthHeight, point, color));
+    assertEquals("Expected the list of shapes to be example, " +
+            "example2 in that order to match insertion order.",
+            List.of("example", "example2"), model.getShapeNames());
+    model.removeShape("example");
+    model.addShape("example", new Rectangle(widthHeight, point, color));
+    model.addShape("example2", new Rectangle(widthHeight, point, color));
+    assertEquals("Expected order of list of shapes to be example2, " +
+            "example to follow insertion order (not including replacement).",
+            List.of("example2", "example"), model.getShapeNames());
+  }
+
+  /**
+   * A small test to verify the default implementation of getShapeKeyframeTicks.
+   */
+  @Test
+  public void testGetShapeKeyframeTicks() {
+    WidthHeight widthHeight = new WidthHeight(100, 100);
+    WidthHeight nextWidthHeight = new WidthHeight(200, 100);
+    Point point = new Point(100, 100);
+    Color color = new Color(255, 255, 255);
+    model.addShape("rectangle", new Rectangle(widthHeight, point, color));
+    // It's actually easier to add two keyframes with a motion.
+    model.addMotion("rectangle", new BasicMotion(0, 100,
+            widthHeight, nextWidthHeight,
+            point, point,
+            color, color));
+    assertEquals("Expected to get a list of sorted keyframes as 0, 100.",
+            List.of(0, 100), model.getShapeKeyframeTicks("rectangle"));
+    model.addKeyframe("rectangle", new Rectangle(widthHeight, point, color), 50);
+    assertEquals("Expected to get a list of (still) sorted keyframes as 0, 50, 100.",
+            List.of(0, 50, 100), model.getShapeKeyframeTicks("rectangle"));
   }
 }

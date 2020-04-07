@@ -39,6 +39,24 @@ public interface IAnimatorModelViewOnly {
   Map<String, IShape> getShapes();
 
   /**
+   * Gets the names of shapes in this model.
+   * @returns A list (that happens to be sorted by the insertion order) of the shapes contained in
+   *          the animation.
+   */
+  default List<String> getShapeNames() {
+    return new ArrayList<>(getShapes().keySet());
+  }
+
+  /**
+   * Gets the significant ticks at which keyframes exist in this model.
+   * @param id  The id of the shape to get ticks for.
+   * @returns A list of ticks (in order) for which there exists keyframes for, for the given shape.
+   */
+  default List<Integer> getShapeKeyframeTicks(String id) {
+    return new ArrayList<>(getKeyframes(id).keySet());
+  }
+
+  /**
    * Returns the map containing all of the ids of the IShapes and their respective list of motions.
    * These motions will be sorted by IMotion endTime.
    *
