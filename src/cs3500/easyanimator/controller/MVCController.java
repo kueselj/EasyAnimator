@@ -121,18 +121,18 @@ public class MVCController implements IController {
       }}, new ActionListener() {
       public void actionPerformed(ActionEvent increaseSpeed) {
         if (timer.getDelay() > 1) {
-          timer.stop();
-          timer = new Timer(timer.getDelay() - 1, e -> refresh());
-          timer.start();
+          //timer.stop();
+          timer.setDelay(timer.getDelay() - 1);
+          //timer = new Timer(timer.getDelay() - 1, e -> refresh());
+          //timer.start();
         }
         System.out.println(timer.getDelay());
-
-
       }}, new ActionListener() {
       public void actionPerformed(ActionEvent decreaseSpeed) {
-        timer.stop();
-        timer = new Timer(timer.getDelay() + 1, e -> refresh());
-        timer.start();
+        //timer.stop();
+        timer.setDelay(timer.getDelay() + 1);
+        //timer = new Timer(timer.getDelay() + 1, e -> refresh());
+        //timer.start();
       }});
   }
 
@@ -217,7 +217,7 @@ public class MVCController implements IController {
           model.addKeyframe(view.getShapeSelected(), rectToAdd, fieldsAsInt.get(0));
         }
 
-        else if (keyFrames.get(fieldsAsInt.get(0)) instanceof Rectangle) {
+        else if (keyFrames.get(fieldsAsInt.get(0)) instanceof Oval) {
           Point p = new Point(fieldsAsInt.get(1),fieldsAsInt.get(2));
           WidthHeight wh = new WidthHeight(fieldsAsInt.get(3), fieldsAsInt.get(4));
           Color color = new Color(fieldsAsInt.get(5), fieldsAsInt.get(6), fieldsAsInt.get(7));
