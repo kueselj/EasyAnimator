@@ -41,7 +41,6 @@ public class MVCController implements IController {
 
   @Override
   public void go() {
-
     //get the correctSize for your view.
     WidthHeight wH = this.model.getCanvasSize();
     this.view.setViewSize(wH);

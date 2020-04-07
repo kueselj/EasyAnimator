@@ -18,8 +18,6 @@ import java.util.Map;
  */
 public class EnhancedSwingView extends JFrame implements IEnhancedVisualView {
 
-
-
   private AnimationPanel mainPanel;
 
   private JPanel buttonPanel;
@@ -31,7 +29,6 @@ public class EnhancedSwingView extends JFrame implements IEnhancedVisualView {
   private JButton toggleLoopingButton;
   private JButton increaseSpeedButton;
   private JButton decreaseSpeedButton;
-
 
   /**
    * Constructor for an enhanced view, takes in a IVisualVew to delegate base operations to.
@@ -169,7 +166,5 @@ public class EnhancedSwingView extends JFrame implements IEnhancedVisualView {
     this.toggleLoopingButton.addActionListener(listeners[4]);
     this.increaseSpeedButton.addActionListener(listeners[5]);
     this.decreaseSpeedButton.addActionListener(listeners[6]);
-
-
   }
 }
