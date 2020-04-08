@@ -5,9 +5,14 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import cs3500.easyanimator.controller.IController;
+import cs3500.easyanimator.controller.MVCController;
+import cs3500.easyanimator.model.EasyAnimator;
 import cs3500.easyanimator.model.IAnimatorModel;
-import cs3500.easyanimator.model.IAnimatorModelViewOnly;
+import cs3500.easyanimator.model.Point;
+import cs3500.easyanimator.model.shapes.WidthHeight;
 import cs3500.easyanimator.view.BasicViewFactory;
+import cs3500.easyanimator.view.EditorSwingView;
 import cs3500.easyanimator.view.IAnimatorView;
 
 /**
@@ -59,27 +64,44 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
   public void launch() throws IllegalStateException {
     // We need the output for the text views. So it is supplied to the factory.
     // It's simply unused for visual views.
-    if (viewType == null || input == null) {
+    if (viewType == null || (!viewType.equals("edit") && input == null)) {
+      // We hotfix in a change to allow you to edit a fresh model.
       throw new IllegalStateException("Failed to provide both a view type and an input " +
               "file.");
     }
 
-    IAnimatorView view;
-    try {
-      view = new BasicViewFactory().getView(this.viewType, this.output);
-    } catch (IllegalArgumentException iae) {
-      throw new IllegalStateException("Unable to use the set view type " + this.viewType);
+    IAnimatorModel model;
+    if (input == null) {
+      // If we start without an input, for the edit view, then we wish to spin up a new model.
+      model = new EasyAnimator();
+      model.setCanvas(new Point(0, 0), new WidthHeight(800, 600));
+    } else {
+      // Let's prepare the model wherever its going.
+      AnimationBuilder<IAnimatorModel> modelBuilder = new EasyAnimatorModelBuilder();
+      new AnimationReader().parseFile(input, modelBuilder);
+      model = modelBuilder.build();
     }
 
-    // Now let's make the model.
-    AnimationBuilder<IAnimatorModel> modelBuilder = new EasyAnimatorModelBuilder();
-    new AnimationReader().parseFile(input, modelBuilder);
-    IAnimatorModel model = modelBuilder.build();
-    // We can give that model over to the view.
-    view.setModel(model);
-    view.setSpeed(speed);
-    // I think we are ready to launch.
-    view.makeVisible();
+    if (viewType.equals("edit")) {
+      // We hotfix this change in to support an editor.
+      MVCController controller = new MVCController(model);
+      controller.setView(new EditorSwingView(controller), this.speed);
+      controller.go();
+    } else {
+      IAnimatorView view;
+      try {
+        view = new BasicViewFactory().getView(this.viewType, this.output);
+      } catch (IllegalArgumentException iae) {
+        throw new IllegalStateException("Unable to use the set view type " + this.viewType);
+      }
+
+      // We can give that model over to the view.
+      view.setModel(model);
+      view.setSpeed(speed);
+      // I think we are ready to launch.
+      view.makeVisible();
+    }
+
     // If we opened a file writer we have to close it to get those writes out.
     if (outputWriter != null) {
       try {
