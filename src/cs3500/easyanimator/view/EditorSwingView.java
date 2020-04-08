@@ -267,8 +267,11 @@ public class EditorSwingView implements IAnimatorView {
                 keyFrameR.getText(), keyFrameG.getText(), keyFrameB.getText()));
 
         updateKeyframeSelector(selectedShapeString);
+
+        // ██████████ DELETING A KEYFRAME ██████████
       } else if (ac == EDITING_ACTION.DELETE_KEYFRAME.name()) {
         bellOnFail(listener.removeKeyframe(selectedShapeString, getTickSelected()));
+        updateKeyframeSelector(selectedShapeString);
       } else {
         throw new IllegalStateException("This branch of the if statement " +
                 "should have been impossible to reach.");

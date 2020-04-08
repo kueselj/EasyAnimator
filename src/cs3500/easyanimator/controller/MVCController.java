@@ -42,6 +42,7 @@ public class MVCController implements IController, EditorListener {
       this.model.addShape(name,
               SHAPE_FACTORY.getShape(type, DEFAULT_WH, DEFAULT_POS, DEFAULT_COL));
     } catch (IllegalArgumentException iae) {
+      iae.printStackTrace();
       // Something failed.
       return false;
     }
