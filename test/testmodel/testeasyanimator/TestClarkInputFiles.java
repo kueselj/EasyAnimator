@@ -10,7 +10,6 @@ import cs3500.easyanimator.util.AnimationReader;
 import cs3500.easyanimator.util.EasyAnimatorModelBuilder;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 /**
  * A test suite dedicated to ensuring that our model is compatible with the input files provided
