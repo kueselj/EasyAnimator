@@ -141,4 +141,13 @@ public class MVCController implements IController, EditorListener {
     viewCheck();
     this.view.makeVisible();
   }
+
+  /**
+   *
+   */
+  private void saveModel() {
+
+  }
+
+  private void loadModel() {}
 }
