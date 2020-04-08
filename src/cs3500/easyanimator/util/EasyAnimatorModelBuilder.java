@@ -66,7 +66,7 @@ public class EasyAnimatorModelBuilder implements AnimationBuilder<IAnimatorModel
                                                     int w2, int h2,
                                                     int r2, int g2, int b2) {
     if (t1 == t2) {
-      // This is malformed, so we reject it.
+      // This is malformed, so we inject it as a keyframe.
       this.addKeyframe(name, t1, x1, y1, w1, h1, r1, g1, b1);
       return this;
     }

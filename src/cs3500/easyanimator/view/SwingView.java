@@ -3,69 +3,39 @@ package cs3500.easyanimator.view;
 import javax.swing.*;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.event.ActionListener;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.List;
-import java.util.SortedSet;
 
 import cs3500.easyanimator.model.IAnimatorModelViewOnly;
-import cs3500.easyanimator.model.motions.IMotion;
-import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.model.shapes.WidthHeight;
 
 /**
  * A visual animation view representing an IAnimatorModel. Uses swing to animate a set model.
  */
-public class SwingView extends JFrame implements IVisualView {
+public class SwingView extends JFrame implements IAnimatorView {
   private IAnimatorModelViewOnly model;
   private AnimationPanel mainPanel;
   private Timer timer;
-  private int tickRange;
   private int tick;
 
   /**
    * Basic constructor for the SwingView to use.
    */
   public SwingView() {
-    super();
-    this.setTitle("Your Animation");
+    super("Your animation");
+    // A good default size.
+    this.setSize(new Dimension(800, 600));
     this.tick = 0;
     this.mainPanel = new AnimationPanel();
-    this.add(this.mainPanel);
-
-    JScrollPane scrollPane = new JScrollPane(this.mainPanel);
+    JScrollPane scrollPane = new JScrollPane(mainPanel);
     this.add(scrollPane, BorderLayout.CENTER);
-
     this.setResizable(true);
     this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-  }
-
-  @Override
-  public void refresh() {
-    //TODO create field for the max length of the animation by looking at the endTime.
-    if (this.tick == tickRange) {
-      this.tick = 0;
-      this.mainPanel.setShapes(model.getShapesAtTick(this.tick));
-      this.repaint();
-    }
-    else {
-      this.tick++;
-      this.mainPanel.setShapes(model.getShapesAtTick(this.tick));
-      this.repaint();
-    }
-  }
-
-  @Override
-  public void setViewSize(WidthHeight wH) {
-    //TODO nothing, this is an old view.
+    this.timer = new Timer(30, e -> this.refresh());
+    // We don't need to start this timer until we have a model.
   }
 
   @Override
   public void makeVisible() {
-    this.setVisible(true);
+    setVisible(true);
   }
 
   @Override
@@ -73,42 +43,34 @@ public class SwingView extends JFrame implements IVisualView {
     if (model == null) {
       throw new IllegalArgumentException("Cannot set the view to have a uninitialized model");
     }
-
     this.model = model;
+    // We restart the view.
+    timer.stop();
     this.tick = 0;
-    this.tickRange = model.getMaxTick();
-
-    //get the correctSize for your view.
-    WidthHeight wH = this.model.getCanvasSize();
-    Dimension canvasDimension = new Dimension(wH.getWidth(), wH.getHeight());
-
+    // We need to make our panel fit the canvas size.
+    WidthHeight canvasSize = model.getCanvasSize();
+    Dimension canvasDimension = new Dimension(canvasSize.getWidth(), canvasSize.getHeight());
     this.mainPanel.setPreferredSize(canvasDimension);
-    this.setMaximumSize(canvasDimension);
     this.mainPanel.setMaximumSize(canvasDimension);
-
-    this.timer = new Timer(1000, e -> this.refresh());
-    this.timer.start();
-
-    this.pack();
+    // Repack.
+    pack();
+    timer.start();
   }
 
   @Override
-  public void setSpeed(double speed) {
-
-    if (speed <= 0.0) {
-      throw new IllegalArgumentException("Speed must be integer greater than 0");
+  public void setSpeed(double tps) {
+    if (tps <= 0) {
+      throw new IllegalArgumentException("Speed must be integer greater than 0.");
     }
-
-    this.timer.setDelay(((int) (1.0 / speed * 1000)));
+    timer.setDelay(((int) (1.0 / tps * 1000)));
   }
 
-  @Override
-  public void setShapes(List<IShape> shapesAtTick) {
-
-  }
-
-  @Override
-  public void addActionListeners(ActionListener... listeners) {
-
+  /**
+   * Do whatever methods are necessary to refresh all the components in this view.
+   */
+  private void refresh() {
+    this.tick = (this.tick + 1) % model.getMaxTick();
+    mainPanel.setShapes(model.getShapesAtTick(tick));
+    mainPanel.repaint();
   }
 }

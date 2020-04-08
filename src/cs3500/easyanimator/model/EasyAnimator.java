@@ -19,6 +19,7 @@ import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.model.shapes.IShapeVisitor;
 import cs3500.easyanimator.model.shapes.Oval;
 import cs3500.easyanimator.model.shapes.Rectangle;
+import cs3500.easyanimator.model.shapes.ShapeF;
 import cs3500.easyanimator.model.shapes.WidthHeight;
 
 /**
@@ -166,7 +167,7 @@ public class EasyAnimator implements IAnimatorModel {
     NavigableMap<Integer, IShape> keyframes = shapeKeyframes.get(id);
     // If there are no keyframes then we return null.
     Map.Entry<Integer, IShape> leftKeyframe = keyframes.floorEntry(tick);
-    Map.Entry<Integer, IShape> rightKeyframe = keyframes.higherEntry(tick);
+    Map.Entry<Integer, IShape> rightKeyframe = keyframes.ceilingEntry(tick);
     if (leftKeyframe != null && rightKeyframe != null) {
       // We are between two keyframes.
       return shape.accept(new Tweener(
@@ -239,9 +240,6 @@ public class EasyAnimator implements IAnimatorModel {
             !(frameLeft.getSize().equals(motion.getStartSize()) &&
                     frameLeft.getPosition().equals(motion.getStartPosition()) &&
                     frameLeft.getColor().equals(motion.getStartColor()))) {
-      System.out.println(frameLeft.getColor());
-      System.out.println(motion.getStartColor());
-
       throw new IllegalArgumentException("Unable to add the given motion, " +
               "state mismatch on the left.");
 
@@ -325,8 +323,8 @@ public class EasyAnimator implements IAnimatorModel {
                     prevSize, curSize,
                     prevPos, curPos,
                     prevColor, curColor));
+            previousKeyframe = keyframe;
           }
-          previousKeyframe = keyframe;
         }
       }
       if (shapeAndKeyframes.getValue().size() == 1) {
@@ -343,37 +341,6 @@ public class EasyAnimator implements IAnimatorModel {
   }
 
   /**
-   * A shape factory produces a shape instance for the given IShape parameters.
-   */
-  private static class ShapeF implements IShapeVisitor<IShape> {
-    private WidthHeight size;
-    private Point position;
-    private Color color;
-
-    /**
-     * Create a new shape.
-     * @param size      The size to use.
-     * @param position  The position as a point to use.
-     * @param color     The color to construct with.
-     */
-    ShapeF(WidthHeight size, Point position, Color color) {
-      this.size = size;
-      this.position = position;
-      this.color = color;
-    }
-
-    @Override
-    public IShape applyToRectangle(Rectangle r) {
-      return new Rectangle(size, position, color);
-    }
-
-    @Override
-    public IShape applyToOval(Oval o) {
-      return new Oval(size, position, color);
-    }
-  }
-
-  /**
    * A Tweener is a small visitor to return a shape constructed between the two given shapes.
    */
   private static class Tweener extends ShapeF {
@@ -386,7 +353,7 @@ public class EasyAnimator implements IAnimatorModel {
      * @param afterT  The state at which state after appears.
      * @param tick    The tick we wish to get the shape at.
      */
-    Tweener(Point canvasCorner,
+     Tweener(Point canvasCorner,
             IShape before, int beforeT, IShape after, int afterT, int tick) {
       super(new WidthHeight(IMotion.tween(before.getSize().getWidth(), beforeT,
               after.getSize().getWidth(), afterT,
@@ -397,23 +364,21 @@ public class EasyAnimator implements IAnimatorModel {
 
               new Point(IMotion.tween(before.getPosition().getX() - canvasCorner.getX(),
                       beforeT,
-              after.getPosition().getX(), afterT,
+              after.getPosition().getX() - canvasCorner.getX(), afterT,
               tick),
               IMotion.tween(before.getPosition().getY() - canvasCorner.getY(),
                       beforeT,
-                      after.getPosition().getY(), afterT,
+                      after.getPosition().getY() - canvasCorner.getY(), afterT,
                       tick)),
-
-
-              new Color(IMotion.tween(before.getColor().getRed(), beforeT,
+              new Color(Math.min(IMotion.tween(before.getColor().getRed(), beforeT,
                       after.getColor().getRed(), afterT,
-                      tick),
-                      IMotion.tween(before.getColor().getGreen(), beforeT,
+                      tick), 255),
+                      Math.min(IMotion.tween(before.getColor().getGreen(), beforeT,
                         after.getColor().getGreen(), afterT,
-                        tick),
-                      IMotion.tween(before.getColor().getBlue(), beforeT,
+                        tick), 255),
+                      Math.min(IMotion.tween(before.getColor().getBlue(), beforeT,
                         after.getColor().getBlue(), afterT,
-                        tick)));
+                        tick), 255)));
     }
   }
 }

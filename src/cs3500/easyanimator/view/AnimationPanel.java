@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,11 +23,11 @@ public class AnimationPanel extends JPanel {
   public AnimationPanel() {
     super();
     this.setBackground(Color.WHITE);
-    this.shapes = new ArrayList<IShape>();
+    this.shapes = new ArrayList<>(); // By default the pane is blank.
   }
 
   /**
-   * Sets the panel to contain the given shapes.
+   * Sets the panel to draw the given shapes.
    * @param shapes the shapes to set.
    */
   public void setShapes(List<IShape> shapes) {
@@ -37,35 +36,14 @@ public class AnimationPanel extends JPanel {
   }
 
   @Override
-  protected void paintComponent(Graphics g) {
-    //never forget to call super.paintComponent!
+  public void paintComponent(Graphics g) {
     super.paintComponent(g);
-
     Graphics2D g2d = (Graphics2D) g;
-
     g2d.setColor(Color.BLACK);
-
-    /*
-    the origin of the panel is top left. In order
-    to make the origin bottom left, we must "flip" the
-    y coordinates so that y = height - y
-
-    We do that by using an affine transform. The flip
-    can be specified as scaling y by -1 and then
-    translating by height.
-     */
-
-    AffineTransform originalTransform = g2d.getTransform();
-
-    //the order of transforms is bottom-to-top
-    //so as a result of the two lines below,
-    //each y will first be scaled, and then translated
-    //Uncomment these if you want to change to draw from bottom left.
-    //g2d.translate(0, this.getPreferredSize().getHeight());
-    //g2d.scale(1, -1);
-
+    // We are already transformed by get shapes at tick.
+    IShapeVisitor<Void> drawingVisitor = new DrawShapeVisitor(g2d);
     for (IShape s : this.shapes) {
-      s.accept(new DrawShapeVisitor(g2d));
+      s.accept(drawingVisitor);
     }
   }
 
@@ -73,7 +51,8 @@ public class AnimationPanel extends JPanel {
    * Custom visitor to draw the desired shape on the given Graphics2D.
    */
   private class DrawShapeVisitor implements IShapeVisitor<Void> {
-
+    private int x, y, width, height;
+    private Color color;
     Graphics2D g2d;
 
     /**
@@ -84,34 +63,34 @@ public class AnimationPanel extends JPanel {
       this.g2d = g2d;
     }
 
+    /**
+     * Prepares parameters in the visitor with extracting all the needed properties from the given
+     * shape.
+     * @param shape The generic shape to use.
+     */
+    private void prepare(IShape shape) {
+      this.x = shape.getPosition().getX();
+      this.y = shape.getPosition().getY();
+      this.width = shape.getSize().getWidth();
+      this.height = shape.getSize().getHeight();
+      this.color = new Color(shape.getColor().getRed(),
+              shape.getColor().getGreen(),
+              shape.getColor().getBlue());
+    }
+
     @Override
     public Void applyToRectangle(Rectangle rect) {
-      int x = rect.getPosition().getX();
-      int y = rect.getPosition().getY();
-      int width = rect.getSize().getWidth();
-      int height = rect.getSize().getHeight();
-      int r = rect.getColor().getRed();
-      int g = rect.getColor().getGreen();
-      int b = rect.getColor().getBlue();
-
-      g2d.setColor(new java.awt.Color(r, g, b));
+      prepare(rect);
+      g2d.setColor(color);
       g2d.fillRect(x, y, width, height);
       return null;
     }
 
     @Override
     public Void applyToOval(Oval oval) {
-      int x = oval.getPosition().getX();
-      int y = oval.getPosition().getY();
-      int width = oval.getSize().getWidth();
-      int height = oval.getSize().getHeight();
-      int r = oval.getColor().getRed();
-      int g = oval.getColor().getGreen();
-      int b = oval.getColor().getBlue();
-
-      g2d.setColor(new java.awt.Color(r, g, b));
+      prepare(oval);
+      g2d.setColor(color);
       g2d.fillOval(x, y, width, height);
-
       return null;
     }
   }

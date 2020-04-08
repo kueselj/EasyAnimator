@@ -76,8 +76,7 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
     new AnimationReader().parseFile(input, modelBuilder);
     IAnimatorModel model = modelBuilder.build();
     // We can give that model over to the view.
-    // We need to cast down because it takes the readonly version.
-    view.setModel((IAnimatorModelViewOnly) model);
+    view.setModel(model);
     view.setSpeed(speed);
     // I think we are ready to launch.
     view.makeVisible();

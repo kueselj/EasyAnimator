@@ -107,7 +107,6 @@ public abstract class AbstractShapeTest {
     assertEquals(new Point(150, 175), testShape.getPosition());
   }
 
-
   /**
    * Constructs an instance of the class under test representing the Shape
    * given as a Rectangle.

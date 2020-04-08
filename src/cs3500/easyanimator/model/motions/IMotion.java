@@ -136,11 +136,11 @@ public interface IMotion {
    * @return the value at the desired tick.
    */
   static int tween(int val1, int val1T, int val2, int val2T, int tick) {
-    double a = (double) val1;
-    double aT = (double) val1T;
-    double b = (double) val2;
-    double bT = (double) val2T;
-    double t = (double) tick;
+    double a = val1;
+    double aT = val1T;
+    double b = val2;
+    double bT = val2T;
+    double t = tick;
 
     double f1 = (bT - t) / (bT - aT);
     double f2 = a * f1;
