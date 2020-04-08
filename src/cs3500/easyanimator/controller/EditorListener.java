@@ -58,4 +58,14 @@ public interface EditorListener {
                    String w, String h,
                    String x, String y,
                    String r, String g, String b);
+
+  /**
+   * Saves the current model to a file.
+   */
+  void saveModel();
+
+  /**
+   * Loads a model.
+   */
+  void loadModel();
 }

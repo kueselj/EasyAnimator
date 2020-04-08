@@ -1,5 +1,7 @@
 package cs3500.easyanimator.controller;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +29,7 @@ public class MVCController implements IController, EditorListener {
    */
   public MVCController(IAnimatorModel model) {
     this.model = model;
+
   }
 
   private static IShapeFactory SHAPE_FACTORY = new BasicShapeFactory();
@@ -142,12 +145,15 @@ public class MVCController implements IController, EditorListener {
     this.view.makeVisible();
   }
 
-  /**
-   *
-   */
-  private void saveModel() {
+  @Override
+  public void saveModel() {
+    System.out.println("Saved!");
 
   }
 
-  private void loadModel() {}
+  @Override
+  public void loadModel() {
+    System.out.println("Loaded!");
+  }
+
 }

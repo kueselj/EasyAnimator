@@ -12,12 +12,14 @@ import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.SortedMap;
 
 /**
  * Implementation of an EnhancedView that delegates base operations to a VisualView.
  */
-public class EditorSwingView implements IAnimatorView {
+public class EditorSwingView implements IEnhancedView {
   private final EditorListener listener;
   private final Timer timer;
   private int tick;
@@ -279,6 +281,31 @@ public class EditorSwingView implements IAnimatorView {
     }
   }
 
+  /**
+   * Class for handling a key pressed, will pass off to the controller.
+   */
+  private class SaveListener implements KeyListener {
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+      //do nothing.
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+      if (e.getKeyChar() == 's') {
+        listener.saveModel();
+      }
+      else if (e.getKeyChar() == 'l') {
+        listener.loadModel();
+      }
+    }
+    @Override
+    public void keyReleased(KeyEvent e) {
+      //do nothing.
+    }
+  }
+
   private static String[] DEFAULT_SHAPES = new String[]{"rectangle", "oval"};
   private static Dimension MINIMUM_WINDOW_SIZE = new Dimension(800, 600);
   private static Dimension MAX_PLAYBACK_BUTTONS_SIZE = new Dimension(Integer.MAX_VALUE, 50);
@@ -293,6 +320,7 @@ public class EditorSwingView implements IAnimatorView {
 
     // Editor stuff that is not graphics.
     this.listener = listener;
+    //this.saveListener = listener;
     this.timer = new Timer(30, e -> this.refresh());
     this.tick = 0;
     this.looping = true;
@@ -306,9 +334,12 @@ public class EditorSwingView implements IAnimatorView {
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     // ADDING COMPONENTS
     frame.setLayout(new BorderLayout());
+    frame.addKeyListener(saveKeyListener);
+
 
     playbackListener = new PlaybackListener();
     editingListener = new EditingListener();
+    saveKeyListener = new SaveListener();
 
     // THE EDITOR ON THE RIGHT
     // Next, we want the basic layout that everything is going to sit on.
@@ -317,11 +348,13 @@ public class EditorSwingView implements IAnimatorView {
     this.selectShape = new JComboBox<>();
     selectShape.setActionCommand(EDITING_ACTION.SELECT_SHAPE.name());
     selectShape.addActionListener(editingListener);
+    selectShape.addKeyListener(saveKeyListener);
     editorPanel.add(selectShape);
 
     this.shapeName = createField("Shape Name", editorPanel);
     this.shapeType = new JComboBox<>(DEFAULT_SHAPES);
     editorPanel.add(shapeType);
+    this.shapeType.addKeyListener(saveKeyListener);
     this.saveShape = addButton("Save Shape",
             editingListener, EDITING_ACTION.SAVE_SHAPE.name(),
             editorPanel);
@@ -333,7 +366,10 @@ public class EditorSwingView implements IAnimatorView {
     selectTick = new JComboBox<>();
     selectTick.setActionCommand(EDITING_ACTION.SELECT_KEYFRAME.name());
     selectTick.addActionListener(editingListener);
+    selectTick.addKeyListener(saveKeyListener);
     editorPanel.add(selectTick);
+    editorPanel.addKeyListener(saveKeyListener);
+
 
     // createField adds it to the panel for us, how generous.
     this.keyFrameTick = createField("Keyframe Tick", editorPanel);
@@ -362,6 +398,7 @@ public class EditorSwingView implements IAnimatorView {
     playbackPanel.setLayout(new BoxLayout(playbackPanel, BoxLayout.Y_AXIS));
 
     this.mainPanel = new AnimationPanel();
+    this.mainPanel.addKeyListener(saveKeyListener);
     JScrollPane scrollPane = new JScrollPane(this.mainPanel);
 
     playbackPanel.add(scrollPane);
@@ -413,7 +450,10 @@ public class EditorSwingView implements IAnimatorView {
     buttonPanel.add(tickLabel);
 
     this.frame.add(playbackPanel);
+    this.frame.addKeyListener(saveKeyListener);
   }
+
+
 
   // All the graphics fields we use.
   // We interact with these in the code below.
@@ -422,6 +462,7 @@ public class EditorSwingView implements IAnimatorView {
 
   // SHAPE SELECTOR
   private ActionListener editingListener;
+  private KeyListener saveKeyListener;
   private JComboBox selectShape;
   private JTextField shapeName;
   private JComboBox<String> shapeType;
@@ -618,4 +659,6 @@ public class EditorSwingView implements IAnimatorView {
     this.keyFrameG.setText(G);
     this.keyFrameB.setText(B);
   }
+
+
 }
