@@ -9,6 +9,7 @@ import cs3500.easyanimator.util.AnimationBuilder;
 import cs3500.easyanimator.util.AnimationReader;
 import cs3500.easyanimator.util.EasyAnimatorModelBuilder;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -121,9 +122,10 @@ public abstract class TestClarkInputFiles {
   /**
    * A private helper to test a string input with our builder and model.
    * @param str The string to test.
+   * @return  The animator model that was created.
    */
-  private void testString(String str) {
-    new AnimationReader().parseFile(new StringReader(str), getBuilder());
+  private IAnimatorModel testString(String str) {
+    return new AnimationReader().parseFile(new StringReader(str), getBuilder());
   }
 
   /**
@@ -132,9 +134,10 @@ public abstract class TestClarkInputFiles {
    */
   @Test
   public void testTOH3() {
-    testString(TOH3TXT);
+    IAnimatorModel model = testString(TOH3TXT);
     // To make the java style checker happy.
-    assertTrue(true);
+    assertEquals("Expected TOH3 to have 3 named shapes.",
+            3, model.getShapeNames().size());
   }
 
   /**
@@ -142,7 +145,8 @@ public abstract class TestClarkInputFiles {
    */
   @Test
   public void testSMALLDEMO() {
-    testString(SMALLDEMO);
-    assertTrue(true);
+    IAnimatorModel model = testString(SMALLDEMO);
+    assertEquals("Expected small demo to have 3 named shapes.",
+            2, model.getShapeNames().size());
   }
 }
