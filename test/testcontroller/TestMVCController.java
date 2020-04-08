@@ -1,4 +1,4 @@
-package testController;
+package testcontroller;
 
 import cs3500.easyanimator.controller.MVCController;
 import cs3500.easyanimator.model.Color;
@@ -14,11 +14,13 @@ import cs3500.easyanimator.view.IAnimatorView;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
-public class testMVCController {
+/**
+ * Test class for the MVCController, tests that all its methods properly update the model.
+ */
+public class TestMVCController {
 
   IAnimatorModel model;
   IAnimatorView view;
@@ -27,7 +29,7 @@ public class testMVCController {
   /**
    * Resets the controller for further testing.
    */
-  public void reset() {
+  private void reset() {
     model = new EasyAnimator();
 
     WidthHeight wh100100 = new WidthHeight(100, 100);
