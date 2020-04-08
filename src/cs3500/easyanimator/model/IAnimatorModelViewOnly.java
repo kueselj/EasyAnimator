@@ -2,7 +2,6 @@ package cs3500.easyanimator.model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -67,8 +66,8 @@ public interface IAnimatorModelViewOnly {
   /**
    * Returns a map containing all the ids of shapes and their respective lists.
    * These motions will be sorted, but this not guaranteed by type.
-   * @deprecated
    * @return A map from string ids to lists of motions.
+   * @deprecated This method is deprecated in favor of get sorted motions.
    */
   default Map<String, List<IMotion>> getMotions() {
     HashMap<String, List<IMotion>> map = new HashMap<>();
@@ -93,7 +92,7 @@ public interface IAnimatorModelViewOnly {
    *
    * @param tick the tick to get the shapes at.
    * @return a list of shapes with their states at the desired tick.
-   * *       These shapes are sorted by insertion time.
+   *         These shapes are sorted by insertion time.
    * @throws IllegalArgumentException if the shape name or tick is invalid.
    */
   List<IShape> getShapesAtTick(int tick);

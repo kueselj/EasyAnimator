@@ -2,10 +2,7 @@ package cs3500.easyanimator.view;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +18,10 @@ import cs3500.easyanimator.model.shapes.IShapeVisitor;
 import cs3500.easyanimator.model.shapes.Oval;
 import cs3500.easyanimator.model.shapes.Rectangle;
 
+/**
+ * A SVGAnimationVie is a view of a model's motions in svg format. This creates a String and prints
+ * it out to the appendable output and makeVisible's method call.
+ */
 public class SVGAnimationView implements IAnimatorView {
 
   private final Appendable out;
@@ -100,8 +101,10 @@ public class SVGAnimationView implements IAnimatorView {
    * @param speed   The speed of animation.
    * @return        A string of animates from a motion.
    */
-  private static String motionToAnimate(IMotion motion, String attributeName, Function<IMotion, String> from,
-                                        Function<IMotion, String> to, double speed) {
+  private static String motionToAnimate(IMotion motion, String attributeName,
+                                        Function<IMotion, String> from,
+                                        Function<IMotion, String> to,
+                                        double speed) {
     String fromStr = from.apply(motion);
     String toStr = to.apply(motion);
     if (!toStr.equals(fromStr)) {

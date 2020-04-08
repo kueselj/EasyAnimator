@@ -35,12 +35,12 @@ public abstract class KeyframeTests {
   abstract IAnimatorModel model();
 
   // A collection of constants I use in my tests.
-  WidthHeight SMALL = new WidthHeight(100, 100);
-  WidthHeight LARGE = new WidthHeight(200, 200);
-  Point HERE = new Point(0, 0);
-  Point THERE = new Point(100, 100);
-  Color RED = new Color(255, 0, 0);
-  Color BLUE = new Color(0, 0, 255);
+  WidthHeight small = new WidthHeight(100, 100);
+  WidthHeight large = new WidthHeight(200, 200);
+  Point here = new Point(0, 0);
+  Point there = new Point(100, 100);
+  Color red = new Color(255, 0, 0);
+  Color blue = new Color(0, 0, 255);
 
   /**
    * A test to verify that adding a keyframe adds a keyframe, AND means we have at least one motion.
@@ -48,8 +48,8 @@ public abstract class KeyframeTests {
   @Test
   public void testAddKeyframe() {
     IAnimatorModel model = model();
-    IShape start = new Rectangle(SMALL, HERE, RED);
-    IShape end = new Rectangle(LARGE, THERE, BLUE);
+    IShape start = new Rectangle(small, here, red);
+    IShape end = new Rectangle(large, there, blue);
     model.addShape("example", start);
 
     // One keyframe.
@@ -77,9 +77,9 @@ public abstract class KeyframeTests {
             model.getSortedMotions().get("example").first());
   }
 
-  WidthHeight MED = new WidthHeight(150, 150);
-  Point MID = new Point(50, 50);
-  Color IN_BETWEEN = new Color(255 / 2, 0, 255 / 2);
+  WidthHeight med = new WidthHeight(150, 150);
+  Point mid = new Point(50, 50);
+  Color in_between = new Color(255 / 2, 0, 255 / 2);
 
   /**
    * A test to verify how adding a keyframe intermixes with adding a motion.
@@ -87,9 +87,9 @@ public abstract class KeyframeTests {
   @Test
   public void testAddKeyframeAndMotion() {
     IAnimatorModel model = model();
-    IShape start = new Rectangle(SMALL, HERE, RED);
-    IShape middle = new Rectangle(MED, MID, IN_BETWEEN);
-    IShape end = new Rectangle(LARGE, THERE, BLUE);
+    IShape start = new Rectangle(small, here, red);
+    IShape middle = new Rectangle(med, mid, in_between);
+    IShape end = new Rectangle(large, there, blue);
     model.addShape("example", start);
 
     model.addMotion("example", new BasicMotion(0, 100,

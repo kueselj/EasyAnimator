@@ -269,7 +269,7 @@ public class EasyAnimator implements IAnimatorModel {
     NavigableMap<Integer, IShape> keyframes = shapeKeyframes.get(id);
     // Do the keyframes exist?
     if (!keyframes.containsKey(motion.getStartTime()) ||
-      !keyframes.containsKey(motion.getEndTime())) {
+            !keyframes.containsKey(motion.getEndTime())) {
       throw new IllegalArgumentException("Unable to remove this motion, it does not exist.");
     }
     // Finally, do we cause a state clash by removing this motion?
@@ -341,40 +341,39 @@ public class EasyAnimator implements IAnimatorModel {
    */
   private static class Tweener extends ShapeF {
     /**
-     * Construct a new Tweener with state before, after, and the tick to pick.
      *
-     * @param before  The state before the tick.
-     * @param beforeT The tick at which state before appears.
-     * @param after   The state after the tick.
-     * @param afterT  The state at which state after appears.
-     * @param tick    The tick we wish to get the shape at.
+     * @param canvasCorner
+     * @param before
+     * @param beforeT
+     * @param after
+     * @param afterT
+     * @param tick
      */
-     Tweener(Point canvasCorner,
+    Tweener(Point canvasCorner,
             IShape before, int beforeT, IShape after, int afterT, int tick) {
-      super(new WidthHeight(IMotion.tween(before.getSize().getWidth(), beforeT,
-              after.getSize().getWidth(), afterT,
-              tick),
-              IMotion.tween(before.getSize().getHeight(), beforeT,
-                      after.getSize().getHeight(), afterT,
-                      tick)),
-
+       super(new WidthHeight(IMotion.tween(before.getSize().getWidth(), beforeT,
+               after.getSize().getWidth(), afterT,
+               tick),
+                       IMotion.tween(before.getSize().getHeight(), beforeT,
+                               after.getSize().getHeight(), afterT,
+                               tick)),
               new Point(IMotion.tween(before.getPosition().getX() - canvasCorner.getX(),
                       beforeT,
-              after.getPosition().getX() - canvasCorner.getX(), afterT,
-              tick),
-              IMotion.tween(before.getPosition().getY() - canvasCorner.getY(),
+                      after.getPosition().getX() - canvasCorner.getX(), afterT,
+                      tick),
+                      IMotion.tween(before.getPosition().getY() - canvasCorner.getY(),
                       beforeT,
                       after.getPosition().getY() - canvasCorner.getY(), afterT,
                       tick)),
-              new Color(Math.min(IMotion.tween(before.getColor().getRed(), beforeT,
-                      after.getColor().getRed(), afterT,
-                      tick), 255),
-                      Math.min(IMotion.tween(before.getColor().getGreen(), beforeT,
-                        after.getColor().getGreen(), afterT,
-                        tick), 255),
-                      Math.min(IMotion.tween(before.getColor().getBlue(), beforeT,
-                        after.getColor().getBlue(), afterT,
-                        tick), 255)));
+               new Color(Math.min(IMotion.tween(before.getColor().getRed(), beforeT,
+                       after.getColor().getRed(), afterT,
+                       tick), 255),
+                       Math.min(IMotion.tween(before.getColor().getGreen(), beforeT,
+                               after.getColor().getGreen(), afterT,
+                               tick), 255),
+                       Math.min(IMotion.tween(before.getColor().getBlue(), beforeT,
+                               after.getColor().getBlue(), afterT,
+                               tick), 255)));
     }
   }
 }

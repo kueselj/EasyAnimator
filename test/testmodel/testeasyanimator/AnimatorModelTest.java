@@ -479,6 +479,8 @@ public abstract class AnimatorModelTest {
             startWH, endWH,
             startPoint, startPoint,
             startColor, startColor));
+    // We make the java style checker happy. We wanted to check this didn't throw any exceptions.
+    assertTrue(true);
   }
 
   // New utility method checks.

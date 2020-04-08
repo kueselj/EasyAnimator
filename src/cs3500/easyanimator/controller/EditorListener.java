@@ -1,7 +1,5 @@
 package cs3500.easyanimator.controller;
 
-import cs3500.easyanimator.model.shapes.IShape;
-
 /**
  * Defines a listener for the different events that happens while a user is interacting with an
  * editor.

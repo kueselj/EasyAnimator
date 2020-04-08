@@ -1,7 +1,5 @@
 package cs3500.easyanimator.view;
 
-import cs3500.easyanimator.controller.MVCController;
-
 /**
  * A BasicViewFactory is an IViewFactory that can construct the basic set of views: text, svg, and
  * visual.

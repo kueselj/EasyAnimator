@@ -9,19 +9,16 @@ import cs3500.easyanimator.model.shapes.Oval;
 import cs3500.easyanimator.model.shapes.Rectangle;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
 
 /**
  * A textual representation view of an IAnimatorModel.
  */
 public class TextualView implements IAnimatorView {
 
-  Appendable out;
-  IAnimatorModelViewOnly model;
+  private Appendable out;
+  private IAnimatorModelViewOnly model;
 
   /**
    * Basic constructor for a Textual view, needs an appendable to output to.

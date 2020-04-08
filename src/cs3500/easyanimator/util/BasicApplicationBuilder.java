@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import cs3500.easyanimator.controller.IController;
 import cs3500.easyanimator.controller.MVCController;
 import cs3500.easyanimator.model.EasyAnimator;
 import cs3500.easyanimator.model.IAnimatorModel;
@@ -86,7 +85,7 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
       // We hotfix this change in to support an editor.
       MVCController controller = new MVCController(model);
       controller.setView(new EditorSwingView(controller), this.speed);
-      controller.go();
+      controller.start();
     } else {
       IAnimatorView view;
       try {
@@ -106,6 +105,14 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
     if (outputWriter != null) {
       try {
         outputWriter.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+
+    if (inputReader != null) {
+      try {
+        inputReader.close();
       } catch (IOException e) {
         e.printStackTrace();
       }

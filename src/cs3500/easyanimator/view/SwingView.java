@@ -1,6 +1,8 @@
 package cs3500.easyanimator.view;
 
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.Timer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 

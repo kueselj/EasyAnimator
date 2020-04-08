@@ -51,7 +51,10 @@ public class AnimationPanel extends JPanel {
    * Custom visitor to draw the desired shape on the given Graphics2D.
    */
   private class DrawShapeVisitor implements IShapeVisitor<Void> {
-    private int x, y, width, height;
+    private int x;
+    private int y;
+    private int width;
+    private int height;
     private Color color;
     Graphics2D g2d;
 

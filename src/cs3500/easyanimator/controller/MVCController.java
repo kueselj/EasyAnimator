@@ -1,9 +1,5 @@
 package cs3500.easyanimator.controller;
 
-
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,7 +10,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import javax.swing.*;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import cs3500.easyanimator.model.Color;
 import cs3500.easyanimator.model.IAnimatorModel;
@@ -117,7 +115,10 @@ public class MVCController implements IController, EditorListener {
   }
 
   @Override
-  public boolean setKeyframe(String name, int tick, String w, String h, String x, String y, String r, String g, String b) {
+  public boolean setKeyframe(String name, int tick,
+                             String w, String h,
+                             String x, String y,
+                             String r, String g, String b) {
     viewCheck();
     try {
       if (!model.getShapeNames().contains(name)) {
@@ -155,7 +156,7 @@ public class MVCController implements IController, EditorListener {
   }
 
   @Override
-  public void go() {
+  public void start() {
     viewCheck();
     this.view.makeVisible();
   }

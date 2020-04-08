@@ -6,10 +6,21 @@ import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.model.shapes.IShapeVisitor;
 import cs3500.easyanimator.model.shapes.ShapeNameVisitor;
 
-import javax.swing.*;
+import javax.swing.JComboBox;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JPanel;
+import javax.swing.JFrame;
+import javax.swing.BoxLayout;
+import javax.swing.JScrollPane;
 import javax.swing.Timer;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.BorderLayout;
+import java.awt.Toolkit;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -35,8 +46,8 @@ public class EditorSwingView implements IEnhancedView {
   }
 
   // GRAPHICS
-  private Dimension EDITOR_PANEL_SIZE = new Dimension(300, 500);
-  private Color EDITOR_PANEL_BACKGROUND = Color.GRAY;
+  private static final Dimension EDITOR_PANEL_SIZE = new Dimension(300, 500);
+  private static final Color EDITOR_PANEL_BACKGROUND = Color.GRAY;
 
   /**
    * A small helper method to create the editor panel. This will return something that will stack
@@ -114,17 +125,17 @@ public class EditorSwingView implements IEnhancedView {
           timer.start();
         }
       }
-      //PAUSE
+      // PAUSE
       else if (ac == PLAYBACK_ACTION.PAUSE.name()) {
         timer.stop();
       }
-      //RESTART
+      // RESTART
       else if (ac == PLAYBACK_ACTION.RESTART.name()) {
         timer.stop();
         tick = 0;
         refresh();
       }
-      //SPEEDUP
+      // SPEEDUP
       else if (ac == PLAYBACK_ACTION.SPEEDUP.name()) {
         // Max not necessary here, but here for good practice as a reminder.
         if (timer.getDelay() >= 1) {
@@ -132,7 +143,7 @@ public class EditorSwingView implements IEnhancedView {
         }
         System.out.println(timer.getDelay());
       }
-      //SPEEDDOWN
+      // SPEEDDOWN
       else if (ac == PLAYBACK_ACTION.SPEEDDOWN.name()) {
         setSpeed(timer.getDelay() + 1);
 
@@ -146,8 +157,9 @@ public class EditorSwingView implements IEnhancedView {
       else if (ac == PLAYBACK_ACTION.TICKUP.name()) {
         if (tick == model.getMaxTick()) {
           tick = 0;
+        } else {
+          tick = tick + 1;
         }
-        else tick = tick + 1;
         mainPanel.setShapes(model.getShapesAtTick(tick));
         mainPanel.repaint();
         updateTickLabel();
@@ -300,6 +312,7 @@ public class EditorSwingView implements IEnhancedView {
         listener.loadModel();
       }
     }
+
     @Override
     public void keyReleased(KeyEvent e) {
       //do nothing.
@@ -338,7 +351,9 @@ public class EditorSwingView implements IEnhancedView {
 
 
     playbackListener = new PlaybackListener();
-    editingListener = new EditingListener();
+    // I was forced to put this listener not as a field ...
+    // but a local variable by the dreaded style checker.
+    ActionListener editingListener = new EditingListener();
     saveKeyListener = new SaveListener();
 
     // THE EDITOR ON THE RIGHT
@@ -355,10 +370,11 @@ public class EditorSwingView implements IEnhancedView {
     this.shapeType = new JComboBox<>(DEFAULT_SHAPES);
     editorPanel.add(shapeType);
     this.shapeType.addKeyListener(saveKeyListener);
-    this.saveShape = addButton("Save Shape",
+    // I was made to make these local variables by the style checker.
+    JButton saveShape = addButton("Save Shape",
             editingListener, EDITING_ACTION.SAVE_SHAPE.name(),
             editorPanel);
-    this.deleteShape = addButton("Delete Shape",
+    JButton deleteShape = addButton("Delete Shape",
             editingListener, EDITING_ACTION.DELETE_SHAPE.name(),
             editorPanel);
 
@@ -382,11 +398,11 @@ public class EditorSwingView implements IEnhancedView {
     this.keyFrameB = createField("Blue", editorPanel);
 
     // Buttons at the bottom to finalize changes.
-    this.saveModification = addButton("Save Keyframe (Change)",
+    JButton saveModification = addButton("Save Keyframe (Change)",
             editingListener, EDITING_ACTION.SAVE_KEYFRAME.name(),
             editorPanel);
 
-    this.deleteKeyFrame = addButton("Delete Keyframe (Change)",
+    JButton deleteKeyFrame = addButton("Delete Keyframe (Change)",
             editingListener, EDITING_ACTION.DELETE_KEYFRAME.name(),
             editorPanel);
 
@@ -412,35 +428,35 @@ public class EditorSwingView implements IEnhancedView {
     playbackPanel.add(buttonPanel);
 
     // Onto buttons.
-    this.startButton = addButton("Play",
+    JButton startButton = addButton("Play",
             playbackListener, PLAYBACK_ACTION.PLAY.name(),
             buttonPanel);
 
-    this.pauseButton = addButton("Pause",
+    JButton pauseButton = addButton("Pause",
             playbackListener, PLAYBACK_ACTION.PAUSE.name(),
             buttonPanel);
 
-    this.restartButton = addButton("Restart",
+    JButton restartButton = addButton("Restart",
             playbackListener, PLAYBACK_ACTION.RESTART.name(),
             buttonPanel);
 
-    this.pauseButton = addButton("Toggle Loop",
+    JButton toggleLoop = addButton("Toggle Loop",
             playbackListener, PLAYBACK_ACTION.TOGGLELOOP.name(),
             buttonPanel);
 
-    this.increaseSpeedButton = addButton("^ Speed",
+    JButton increaseSpeedButton = addButton("^ Speed",
             playbackListener, PLAYBACK_ACTION.SPEEDUP.name(),
             buttonPanel);
 
-    this.decreaseSpeedButton = addButton("v Speed",
+    JButton decreaseSpeedButton = addButton("v Speed",
             playbackListener, PLAYBACK_ACTION.SPEEDDOWN.name(),
             buttonPanel);
 
-    this.tickUp = addButton("^ Tick",
+    JButton tickUp = addButton("^ Tick",
             playbackListener, PLAYBACK_ACTION.TICKUP.name(),
             buttonPanel);
 
-    this.tickUp = addButton("v Tick",
+    JButton tickDown = addButton("v Tick",
             playbackListener, PLAYBACK_ACTION.TICKDOWN.name(),
             buttonPanel);
 
@@ -461,13 +477,10 @@ public class EditorSwingView implements IEnhancedView {
   private JLabel tickLabel;
 
   // SHAPE SELECTOR
-  private ActionListener editingListener;
   private KeyListener saveKeyListener;
   private JComboBox selectShape;
   private JTextField shapeName;
   private JComboBox<String> shapeType;
-  private JButton deleteShape;
-  private JButton saveShape;
 
   // KEYFRAME EDITING
   private JComboBox selectTick;
@@ -479,21 +492,10 @@ public class EditorSwingView implements IEnhancedView {
   private JTextField keyFrameR;
   private JTextField keyFrameG;
   private JTextField keyFrameB;
-  private JButton saveModification;
-  private JButton deleteKeyFrame;
 
   // PLAYBACK
   private AnimationPanel mainPanel;
   private ActionListener playbackListener;
-  private JButton startButton;
-  private JButton pauseButton;
-  private JButton resumeButton;
-  private JButton restartButton;
-  private JButton toggleLoopingButton;
-  private JButton increaseSpeedButton;
-  private JButton decreaseSpeedButton;
-  private JButton tickUp;
-  private JButton tickDown;
 
 
   @Override
@@ -616,13 +618,13 @@ public class EditorSwingView implements IEnhancedView {
    * @param tick    The tick of the keyframe we have selected.
    */
   private void selectKeyframe(String name, Integer tick) {
-    String W = DEFAULT;
-    String H = DEFAULT;
-    String X = DEFAULT;
-    String Y = DEFAULT;
-    String R = DEFAULT;
-    String G = DEFAULT;
-    String B = DEFAULT;
+    String w = DEFAULT;
+    String h = DEFAULT;
+    String x = DEFAULT;
+    String y = DEFAULT;
+    String r = DEFAULT;
+    String g = DEFAULT;
+    String b = DEFAULT;
     // If we have actually selected the New Keyframe we just want to use the playback tick.
     if (tick == null) {
       tick = this.tick;
@@ -645,24 +647,22 @@ public class EditorSwingView implements IEnhancedView {
       } else {
         state = keyframes.get(headMap.firstKey());
       }
-      W = Integer.toString(state.getSize().getWidth());
-      H = Integer.toString(state.getSize().getHeight());
-      X = Integer.toString(state.getPosition().getX());
-      Y = Integer.toString(state.getPosition().getY());
-      R = Integer.toString(state.getColor().getRed());
-      G = Integer.toString(state.getColor().getGreen());
-      B = Integer.toString(state.getColor().getBlue());
+      w = Integer.toString(state.getSize().getWidth());
+      h = Integer.toString(state.getSize().getHeight());
+      x = Integer.toString(state.getPosition().getX());
+      y = Integer.toString(state.getPosition().getY());
+      r = Integer.toString(state.getColor().getRed());
+      g = Integer.toString(state.getColor().getGreen());
+      b = Integer.toString(state.getColor().getBlue());
     }
     // We do NOT set the selected tick. That must be done somewhere else.
     this.keyFrameTick.setText(Integer.toString(tick));
-    this.keyFrameWidth.setText(W);
-    this.keyFrameHeight.setText(H);
-    this.keyFrameX.setText(X);
-    this.keyFrameY.setText(Y);
-    this.keyFrameR.setText(R);
-    this.keyFrameG.setText(G);
-    this.keyFrameB.setText(B);
+    this.keyFrameWidth.setText(w);
+    this.keyFrameHeight.setText(h);
+    this.keyFrameX.setText(x);
+    this.keyFrameY.setText(y);
+    this.keyFrameR.setText(r);
+    this.keyFrameG.setText(g);
+    this.keyFrameB.setText(b);
   }
-
-
 }

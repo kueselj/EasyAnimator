@@ -43,7 +43,8 @@ public abstract class TestIApplicationBuilder {
    */
   @Test
   public void testMinimumArguments() {
-    String in, out;
+    String in;
+    String out;
     try {
       in = createTemporaryLocation("input");
       out = createTemporaryLocation("out");

@@ -122,8 +122,10 @@ public final class BasicMotion implements IMotion {
 
   @Override
   public Point getPosition(int tick) {
-    return new Point(IMotion.tween(startPosition.getX(), startTime, endPosition.getX(), endTime, tick),
-            IMotion.tween(startPosition.getY(), startTime, endPosition.getY(), endTime, tick));
+    return new Point(IMotion.tween(startPosition.getX(), startTime,
+            endPosition.getX(), endTime, tick),
+            IMotion.tween(startPosition.getY(), startTime,
+                    endPosition.getY(), endTime, tick));
   }
 
   @Override
@@ -145,12 +147,12 @@ public final class BasicMotion implements IMotion {
                     endColor.getBlue(), endTime, tick));
   }
 
-  @Override
   /**
    * We override the existing equals behavior so that it is equals if the fields match.
    * @param o   The object to compare to.
    * @return    True if the objects are equal otherwise false.
    */
+  @Override
   public boolean equals(Object o) {
     if (this == o) {
       return true;
@@ -169,6 +171,11 @@ public final class BasicMotion implements IMotion {
     }
   }
 
+  /**
+   * Overrides the default hashcode implementation to be compatible with equal, field comparison.
+   * @return  A integer hashcode.
+   */
+  @Override
   public int hashCode() {
     return Objects.hash(this.startTime, this.endTime,
             this.startSize,this.endSize,
