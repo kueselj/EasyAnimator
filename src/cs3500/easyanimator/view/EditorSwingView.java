@@ -63,7 +63,7 @@ public class EditorSwingView implements IAnimatorView {
     JTextField field = new JTextField();
     field.setPreferredSize(MAX_FIELD_SIZE);
     JLabel label = new JLabel(name);
-    group.add(label, BorderLayout.EAST);
+    group.add(label, BorderLayout.CENTER);
     group.add(field, BorderLayout.WEST);
     editorPanel.add(group);
     return field;
@@ -88,7 +88,8 @@ public class EditorSwingView implements IAnimatorView {
   /**
    * A PLAYBACK_ACTION is a set of actions to do when adjusting playback.
    */
-  private enum PLAYBACK_ACTION { PLAY, PAUSE, RESTART, SPEEDUP, SPEEDDOWN, TOGGLELOOP }
+  private enum PLAYBACK_ACTION { PLAY, PAUSE, RESTART, TOGGLELOOP, SPEEDUP, SPEEDDOWN,
+    TICKUP, TICKDOWN }
 
   // We have the listener for those actions below.
   // See the justification for this style here, https://stackoverflow.com/a/5937586.
@@ -110,20 +111,57 @@ public class EditorSwingView implements IAnimatorView {
           // Without a model, if we start there will be errors.
           timer.start();
         }
-      } else if (ac == PLAYBACK_ACTION.PAUSE.name()) {
+      }
+      //PAUSE
+      else if (ac == PLAYBACK_ACTION.PAUSE.name()) {
         timer.stop();
-      } else if (ac == PLAYBACK_ACTION.RESTART.name()) {
+      }
+      //RESTART
+      else if (ac == PLAYBACK_ACTION.RESTART.name()) {
         timer.stop();
         tick = 0;
         refresh();
-      } else if (ac == PLAYBACK_ACTION.SPEEDUP.name()) {
+      }
+      //SPEEDUP
+      else if (ac == PLAYBACK_ACTION.SPEEDUP.name()) {
         // Max not necessary here, but here for good practice as a reminder.
-        setSpeed(timer.getDelay() - TIMER_CHANGE);
-      } else if (ac == PLAYBACK_ACTION.SPEEDDOWN.name()) {
-        setSpeed(timer.getDelay() + TIMER_CHANGE);
-      } else if (ac == PLAYBACK_ACTION.TOGGLELOOP.name()) {
+        if (timer.getDelay() >= 1) {
+          setSpeed(timer.getDelay() - 1);
+        }
+        System.out.println(timer.getDelay());
+      }
+      //SPEEDDOWN
+      else if (ac == PLAYBACK_ACTION.SPEEDDOWN.name()) {
+        setSpeed(timer.getDelay() + 1);
+
+        System.out.println(timer.getDelay());
+      }
+      //TOGGLELOOP
+      else if (ac == PLAYBACK_ACTION.TOGGLELOOP.name()) {
         looping = !looping;
-      } else {
+      }
+      //TICKUP
+      else if (ac == PLAYBACK_ACTION.TICKUP.name()) {
+        if (tick == model.getMaxTick()) {
+          tick = 0;
+        }
+        else tick = tick + 1;
+        mainPanel.setShapes(model.getShapesAtTick(tick));
+        mainPanel.repaint();
+        updateTickLabel();
+      }
+      //TICKDOWN
+      else if (ac == PLAYBACK_ACTION.TICKDOWN.name()) {
+
+        if (tick == 0) {
+          tick = model.getMaxTick();
+        }
+        else tick = tick - 1;
+        mainPanel.setShapes(model.getShapesAtTick(tick));
+        mainPanel.repaint();
+        updateTickLabel();
+      }
+      else {
         // We don't add events to this listener without setting the action command.
         throw new IllegalStateException("This branch should have been unreachable");
       }
@@ -173,7 +211,7 @@ public class EditorSwingView implements IAnimatorView {
       if (ac == EDITING_ACTION.SELECT_SHAPE.name()) {
         selectShape(selectedShapeString);
 
-        // ██████████ OVERIDDING / CREATING A SHAPE ██████████
+        // ██████████ OVERRIDING / CREATING A SHAPE ██████████
       } else if (ac == EDITING_ACTION.SAVE_SHAPE.name()) {
         String newShapeName = shapeName.getText().trim();
         String newShapeType = (String) shapeType.getSelectedItem();
@@ -322,6 +360,7 @@ public class EditorSwingView implements IAnimatorView {
 
     this.mainPanel = new AnimationPanel();
     JScrollPane scrollPane = new JScrollPane(this.mainPanel);
+
     playbackPanel.add(scrollPane);
 
     // Now we add a button panel full of playback controls.
@@ -353,9 +392,22 @@ public class EditorSwingView implements IAnimatorView {
             playbackListener, PLAYBACK_ACTION.SPEEDUP.name(),
             buttonPanel);
 
-    this.increaseSpeedButton = addButton("v Speed",
+    this.decreaseSpeedButton = addButton("v Speed",
             playbackListener, PLAYBACK_ACTION.SPEEDDOWN.name(),
             buttonPanel);
+
+    this.tickUp = addButton("^ Tick",
+            playbackListener, PLAYBACK_ACTION.TICKUP.name(),
+            buttonPanel);
+
+    this.tickUp = addButton("v Tick",
+            playbackListener, PLAYBACK_ACTION.TICKDOWN.name(),
+            buttonPanel);
+
+    this.tickLabel = new JLabel();
+
+
+    buttonPanel.add(tickLabel);
 
     this.frame.add(playbackPanel);
   }
@@ -363,6 +415,7 @@ public class EditorSwingView implements IAnimatorView {
   // All the graphics fields we use.
   // We interact with these in the code below.
   private JFrame frame;
+  private JLabel tickLabel;
 
   // SHAPE SELECTOR
   private ActionListener editingListener;
@@ -395,6 +448,9 @@ public class EditorSwingView implements IAnimatorView {
   private JButton toggleLoopingButton;
   private JButton increaseSpeedButton;
   private JButton decreaseSpeedButton;
+  private JButton tickUp;
+  private JButton tickDown;
+
 
   @Override
   public void makeVisible() {
@@ -417,12 +473,19 @@ public class EditorSwingView implements IAnimatorView {
     }
     this.mainPanel.setShapes(model.getShapesAtTick(this.tick));
     this.mainPanel.repaint();
+    this.updateTickLabel();
+  }
+
+  /**
+   * Simply updates the tick label to the current tick.
+   */
+  private void updateTickLabel() {
+    this.tickLabel.setText("   " + this.tick);
   }
 
   @Override
   public void setSpeed(double speed) {
-    // I crash below 15 hahahaha.
-    this.timer.setDelay(Math.max(15, (int) (1.0 / speed * 1000)));
+    this.timer.setDelay((int) speed);
   }
 
   private static String NEW_KEYFRAME = "New Keyframe";
