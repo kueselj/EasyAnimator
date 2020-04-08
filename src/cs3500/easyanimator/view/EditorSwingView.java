@@ -464,7 +464,11 @@ public class EditorSwingView implements IAnimatorView {
    * A custom method to use when refreshing playback.
    */
   private void refresh() {
-    if (this.looping) {
+    if (this.model.getMaxTick() == 0) {
+      // A special rule for if the model is in a particularly weird state.
+      this.tick = 0;
+      this.timer.stop();
+    } else if (this.looping) {
       this.tick = (this.tick + 1) % model.getMaxTick();
     } else {
       if (this.tick == model.getMaxTick()) {

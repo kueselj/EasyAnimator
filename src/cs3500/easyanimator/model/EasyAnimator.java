@@ -1,6 +1,5 @@
 package cs3500.easyanimator.model;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -16,9 +15,6 @@ import java.util.TreeSet;
 import cs3500.easyanimator.model.motions.BasicMotion;
 import cs3500.easyanimator.model.motions.IMotion;
 import cs3500.easyanimator.model.shapes.IShape;
-import cs3500.easyanimator.model.shapes.IShapeVisitor;
-import cs3500.easyanimator.model.shapes.Oval;
-import cs3500.easyanimator.model.shapes.Rectangle;
 import cs3500.easyanimator.model.shapes.ShapeF;
 import cs3500.easyanimator.model.shapes.WidthHeight;
 
@@ -306,7 +302,7 @@ public class EasyAnimator implements IAnimatorModel {
                shapeAndKeyframes.getValue().entrySet()) {
         if (previousKeyframe == null) {
           previousKeyframe = keyframe;
-          continue; // Next loop.
+          continue;
         } else {
           // We only add a motion if it changes the value.
           WidthHeight prevSize = previousKeyframe.getValue().getSize();
