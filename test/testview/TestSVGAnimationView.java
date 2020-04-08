@@ -2,7 +2,10 @@ package testview;
 
 import org.junit.Test;
 
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import java.io.ByteArrayInputStream;
@@ -163,11 +166,11 @@ public class TestSVGAnimationView {
    * @param dur           The duration of the animate.
    */
   private void verifyAnimation(Element e,
-                       String attributeName,
-                       String from, String to,
-                       String begin, String dur) {
+                               String attributeName,
+                               String from, String to,
+                               String begin, String dur) {
     NodeList list = e.getChildNodes();
-    for (int i = 0; i < list.getLength(); i++){
+    for (int i = 0; i < list.getLength(); i++) {
       Node item = list.item(i);
       if (item.getNodeType() == Node.ELEMENT_NODE) {
         Element child = (Element) item;

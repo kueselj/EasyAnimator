@@ -5,7 +5,6 @@ import org.junit.Test;
 import cs3500.easyanimator.view.IAnimatorView;
 import cs3500.easyanimator.view.IViewFactory;
 import cs3500.easyanimator.view.SVGAnimationView;
-import cs3500.easyanimator.view.SwingView;
 import cs3500.easyanimator.view.TextualView;
 
 import static org.junit.Assert.assertTrue;
