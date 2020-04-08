@@ -16,12 +16,13 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 public class testMVCController {
 
   IAnimatorModel model;
-  MVCController controller;
   IAnimatorView view;
+  MVCController controller;
 
   /**
    * Resets the controller for further testing.
@@ -61,7 +62,7 @@ public class testMVCController {
             diffColor, otherColor));
 
     // We add a motion for this shape so we can use it later.
-    model.addMotion("R", new BasicMotion(0, 100,
+    model.addMotion("R", new BasicMotion(50, 100,
             wh20050, wh50200,
             p400400, p00,
             why, red));
@@ -79,8 +80,6 @@ public class testMVCController {
 
     //controller.go();
   }
-
-
 
   @Test
   public void testAddShape() {
@@ -108,28 +107,90 @@ public class testMVCController {
     }
     assertTrue(testFailed);
 
-
+    //should return false if there is no shape to remove with that name.
+    assertFalse(controller.removeShape("C"));
   }
 
   @Test
   public void testRenameShape() {
+    this.reset();
+    assertTrue(model.getKeyframes("C") != null);
+    try {
+      model.getKeyframes("C2");
+      return;
+    } catch (IllegalArgumentException e) {
+      //this should have failed.
+    }
+    controller.renameShape("C", "C2", "oval");
+    try {
+      model.getKeyframes("C");
+    } catch (IllegalArgumentException e) {
+      //this should fail
+    }
+    assertTrue(model.getKeyframes("C2") != null);
 
-
+    //can't rename a shape that doesnt exist!
+    assertFalse(controller.renameShape("Hello", "thisNoExist", "oval"));
   }
 
   @Test
   public void testRemoveKeyFrame() {
+    this.reset();
 
+    assertTrue(model.getKeyframes("C").containsKey(200));
+    controller.removeKeyframe("C", 200);
+    assertFalse(model.getKeyframes("C").containsKey(200));
+
+    //test that trying to remove a keyFrame that isn't there will return false.
+    assertFalse(controller.removeKeyframe("C", 1000));
   }
 
   @Test
   public void testSetKeyFrame() {
+    this.reset();
+    assertFalse(model.getKeyframes("C").containsKey(600));
 
+    //Make a new keyFrame, after last tick as well.
+    controller.setKeyframe("C", 600,
+            "50", "100", "150", "200", "10", "20", "30");
+    assertTrue(model.getKeyframes("C").containsKey(600));
+    assertEquals(50, model.getKeyframes("C").get(600).getSize().getWidth());
+    assertEquals(100, model.getKeyframes("C").get(600).getSize().getHeight());
+    assertEquals(150, model.getKeyframes("C").get(600).getPosition().getX());
+    assertEquals(200, model.getKeyframes("C").get(600).getPosition().getY());
+    assertEquals(10, model.getKeyframes("C").get(600).getColor().getRed());
+    assertEquals(20, model.getKeyframes("C").get(600).getColor().getGreen());
+    assertEquals(30, model.getKeyframes("C").get(600).getColor().getBlue());
+
+    assertFalse(model.getKeyframes("R").containsKey(0));
+
+    //Make a new keyFrame, before last tick as well.
+    controller.setKeyframe("R", 0,
+            "50", "100", "150", "200", "10", "20", "30");
+    assertTrue(model.getKeyframes("C").containsKey(600));
+    assertEquals(50, model.getKeyframes("R").get(0).getSize().getWidth());
+    assertEquals(100, model.getKeyframes("R").get(0).getSize().getHeight());
+    assertEquals(150, model.getKeyframes("R").get(0).getPosition().getX());
+    assertEquals(200, model.getKeyframes("R").get(0).getPosition().getY());
+    assertEquals(10, model.getKeyframes("R").get(0).getColor().getRed());
+    assertEquals(20, model.getKeyframes("R").get(0).getColor().getGreen());
+    assertEquals(30, model.getKeyframes("R").get(0).getColor().getBlue());
+
+
+    //Override a keyFrame.
+    controller.setKeyframe("C", 200,
+            "40", "100", "150", "200", "10", "20", "30");
+    assertTrue(model.getKeyframes("C").containsKey(600));
+    assertEquals(40, model.getKeyframes("C").get(200).getSize().getWidth());
+    assertEquals(100, model.getKeyframes("C").get(200).getSize().getHeight());
+    assertEquals(150, model.getKeyframes("C").get(200).getPosition().getX());
+    assertEquals(200, model.getKeyframes("C").get(200).getPosition().getY());
+    assertEquals(10, model.getKeyframes("C").get(200).getColor().getRed());
+    assertEquals(20, model.getKeyframes("C").get(200).getColor().getGreen());
+    assertEquals(30, model.getKeyframes("C").get(200).getColor().getBlue());
+
+    //invalid parameters, should not go through!
+    assertFalse(controller.setKeyframe("C", 700, "10", "10", "10",
+            "10", "10", "10", "300"));
   }
-
-  @Test
-  public void testSetView() {
-
-  }
-
 }
