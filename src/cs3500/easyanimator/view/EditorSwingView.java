@@ -169,8 +169,9 @@ public class EditorSwingView implements IEnhancedView {
 
         if (tick == 0) {
           tick = model.getMaxTick();
+        } else {
+          tick = tick - 1;
         }
-        else tick = tick - 1;
         mainPanel.setShapes(model.getShapesAtTick(tick));
         mainPanel.repaint();
         updateTickLabel();
@@ -350,7 +351,7 @@ public class EditorSwingView implements IEnhancedView {
     frame.addKeyListener(saveKeyListener);
 
 
-    playbackListener = new PlaybackListener();
+    ActionListener playbackListener = new PlaybackListener();
     // I was forced to put this listener not as a field ...
     // but a local variable by the dreaded style checker.
     ActionListener editingListener = new EditingListener();
@@ -495,7 +496,6 @@ public class EditorSwingView implements IEnhancedView {
 
   // PLAYBACK
   private AnimationPanel mainPanel;
-  private ActionListener playbackListener;
 
 
   @Override

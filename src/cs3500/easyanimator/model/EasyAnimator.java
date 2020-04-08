@@ -109,7 +109,7 @@ public class EasyAnimator implements IAnimatorModel {
     // Even through the client doesn't know it's a LinkedHashMap,
     // they will be pleased by the iterator order.
     LinkedHashMap<String, IShape> map = new LinkedHashMap<>();
-    for (Map.Entry<String, IShape> shapeEntry: namedShapes.entrySet()) {
+    for (Map.Entry<String, IShape> shapeEntry : namedShapes.entrySet()) {
       map.put(shapeEntry.getKey(), shapeEntry.getValue().copy());
     }
     return map;
@@ -184,7 +184,7 @@ public class EasyAnimator implements IAnimatorModel {
     // I can re-use the method I already defined.
     ArrayList<IShape> shapes = new ArrayList<>();
     // Note this is sorted by insertion order so our list will be in insertion order.
-    for (String shapeName: namedShapes.keySet()) {
+    for (String shapeName : namedShapes.keySet()) {
       IShape shape = getShapeAtTick(shapeName, tick);
       if (shape != null) {
         shapes.add(shape);
@@ -294,12 +294,12 @@ public class EasyAnimator implements IAnimatorModel {
   public Map<String, SortedSet<IMotion>> getSortedMotions() {
     // We simulate motions.
     LinkedHashMap<String, SortedSet<IMotion>> out = new LinkedHashMap<>();
-    for (Map.Entry<String, NavigableMap<Integer, IShape>> shapeAndKeyframes:
+    for (Map.Entry<String, NavigableMap<Integer, IShape>> shapeAndKeyframes :
             shapeKeyframes.entrySet()) {
       SortedSet<IMotion> motions = new TreeSet<>(Comparator.comparingInt(IMotion::getEndTime));
       Map.Entry<Integer, IShape> previousKeyframe = null;
-      for (Map.Entry<Integer, IShape> keyframe:
-               shapeAndKeyframes.getValue().entrySet()) {
+      for (Map.Entry<Integer, IShape> keyframe :
+              shapeAndKeyframes.getValue().entrySet()) {
         if (previousKeyframe == null) {
           previousKeyframe = keyframe;
           continue;
@@ -340,40 +340,42 @@ public class EasyAnimator implements IAnimatorModel {
    * A Tweener is a small visitor to return a shape constructed between the two given shapes.
    */
   private static class Tweener extends ShapeF {
+
     /**
+     * Create a new Tweener instance with the following parameters.
      *
-     * @param canvasCorner
-     * @param before
-     * @param beforeT
-     * @param after
-     * @param afterT
-     * @param tick
+     * @param canvasCorner The top left corner position.
+     * @param before       The state before to use.
+     * @param beforeT      The tick of the state before.
+     * @param after        The state after to use.
+     * @param afterT       The tick of the state after.
+     * @param tick         The tick to use.
      */
     Tweener(Point canvasCorner,
             IShape before, int beforeT, IShape after, int afterT, int tick) {
-       super(new WidthHeight(IMotion.tween(before.getSize().getWidth(), beforeT,
-               after.getSize().getWidth(), afterT,
-               tick),
-                       IMotion.tween(before.getSize().getHeight(), beforeT,
-                               after.getSize().getHeight(), afterT,
-                               tick)),
+      super(new WidthHeight(IMotion.tween(before.getSize().getWidth(), beforeT,
+              after.getSize().getWidth(), afterT,
+              tick),
+                      IMotion.tween(before.getSize().getHeight(), beforeT,
+                              after.getSize().getHeight(), afterT,
+                              tick)),
               new Point(IMotion.tween(before.getPosition().getX() - canvasCorner.getX(),
                       beforeT,
                       after.getPosition().getX() - canvasCorner.getX(), afterT,
                       tick),
                       IMotion.tween(before.getPosition().getY() - canvasCorner.getY(),
-                      beforeT,
-                      after.getPosition().getY() - canvasCorner.getY(), afterT,
-                      tick)),
-               new Color(Math.min(IMotion.tween(before.getColor().getRed(), beforeT,
-                       after.getColor().getRed(), afterT,
-                       tick), 255),
-                       Math.min(IMotion.tween(before.getColor().getGreen(), beforeT,
-                               after.getColor().getGreen(), afterT,
-                               tick), 255),
-                       Math.min(IMotion.tween(before.getColor().getBlue(), beforeT,
-                               after.getColor().getBlue(), afterT,
-                               tick), 255)));
+                              beforeT,
+                              after.getPosition().getY() - canvasCorner.getY(), afterT,
+                              tick)),
+              new Color(Math.min(IMotion.tween(before.getColor().getRed(), beforeT,
+                      after.getColor().getRed(), afterT,
+                      tick), 255),
+                      Math.min(IMotion.tween(before.getColor().getGreen(), beforeT,
+                              after.getColor().getGreen(), afterT,
+                              tick), 255),
+                      Math.min(IMotion.tween(before.getColor().getBlue(), beforeT,
+                              after.getColor().getBlue(), afterT,
+                              tick), 255)));
     }
   }
 }

@@ -1,6 +1,7 @@
 package cs3500.easyanimator.controller;
 
-import java.awt.*;
+import java.awt.Window;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
