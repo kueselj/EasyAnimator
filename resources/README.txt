@@ -1,5 +1,7 @@
 EasyAnimator
 
+//ASSIGNMENT 6//
+
 The implementation of our model (EasyAnimator, which is an implementation of an IAnimatorModel) can
 be understood as dealing with two different categories of objects.
 
@@ -47,3 +49,37 @@ to add different settings as they come in from the command line parser. Having a
 we didn't have a bunch of static code that went untested. At the end of adding a bunch of
 parameters we use the build method which launches the application with those settings applied.
 
+//ASSIGNMENT 7//
+
+Just so ya know. Gotta press start to actually start the animation, not gonna
+pop up for no good reason.
+
+This assignment we decided to add keyFrames. However, we still have backwards compatibility with
+our motions that we had. Adaptor much?. keyFrames add a lot of flexibility to the model as we can
+now add the state of a given shape at a particular moment in time.
+
+Next, we started implementing our new editorView and corresponding controller. This implementation
+was a hot debate topic for the team. We on three separate occasions changed where the logic for
+the view would be located. It is now all in the view, so ticks, the timer, etc. Piazza said this was
+ok but as expected we ran into some major design issues when trying to implement listeners as they
+somewhat had to live in the view as opposed to the controller which is not what we wanted.
+
+Our view functionality can be placed into two categories. Playback controls, and our
+editor features. The playback controls are all buttons. We think this looks better. KeyBoard buttons
+are no fun. We did implement a keyBoard function though as requested to save and load files. The
+editor features panel is a combination of JCombo boxes, JButtons, and textFields. A user can
+use to JComboBoxes to select from all the available shapes. Another JComboBox is used to select
+from all the available ticks for that given shape. Which, happens to be a keyFrame technically. All
+of that selected keyFrame's fields are then displayed in the text boxes. The user can edit them and
+save that keyFrame. They can also add a new keyframe for that shape. Buttons are used to create a
+new shape, save a keyFrame, and delete a keyFrame.
+
+We added some additional un-required features to the the view, such as the ability to pause, then
+go through the individual ticks so the user can see a shapes state at an exact keyFrame. A tick
+count is displayed for convenience. When selecting add a new keyframe, the textFields will
+automatically fill with the state of the selected state at that tick!
+
+Our controller implementation is unfortunately a little thin. Holds a model and a view.
+It is itself a listener that the view can use for certain action events.
+The controller, once activated by an action event, will then decide what to do. Renaming a shape,
+creating a new keyFrame, deleting a keyFrame, modifying keyframe, adding a shape, deleting a shape.
