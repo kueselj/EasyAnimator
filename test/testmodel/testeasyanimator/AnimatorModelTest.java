@@ -479,8 +479,8 @@ public abstract class AnimatorModelTest {
             startWH, endWH,
             startPoint, startPoint,
             startColor, startColor));
-    // We make the java style checker happy. We wanted to check this didn't throw any exceptions.
-    assertTrue(true);
+    assertEquals("Expected the sample shape to have 2 motions.",
+            2, model.getSortedMotions().get("sample").size());
   }
 
   // New utility method checks.
