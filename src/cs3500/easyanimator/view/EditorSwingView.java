@@ -530,8 +530,8 @@ public class EditorSwingView implements IEnhancedView {
   }
 
   @Override
-  public void setSpeed(double speed) {
-    this.speed = Math.max(speed, 1);
+  public void setSpeed(double tps) {
+    this.speed = Math.max(tps, 1);
     this.timer.setDelay((int) Math.max(1, (1.0 / speed * 1000.0)));
   }
 
