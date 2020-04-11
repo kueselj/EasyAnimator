@@ -34,6 +34,7 @@ public class EditorSwingView implements IEnhancedView {
   private final EditorListener listener;
   private final Timer timer;
   private int tick;
+  private double speed;
   private boolean looping;
 
   private IAnimatorModelViewOnly model;
@@ -138,16 +139,11 @@ public class EditorSwingView implements IEnhancedView {
       // SPEEDUP
       else if (ac == PLAYBACK_ACTION.SPEEDUP.name()) {
         // Max not necessary here, but here for good practice as a reminder.
-        if (timer.getDelay() >= 1) {
-          setSpeed(timer.getDelay() - 1);
-        }
-        System.out.println(timer.getDelay());
+        setSpeed(speed + 1);
       }
       // SPEEDDOWN
       else if (ac == PLAYBACK_ACTION.SPEEDDOWN.name()) {
-        setSpeed(timer.getDelay() + 1);
-
-        System.out.println(timer.getDelay());
+        setSpeed(speed - 1);
       }
       //TOGGLELOOP
       else if (ac == PLAYBACK_ACTION.TOGGLELOOP.name()) {
@@ -535,7 +531,8 @@ public class EditorSwingView implements IEnhancedView {
 
   @Override
   public void setSpeed(double speed) {
-    this.timer.setDelay((int) speed);
+    this.speed = Math.max(speed, 1);
+    this.timer.setDelay((int) Math.max(1, (1.0 / speed * 1000.0)));
   }
 
   private static String NEW_KEYFRAME = "New Keyframe";
