@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 /**
  * A class which represents an Oval. A child class of an AShape.
  */
-public class POval extends AShape {
+public class Oval extends AShape {
 
   /**
    * Constructor for a rectangle object.
@@ -17,7 +17,7 @@ public class POval extends AShape {
    * @param xSize - The width of this oval.
    * @param ySize - The height of this oval.
    */
-  public POval(String name, Pos2D pos, Color color, float xSize, float ySize) {
+  public Oval(String name, Pos2D pos, Color color, float xSize, float ySize) {
     super(name, pos, color, xSize, ySize);
   }
 

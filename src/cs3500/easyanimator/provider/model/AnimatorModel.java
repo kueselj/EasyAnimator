@@ -4,11 +4,11 @@ import cs3500.easyanimator.model.Color;
 import cs3500.easyanimator.model.IAnimatorModel;
 import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.shapes.IShape;
-import cs3500.easyanimator.model.shapes.Oval;
-import cs3500.easyanimator.model.shapes.Rectangle;
 import cs3500.easyanimator.model.shapes.WidthHeight;
 
-public class IAnimatorModelToProviderModel implements ProviderModel {
+import java.util.List;
+
+public class AnimatorModel implements ProviderModel {
   private  IAnimatorModel adaptee;
   private int tick;
 
@@ -28,12 +28,12 @@ public class IAnimatorModelToProviderModel implements ProviderModel {
     IShape shapeToAdd;
 
     //TODO REPLACE WITH VISITOR.
-    if (shape instanceof PRectangle) {
-      shapeToAdd = new Rectangle(sWidthHeight, sPoint, sColor);
+    if (shape instanceof Rectangle) {
+      shapeToAdd = new cs3500.easyanimator.model.shapes.Rectangle(sWidthHeight, sPoint, sColor);
     }
 
-    else if (shape instanceof POval) {
-      shapeToAdd = new Oval(sWidthHeight, sPoint, sColor);
+    else if (shape instanceof Oval) {
+      shapeToAdd = new cs3500.easyanimator.model.shapes.Oval(sWidthHeight, sPoint, sColor);
     }
     else shapeToAdd = null;
 
@@ -48,20 +48,14 @@ public class IAnimatorModelToProviderModel implements ProviderModel {
 
   @Override
   public void addAnimation(AAnimation a) {
-
-    String id = a.getTarget().getName();
-
-    //TODO How to i get the motion fields
-    adaptee.addMotion(a, null);
+    //Supressed.
 
 
   }
 
   @Override
   public void removeAnimation(AAnimation a) {
-    String id = a.getTarget().getName();
-    //TODO How to i get the motion fields.
-    adaptee.removeMotion(id, null);
+    //supressed
 
   }
 
@@ -96,8 +90,12 @@ public class IAnimatorModelToProviderModel implements ProviderModel {
 
   @Override
   public void addKeyFrame(AShape target, String s) {
-    //TODO how to process s? We have no idea what this looks like.
-    adaptee.addKeyframe();
+    //supressed.
 
+  }
+
+  public List<IShape> getShapes() {
+    return adaptee.getShapesAtTick(this.tick);
+    //TODO convert to their version of shapes!
   }
 }

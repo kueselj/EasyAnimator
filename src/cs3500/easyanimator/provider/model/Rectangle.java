@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 /**
  * A class which represents a rectangle. A child class of an AShape.
  */
-public class PRectangle extends AShape {
+public class Rectangle extends AShape {
 
   /**
    * Constructor for a rectangle object.
@@ -17,7 +17,7 @@ public class PRectangle extends AShape {
    * @param xSize - The width of this rectangle.
    * @param ySize - The height of this rectangle.
    */
-  public PRectangle(String name, Pos2D pos, Color color, float xSize, float ySize) {
+  public Rectangle(String name, Pos2D pos, Color color, float xSize, float ySize) {
     super(name, pos, color, xSize, ySize);
   }
 
