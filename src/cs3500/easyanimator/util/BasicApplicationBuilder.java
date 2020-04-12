@@ -10,6 +10,7 @@ import cs3500.easyanimator.model.EasyAnimator;
 import cs3500.easyanimator.model.IAnimatorModel;
 import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.shapes.WidthHeight;
+import cs3500.easyanimator.provider.controller.AnimatorController;
 import cs3500.easyanimator.view.BasicViewFactory;
 import cs3500.easyanimator.view.EditorSwingView;
 import cs3500.easyanimator.view.IAnimatorView;
@@ -86,6 +87,10 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
       MVCController controller = new MVCController(model);
       controller.setView(new EditorSwingView(controller), this.speed);
       controller.start();
+    } else if (viewType.equals("provider")) {
+      // TODO: Add conversion to adapter here.
+      AnimatorController controller = new AnimatorController(null, this.speed);
+      return; // Quit out early.
     } else {
       IAnimatorView view;
       try {
