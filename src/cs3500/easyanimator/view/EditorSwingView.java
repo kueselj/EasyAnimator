@@ -37,6 +37,7 @@ public class EditorSwingView implements IEnhancedView {
   private double speed;
   private boolean looping;
 
+
   private IAnimatorModelViewOnly model;
 
   @Override

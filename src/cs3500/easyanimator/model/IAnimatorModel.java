@@ -10,7 +10,6 @@ import cs3500.easyanimator.model.shapes.WidthHeight;
  * motions for some named shape (id).
  */
 public interface IAnimatorModel extends IAnimatorModelViewOnly {
-
   /**
    * Sets the canvas for the given animation. This is a viewport for all of our shapes and affects
    * how getShapesAtTick and getShapeAtTick behave.

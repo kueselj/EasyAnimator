@@ -12,4 +12,6 @@ public class TestBasicViewFactory extends TestIViewFactory {
   IViewFactory getInstance() {
     return new BasicViewFactory();
   }
+
+
 }
