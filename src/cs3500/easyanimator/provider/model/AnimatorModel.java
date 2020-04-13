@@ -137,6 +137,14 @@ public class AnimatorModel implements ProviderModel, AdapterInterface {
     return this.tick;
   }
 
+  /**
+   * This should be supressed, should not work.
+   * @return empty string, not anything.
+   */
+  public String toSVG() {
+    return "";
+  }
+
   //TODO make this an adapter instead? Probably! Will need one for both shape types tho.
   /**
    * Private helper visitor that converts model shape implementation into the provider shape.

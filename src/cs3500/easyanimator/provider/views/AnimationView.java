@@ -1,7 +1,8 @@
 package cs3500.easyanimator.provider.views;
 
-import cs3500.animator.AnimatorModel;
-import cs3500.animator.controller.AnimatorController;
+import cs3500.easyanimator.provider.controller.AnimatorController;
+import cs3500.easyanimator.provider.model.AnimatorModel;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
