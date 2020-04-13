@@ -4,8 +4,10 @@ import cs3500.easyanimator.model.Color;
 import cs3500.easyanimator.model.IAnimatorModel;
 import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.shapes.IShape;
+import cs3500.easyanimator.model.shapes.IShapeVisitor;
 import cs3500.easyanimator.model.shapes.WidthHeight;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AnimatorModel implements ProviderModel, AdapterInterface {
@@ -13,8 +15,27 @@ public class AnimatorModel implements ProviderModel, AdapterInterface {
   private int tick;
   public int canvasX;
   public int canvasY; // These need to be set on model construction.
-  public int yOffset;
-  public int xOffset; // These too need to be set on model construction.
+  public int xOffset;
+  public int yOffset; // These too need to be set on model construction.
+
+
+  /**
+   * Constructor for an AnimatorModelAdapter, takes in the adaptee,
+   * and a bunch of ints to deal with canvas size and position.
+   * @param adaptee the adaptee model to use.
+   * @param canvasX the x variable of the canvas.
+   * @param canvasY the y variable of the canvas.
+   * @param xOffset the x offset of the canvas.
+   * @param yOffset the y offset of the canvas.
+   */
+  public AnimatorModel(IAnimatorModel adaptee, int canvasX, int canvasY, int xOffset, int yOffset) {
+    this.adaptee = adaptee;
+    this.tick = 0;
+    this.canvasX = canvasX;
+    this.canvasY = canvasY;
+    this.xOffset = xOffset;
+    this.yOffset = yOffset;
+  }
 
   @Override
   public void addShape(AShape shape) {
@@ -30,7 +51,7 @@ public class AnimatorModel implements ProviderModel, AdapterInterface {
     WidthHeight sWidthHeight = new WidthHeight(width, height);
     IShape shapeToAdd;
 
-    //TODO REPLACE WITH VISITOR.
+    //TODO REPLACE WITH VISITOR, but actually, we cant update their code soooo.
     if (shape instanceof Rectangle) {
       shapeToAdd = new cs3500.easyanimator.model.shapes.Rectangle(sWidthHeight, sPoint, sColor);
     } else if (shape instanceof Oval) {
@@ -91,13 +112,54 @@ public class AnimatorModel implements ProviderModel, AdapterInterface {
     throw new UnsupportedOperationException("Unable to add keyframes to this adapted model.");
   }
 
-  public List<IShape> getShapes() {
-    return adaptee.getShapesAtTick(this.tick);
-    //TODO convert to their version of shapes!
+  /**
+   * Returns the list of available shapes at the current tick.
+   * @return the list of shapes at the current tick.
+   */
+  public List<AShape> getShapes() {
+    List<IShape> adapteeShapes = adaptee.getShapesAtTick(this.tick);
+    List<AShape> targetShapes = new ArrayList<AShape>();
+
+    for (IShape s: adapteeShapes) {
+      targetShapes.add(s.accept(new ShapeToProviderShape()));
+    }
+    return targetShapes;
   }
 
   @Override
   public int getTick() {
     return this.tick;
+  }
+
+  //TODO make this an adapter instead? Probably! Will need one for both shape types tho.
+  /**
+   * Private helper visitor that converts model shape implementation into the provider shape.
+   */
+  private class ShapeToProviderShape implements IShapeVisitor<AShape> {
+
+    @Override
+    public AShape applyToRectangle(cs3500.easyanimator.model.shapes.Rectangle r) {
+
+      Pos2D pos = new Pos2D(r.getPosition().getX(), r.getPosition().getY());
+      java.awt.Color col = new java.awt.Color(r.getColor().getRed(),
+              r.getColor().getGreen(),
+              r.getColor().getBlue());
+      int width = r.getSize().getWidth();
+      int height = r.getSize().getHeight();
+
+      return new Rectangle("", pos, col, width, height);
+    }
+
+    @Override
+    public AShape applyToOval(cs3500.easyanimator.model.shapes.Oval o) {
+      Pos2D pos = new Pos2D(o.getPosition().getX(), o.getPosition().getY());
+      java.awt.Color col = new java.awt.Color(o.getColor().getRed(),
+              o.getColor().getGreen(),
+              o.getColor().getBlue());
+      int width = o.getSize().getWidth();
+      int height = o.getSize().getHeight();
+
+      return new Oval("", pos, col, width, height);
+    }
   }
 }
