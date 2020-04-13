@@ -1,0 +1,73 @@
+DESIGN CRITIQUE and LIMITATIONS
+=================================
+The first issue was that the view referred to the model and controller without interface type.
+Immediately this created a limitation that our adapting model and controller had to use their names.
+While we did receive an interface for their model,
+it was missing details that were required by the view to work.
+For example, field access was used to get canvas dimensions and offsets,
+and certain methods were used by some views (for example model.toSVG()).
+We did NOT receive an interface for the controller, because they did not have one.
+One limitation of this is that while there was one method call to the controller,
+we had to clarify it's use over email.
+
+The model consisted of three pieces of tracked state.
+The shapes (extending AShape),
+motions created around shapes (extending AAnimation),
+and the current time in ticks.
+
+To play an animation, we had to update the model by increasing the time stored in the model,
+with the tick(int time) method.
+This would then, we believe, delegate to animations to mutate the shapes in the model.
+This was extremely limiting because it meant control over playback had to be shared between the
+model (which would store the time) and the controller (which would update that time).
+The interface for the model did not provide a method to get the current time or set time directly,
+which we found extremely limiting when attempting to restart the animation.
+One saving grace was that the view used the getShapes method of the model on each refresh.
+This meant in our adapter that we could easily port our getShapesAtTick.
+
+We attempted to implement addShape, though unnecessary for the assignment, as an exercise.
+We had difficulty because there was no mechanism to distinguish between the types of shapes.
+In our code we had solved this problem with a visitor,
+but resorted to using instance of checks in our adaptor.
+
+We largely avoided their design for animations since we didn't need to edit them.
+Though we feel it needs mention that data was stored as a string of fields,
+(with an undocumented format). Adapting this would have been exceedingly strange and difficult.
+
+DOCUMENTATION CRITIQUE
+======================
+
+We found the documentation around how the current time in the animation and the model confusing.
+For example, tick(int time) was documented as "increasing the time by one unit"
+and lacked an explanation for the parameter (did it have to be equal to 1?).
+finished(int time) also took a parameter for time, but lacked documentation for it.
+Instead, the method description was that it returned a true if any animations were in progress.
+Does this mean the time in the dead zones of an animation between two motions should return true?
+
+In the end, since the view interacted with the model very little,
+we interpreted many methods by what would make the editor view and controller work.
+
+IMPLEMENTATION CRITIQUE
+=================
+We were given an editor view that was capable of:
+ - Starting (and Resuming which was under a different button).
+ - Pausing.
+ - Toggling the looping of playback.
+ - Changing playback speed.
+
+It was unclear however that the model/view/controller combination was ever able to restart.
+Animations, which we ended up avoiding in the construction of our adapter,
+seem to contain their own "duration" which would decrease until being zero.
+We interpreted this as meaning animations tracked their own piece of state about the current time,
+and how long into the animation playback was.
+There were no methods that made it clear that this could be rewound so that it could be replayed.
+
+While the model had methods for adding / removing / modifying keyframes the view did not use them,
+or have an interaction with the controller that would signify editing was possible.
+In the email we received we were told that these features were unfinished in the last assignment.
+
+SUGGESTIONS FOR IMPROVEMENT
+===========================
+
+A major design issue is that the model and animations are coupled with the current time.
+Continuing with this design is unfeasible.

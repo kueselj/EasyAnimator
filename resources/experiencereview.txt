@@ -1,0 +1,10 @@
+To settle on using keyframes from the beginning would have vastly simplified our experience.
+Though in the end we did make the switch, even internally in our model implementation,
+motions were a significant pain-point in assignment 6.
+Our expectations of exact behavior were slightly different than instructors,
+and so reading files mysteriously became undoable.
+Switching to keyframes early would have smoothed over the specific issue we encountered.
+
+One other design choice we began to regret was not separating shape type from shape state.
+When adding a shape to model, clients had to go through creating a default set of properties.
+This didn't have a clear interpretation of use when thinking about state through motions.
