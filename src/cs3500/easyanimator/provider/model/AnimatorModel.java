@@ -45,7 +45,6 @@ public class AnimatorModel implements ProviderModel, AdapterInterface {
 
   @Override
   public void addShape(AShape shape) {
-
     int sX = shape.getPos().getX();
     int sY = shape.getPos().getY();
     Point sPoint = new Point(sX, sY);
@@ -57,7 +56,7 @@ public class AnimatorModel implements ProviderModel, AdapterInterface {
     WidthHeight sWidthHeight = new WidthHeight(width, height);
     IShape shapeToAdd;
 
-    //TODO REPLACE WITH VISITOR, but actually, we cant update their code soooo.
+    // While we would have liked to use a visitor, we did not get that from the provider.
     if (shape instanceof Rectangle) {
       shapeToAdd = new cs3500.easyanimator.model.shapes.Rectangle(sWidthHeight, sPoint, sColor);
     } else if (shape instanceof Oval) {
@@ -86,28 +85,15 @@ public class AnimatorModel implements ProviderModel, AdapterInterface {
 
   @Override
   public String getTextualAnimationView() {
-    return null;
+    throw new UnsupportedOperationException("Unable to request textual animation view. " +
+            "It is unnecessary for the editor view.");
   }
 
   @Override
   public void tick(int time) {
-
-    //TODO - In the model, the tick method essentially just dispatches the update to each of the
-    // active animations within the model. The time variable in this case,
-    // would technically be delta time, representing essentially what 'tick' of the animation
-    // we are on. This way the actual code within the AAnimation class can determine if/when
-    // it needs to stop running.
-
-    if (time == adaptee.getMaxTick()) {
-      this.tick = 0;
-    }
-    else this.tick++;
+    this.tick += time;
   }
 
-  //TODO - In the model, the finished method is really just a simple method which looks through
-  // the state of everything in the animation and determines if there is any animation left.
-  // This would mostly be used to detect if the animation should be repeated in the case that
-  // the user decides to loop it when completed.
   @Override
   public boolean finished(int time) {
     return time == this.adaptee.getMaxTick();
@@ -138,14 +124,16 @@ public class AnimatorModel implements ProviderModel, AdapterInterface {
   }
 
   /**
-   * This should be supressed, should not work.
-   * @return empty string, not anything.
+   * This method is required by some views in order to compile but not specified by the interface.
+   * We suppress this behavior.
+   * @throws UnsupportedOperationException Since this method is unnecessary for the provided editor.
+   * @return Not a string.
    */
   public String toSVG() {
-    return "";
+    throw new IllegalArgumentException("This method is unused by the editor, " +
+            "and so should not be called.");
   }
 
-  //TODO make this an adapter instead? Probably! Will need one for both shape types tho.
   /**
    * Private helper visitor that converts model shape implementation into the provider shape.
    */
@@ -153,14 +141,12 @@ public class AnimatorModel implements ProviderModel, AdapterInterface {
 
     @Override
     public AShape applyToRectangle(cs3500.easyanimator.model.shapes.Rectangle r) {
-
       Pos2D pos = new Pos2D(r.getPosition().getX(), r.getPosition().getY());
       java.awt.Color col = new java.awt.Color(r.getColor().getRed(),
               r.getColor().getGreen(),
               r.getColor().getBlue());
-      //TODO change this to only be one if it is zero.
-      int width = r.getSize().getWidth() + 1;
-      int height = r.getSize().getHeight() + 1;
+      int width = Math.max(r.getSize().getWidth(), 1);
+      int height = Math.max(r.getSize().getHeight(), 1);
 
       return new Rectangle("rect", pos, col, width, height);
     }
@@ -171,9 +157,10 @@ public class AnimatorModel implements ProviderModel, AdapterInterface {
       java.awt.Color col = new java.awt.Color(o.getColor().getRed(),
               o.getColor().getGreen(),
               o.getColor().getBlue());
-      //TODO change this to only be one if it is zero.
-      int width = o.getSize().getWidth() + 1;
-      int height = o.getSize().getHeight() + 1;
+      // The provided classes do not allow shapes of sizes zero.
+      // So we make the minimum one.
+      int width = Math.max(o.getSize().getWidth(), 1);
+      int height = Math.max(o.getSize().getHeight(), 1);
 
       return new Oval("oval", pos, col, width, height);
     }
