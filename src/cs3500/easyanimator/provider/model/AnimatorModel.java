@@ -110,7 +110,7 @@ public class AnimatorModel implements ProviderModel, AdapterInterface {
   // the user decides to loop it when completed.
   @Override
   public boolean finished(int time) {
-    return false;
+    return time == this.adaptee.getMaxTick();
   }
 
   @Override
@@ -158,10 +158,11 @@ public class AnimatorModel implements ProviderModel, AdapterInterface {
       java.awt.Color col = new java.awt.Color(r.getColor().getRed(),
               r.getColor().getGreen(),
               r.getColor().getBlue());
-      int width = r.getSize().getWidth();
-      int height = r.getSize().getHeight();
+      //TODO change this to only be one if it is zero.
+      int width = r.getSize().getWidth() + 1;
+      int height = r.getSize().getHeight() + 1;
 
-      return new Rectangle("", pos, col, width, height);
+      return new Rectangle("rect", pos, col, width, height);
     }
 
     @Override
@@ -170,10 +171,11 @@ public class AnimatorModel implements ProviderModel, AdapterInterface {
       java.awt.Color col = new java.awt.Color(o.getColor().getRed(),
               o.getColor().getGreen(),
               o.getColor().getBlue());
-      int width = o.getSize().getWidth();
-      int height = o.getSize().getHeight();
+      //TODO change this to only be one if it is zero.
+      int width = o.getSize().getWidth() + 1;
+      int height = o.getSize().getHeight() + 1;
 
-      return new Oval("", pos, col, width, height);
+      return new Oval("oval", pos, col, width, height);
     }
   }
 }

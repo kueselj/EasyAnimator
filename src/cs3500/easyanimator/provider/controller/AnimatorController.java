@@ -24,6 +24,7 @@ public class AnimatorController implements IAnimatorController {
    * @param speed The default speed in ticks per second to use to update the view and model.
    */
   public AnimatorController(AnimatorModel model, double speed) {
+    this.model = model;
     this.view = new AnimationEditView(this, model);
     this.timer = new Timer((int) (1.0 / speed * 1000), e -> this.refresh());
     this.loop = false;
