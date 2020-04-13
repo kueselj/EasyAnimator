@@ -10,6 +10,12 @@ import cs3500.easyanimator.model.shapes.WidthHeight;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Adapter class from an IAnimatorModel(Our code) to an AnimatorModel(Provider code). Must have
+ * name Animator model as class type instead of interface was used in the provider code. This
+ * Implementation must also keep track of the current tick in the animation as that was integral
+ * to the providers implementation.
+ */
 public class AnimatorModel implements ProviderModel, AdapterInterface {
   private  IAnimatorModel adaptee;
   private int tick;
