@@ -2,7 +2,7 @@ package cs3500.easyanimator.provider.controller;
 
 import javax.swing.*;
 
-import cs3500.easyanimator.provider.model.IAnimatorModel;
+import cs3500.easyanimator.provider.model.AnimatorModel;
 import cs3500.easyanimator.provider.views.AnimationEditView;
 import cs3500.easyanimator.provider.views.IAnimationViewer;
 
@@ -12,11 +12,10 @@ import cs3500.easyanimator.provider.views.IAnimationViewer;
  * to different button presses to adjust that playback.
  */
 public class AnimatorController {
-  IAnimatorModel model;
+  AnimatorModel model;
   IAnimationViewer view;
   Timer timer;
   boolean loop;
-  int tick;
 
   /**
    * Creates a new AnimatorController to run the provider editor view that has controls for
@@ -27,7 +26,6 @@ public class AnimatorController {
   public AnimatorController(AnimatorModel model, double speed) {
     this.view = new AnimationEditView(this, model);
     this.timer = new Timer((int) (1.0 / speed * 1000), e -> this.refresh());
-    this.tick = 0;
     this.loop = false;
     this.timer.start();
   }
@@ -50,18 +48,16 @@ public class AnimatorController {
                             AbstractButton looping,
                             JSlider speedSlider) {
     start.addActionListener(e -> {
-      if (tick == 0) {
+      if (model.getTick() == 0) {
         timer.start();
       }
     });
     pause.addActionListener(e -> timer.stop());
     restart.addActionListener(e -> {
-      timer.stop();
-      tick = 0;
       timer.restart();
-    });
+      this.setTick(0); });
     resume.addActionListener(e -> {
-      if (tick != 0) {
+      if (model.getTick() != 0) {
         timer.start();
       }
     });
@@ -73,10 +69,22 @@ public class AnimatorController {
    * A private helper method dedicated to refreshing the view and model every tick.
    */
   private void refresh() {
-    tick += 1;
-
-    // NEED MODEL INTERPRETATION OF TIME.
-
+    if (model.finished(model.getTick()) && !loop) {
+      this.setTick(0);
+      timer.stop();
+    } else if (model.finished(model.getTick()) && loop) {
+      this.setTick(0);
+    } else {
+      model.tick(1);
+    }
     view.draw();
+  }
+
+  /**
+   * A private helper method to set the current time of the model.
+   * @param tick  The time in ticks to set in the model.
+   */
+  private void setTick(int tick) {
+    this.model.tick(tick - this.model.getTick());
   }
 }

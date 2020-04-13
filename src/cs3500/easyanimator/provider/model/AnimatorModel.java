@@ -8,10 +8,13 @@ import cs3500.easyanimator.model.shapes.WidthHeight;
 
 import java.util.List;
 
-public class AnimatorModel implements ProviderModel {
+public class AnimatorModel implements ProviderModel, AdapterInterface {
   private  IAnimatorModel adaptee;
   private int tick;
-
+  public int canvasX;
+  public int canvasY; // These need to be set on model construction.
+  public int yOffset;
+  public int xOffset; // These too need to be set on model construction.
 
   @Override
   public void addShape(AShape shape) {
@@ -30,15 +33,13 @@ public class AnimatorModel implements ProviderModel {
     //TODO REPLACE WITH VISITOR.
     if (shape instanceof Rectangle) {
       shapeToAdd = new cs3500.easyanimator.model.shapes.Rectangle(sWidthHeight, sPoint, sColor);
-    }
-
-    else if (shape instanceof Oval) {
+    } else if (shape instanceof Oval) {
       shapeToAdd = new cs3500.easyanimator.model.shapes.Oval(sWidthHeight, sPoint, sColor);
+    } else {
+      shapeToAdd = null;
     }
-    else shapeToAdd = null;
 
     adaptee.addShape(shape.name, shapeToAdd);
-
   }
 
   @Override
@@ -48,15 +49,12 @@ public class AnimatorModel implements ProviderModel {
 
   @Override
   public void addAnimation(AAnimation a) {
-    //Supressed.
-
-
+    throw new UnsupportedOperationException("Unable to add animations from this adapted model.");
   }
 
   @Override
   public void removeAnimation(AAnimation a) {
-    //supressed
-
+    throw new UnsupportedOperationException("Unable to remove animations from this adapted model.");
   }
 
   @Override
@@ -90,12 +88,16 @@ public class AnimatorModel implements ProviderModel {
 
   @Override
   public void addKeyFrame(AShape target, String s) {
-    //supressed.
-
+    throw new UnsupportedOperationException("Unable to add keyframes to this adapted model.");
   }
 
   public List<IShape> getShapes() {
     return adaptee.getShapesAtTick(this.tick);
     //TODO convert to their version of shapes!
+  }
+
+  @Override
+  public int getTick() {
+    return this.tick;
   }
 }

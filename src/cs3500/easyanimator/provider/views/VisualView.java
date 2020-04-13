@@ -1,7 +1,7 @@
 package cs3500.easyanimator.provider.views;
 
-import cs3500.animator.AShape;
-import cs3500.animator.AnimatorModel;
+import cs3500.easyanimator.provider.model.AShape;
+import cs3500.easyanimator.provider.model.AnimatorModel;
 import java.awt.Graphics2D;
 
 /**

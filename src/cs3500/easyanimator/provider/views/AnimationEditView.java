@@ -1,6 +1,6 @@
 package cs3500.easyanimator.provider.views;
 
-import cs3500.animator.AnimatorModel;
+import cs3500.easyanimator.provider.model.AnimatorModel;
 import cs3500.easyanimator.provider.controller.AnimatorController;
 
 import java.awt.BorderLayout;
