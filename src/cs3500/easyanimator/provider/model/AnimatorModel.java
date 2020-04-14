@@ -126,8 +126,8 @@ public class AnimatorModel implements ProviderModel, AdapterInterface {
   /**
    * This method is required by some views in order to compile but not specified by the interface.
    * We suppress this behavior.
-   * @throws UnsupportedOperationException Since this method is unnecessary for the provided editor.
    * @return Not a string.
+   * @throws UnsupportedOperationException Since this method is unnecessary for the provided editor.
    */
   public String toSVG() {
     throw new IllegalArgumentException("This method is unused by the editor, " +

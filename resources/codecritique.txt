@@ -1,7 +1,8 @@
 DESIGN CRITIQUE and LIMITATIONS
 =================================
 The first issue was that the view referred to the model and controller without interface type.
-Immediately this created a limitation that our adapting model and controller had to use their names.
+Immediately this created a limitation that our adapting model and controller had to use their names
+if we did not want to change their codes.
 While we did receive an interface for their model,
 it was missing details that were required by the view to work.
 For example, field access was used to get canvas dimensions and offsets,
@@ -28,7 +29,9 @@ This meant in our adapter that we could easily port our getShapesAtTick.
 We attempted to implement addShape, though unnecessary for the assignment, as an exercise.
 We had difficulty because there was no mechanism to distinguish between the types of shapes.
 In our code we had solved this problem with a visitor,
-but resorted to using instance of checks in our adaptor.
+but resorted to using instance of checks in our adaptor. They did have a getShapeType method
+implemented in Rectangle and Oval, but in the spirit of good Object-Oriented-Design, we did not
+use these. Then again, instance of checks are poor design as well.
 
 We largely avoided their design for animations since we didn't need to edit them.
 Though we feel it needs mention that data was stored as a string of fields,

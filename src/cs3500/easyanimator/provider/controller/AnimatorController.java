@@ -1,10 +1,12 @@
 package cs3500.easyanimator.provider.controller;
 
-import javax.swing.*;
-
 import cs3500.easyanimator.provider.model.AnimatorModel;
 import cs3500.easyanimator.provider.views.AnimationEditView;
 import cs3500.easyanimator.provider.views.IAnimationViewer;
+
+import javax.swing.Timer;
+import javax.swing.AbstractButton;
+import javax.swing.JSlider;
 
 /**
  * An implementation of a controller that we think accomplishes what the provided code needs.

@@ -1,9 +1,10 @@
 package cs3500.easyanimator.provider.model;
 
-import cs3500.easyanimator.model.Point;
-
 import java.util.Objects;
 
+/**
+ * Class representing a 2 dimensional position. Has an x position and a y position.
+ */
 public class Pos2D {
   private int xCoordinate;
   private int yCoordinate;
@@ -21,7 +22,6 @@ public class Pos2D {
 
   /**
    * Gets the x coordinate of the Point.
-   *
    * @return the x coordinate of the Point as an int.
    */
   public int getX() {
@@ -30,7 +30,6 @@ public class Pos2D {
 
   /**
    * Gets the y coordinate of the Point.
-   *
    * @return the y coordinate of the Point as an int.
    */
   public int getY() {
@@ -38,7 +37,7 @@ public class Pos2D {
   }
 
   /**
-   * Shifts the Position by the given position
+   * Shifts the Position by the given position.
    * @param p the shift position.
    */
   public void add(Pos2D p) {

@@ -1,6 +1,5 @@
 package cs3500.easyanimator.provider.views;
 
-import cs3500.easyanimator.provider.controller.AnimatorController;
 import cs3500.easyanimator.provider.model.AnimatorModel;
 
 import java.awt.BorderLayout;
@@ -16,7 +15,6 @@ import javax.swing.JScrollPane;
 public class AnimationView extends JFrame implements IAnimationViewer {
 
   private AAnimationPanel panel;
-  private AnimatorController controller;
 
   /**
    * A public constructor for a view. Creates the panel on which the animation takes place.
@@ -24,10 +22,8 @@ public class AnimationView extends JFrame implements IAnimationViewer {
    * @param model    the model to use for the view
    * @param viewType the type of view (text, svg or visual)
    */
-  public AnimationView(AnimatorController controller, AnimatorModel model, String viewType) {
+  public AnimationView(AnimatorModel model, String viewType) {
     super();
-
-    this.controller = controller;
 
     this.setLayout(new BorderLayout());
     this.setResizable(true);

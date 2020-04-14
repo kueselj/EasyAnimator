@@ -1,6 +1,7 @@
 package cs3500.easyanimator.provider.controller;
 
-import javax.swing.*;
+import javax.swing.AbstractButton;
+import javax.swing.JSlider;
 
 /**
  * Interface for the provider controller. The controller sets up the action listeners for the
