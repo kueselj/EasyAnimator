@@ -83,3 +83,12 @@ Our controller implementation is unfortunately a little thin. Holds a model and 
 It is itself a listener that the view can use for certain action events.
 The controller, once activated by an action event, will then decide what to do. Renaming a shape,
 creating a new keyFrame, deleting a keyFrame, modifying keyframe, adding a shape, deleting a shape.
+
+//ASSIGNMENT 7//
+
+All of the features in our code work. All of our views still work. Our editor view has all required
+functionality.
+
+We were unable to implement the editor features of our providers view for the simple reason that
+they are not there. They did not implement these features in their view so it was impossible for
+us to support these features. They did implement playback features and we got those to work.
