@@ -7,7 +7,7 @@ package cs3500.easyanimator.provider.model;
  * methods for adding shapes and animations, advancing the animation one tick, running the complete
  * animation and outputting the log of the animation.
  */
-public interface ProviderModel {
+public interface IAnimatorModel {
 
   /**
    * Adds a shape into the list of shapes.

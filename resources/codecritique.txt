@@ -73,4 +73,17 @@ SUGGESTIONS FOR IMPROVEMENT
 ===========================
 
 A major design issue is that the model and animations are coupled with the current time.
-Continuing with this design is unfeasible.
+Continuing with this design is unfeasible. We would suggest attempting to separate the components
+of the design as much as possible. For example, having shapes, motions, etc immutable. Also, only
+implementing getter methods in them. However, to avoid implementing methods that assume things
+about the rest of your design such as toSVG. This should be implemented elsewhere. These classes
+should only function as storage of data. That way, they could be re-used in different types
+of implementations.
+
+This idea is epitomized in the separation the model, view, and controller. These components should
+be able to live separately on their own instead of relying on each other. Avoid model field
+access in the view.
+
+Another important improvement is making sure to use interface types, everywhere! Change the view to
+use a IAnimatorModel instead of a AnimatorModel. This way no component relies solely on a specific
+implementation. Avoid using field reference as well. This makes your design extremely more flexible.

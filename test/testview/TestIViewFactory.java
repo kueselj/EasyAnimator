@@ -37,9 +37,11 @@ public abstract class TestIViewFactory {
     IViewFactory factory = getInstance();
     IAnimatorView text = factory.getView("text", System.out);
     IAnimatorView svg = factory.getView("svg", System.out);
-    // Disabling this test because it annoying spins up a Swing Window.
+    // Disabling these tests because it annoying spins up a Swing Window.
     // We are pretty sure this works any way. ;P
     // IAnimatorView visual = factory.getView("visual", System.out);
+    // IAnimatorView edit = factory.getView("edit", System.out);
+    // IAnimatorView provider = factory.getView("provider", System.out);
     assertTrue("Expected text view to be an instance of our TextualView.",
             text instanceof TextualView);
     assertTrue("Expected svg view to be an instance of our SVGAnimationView.",
@@ -48,5 +50,11 @@ public abstract class TestIViewFactory {
     // A better name would be swing, but that's a little weird for the user.
     // assertTrue("Expected visual view to be an instance of our SwingView.",
     //         visual instanceof SwingView);
+    //These should actually return controllers.
+    // assertTrue("Expected edit view to be an instance of our EditorSwingView.",
+    //         edit instanceof EditorSwingView);
+    // assertTrue("Expected provider view to be an instance of our AnimationEditView.",
+    //         provider instanceof AnimationEditView);
+
   }
 }

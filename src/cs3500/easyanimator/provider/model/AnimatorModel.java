@@ -1,7 +1,6 @@
 package cs3500.easyanimator.provider.model;
 
 import cs3500.easyanimator.model.Color;
-import cs3500.easyanimator.model.IAnimatorModel;
 import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.model.shapes.IShapeVisitor;
@@ -16,8 +15,8 @@ import java.util.List;
  * Implementation must also keep track of the current tick in the animation as that was integral
  * to the providers implementation.
  */
-public class AnimatorModel implements ProviderModel, AdapterInterface {
-  private  IAnimatorModel adaptee;
+public class AnimatorModel implements IAnimatorModel, AdapterInterface {
+  private cs3500.easyanimator.model.IAnimatorModel adaptee;
   private int tick;
   public int canvasX;
   public int canvasY; // These need to be set on model construction.
@@ -34,7 +33,8 @@ public class AnimatorModel implements ProviderModel, AdapterInterface {
    * @param xOffset the x offset of the canvas.
    * @param yOffset the y offset of the canvas.
    */
-  public AnimatorModel(IAnimatorModel adaptee, int canvasX, int canvasY, int xOffset, int yOffset) {
+  public AnimatorModel(cs3500.easyanimator.model.IAnimatorModel adaptee,
+                       int canvasX, int canvasY, int xOffset, int yOffset) {
     this.adaptee = adaptee;
     this.tick = 0;
     this.canvasX = canvasX;

@@ -89,9 +89,11 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
       controller.setView(new EditorSwingView(controller), this.speed);
       controller.start();
     } else if (viewType.equals("provider")) {
+      int canvasX = model.getCanvasSize().getWidth();
+      int canvasY = model.getCanvasSize().getHeight();
       AnimatorModel adaptedModel =
               //TODO just put dummy values here for now.
-              new AnimatorModel(model, 500, 500, 0, 0);
+              new AnimatorModel(model, canvasX, canvasY, 0, 0);
       AnimatorController controller = new AnimatorController(adaptedModel, this.speed);
 
       return; // Quit out early.
