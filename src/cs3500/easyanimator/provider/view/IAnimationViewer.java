@@ -1,4 +1,4 @@
-package cs3500.easyanimator.provider.views;
+package cs3500.easyanimator.provider.view;
 
 /**
  * Represents a visual animation view. Has a draw method to draw the panel and turn the animation

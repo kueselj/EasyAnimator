@@ -1,4 +1,4 @@
-package cs3500.easyanimator.provider.views;
+package cs3500.easyanimator.provider.view;
 
 import cs3500.easyanimator.provider.model.AnimatorModel;
 
@@ -7,16 +7,12 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 /**
- * Represents a textual view of an animation. A child class of AAnimationPanel.
+ * Represents an SVG (Scalable Vector Graphic) view of an animation. A child class of
+ * AAnimationPanel.
  */
-public class TextualView extends AAnimationPanel {
+public class SVGView extends AAnimationPanel {
 
-  /**
-   * A public constructor for an animation panel.
-   *
-   * @param model the model to use for the animation
-   */
-  public TextualView(AnimatorModel model) {
+  public SVGView(AnimatorModel model) {
     super(model);
   }
 
@@ -25,26 +21,32 @@ public class TextualView extends AAnimationPanel {
    *
    * @return a String representing the animation.
    */
-  public String toText() {
-    return model.getTextualAnimationView();
+  public String toSVG() {
+    return model.toSVG();
   }
 
   @Override
-  void customRender(Graphics2D g2d) {
+  public void customRender(Graphics2D g2d) {
     g2d.setColor(Color.BLACK);
-    String toDraw = model.getTextualAnimationView();
     int fontSize = 12;
+    int tab = 20;
     g2d.setFont(new Font("TimesRoman", Font.PLAIN, fontSize));
+
+    String toDraw = model.toSVG();
     String[] drawStrings = toDraw.split("\n");
     int index = 1;
     for (String s : drawStrings) {
-      g2d.drawString(s, 0, (fontSize * index));
+      if (s.startsWith("\t")) {
+        g2d.drawString(s, tab, (fontSize * index));
+      } else {
+        g2d.drawString(s, 0, (fontSize * index));
+      }
       index++;
     }
   }
 
   @Override
   public String toString() {
-    return toText();
+    return this.toSVG();
   }
 }

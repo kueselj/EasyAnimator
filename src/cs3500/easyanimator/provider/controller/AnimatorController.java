@@ -1,8 +1,8 @@
 package cs3500.easyanimator.provider.controller;
 
 import cs3500.easyanimator.provider.model.AnimatorModel;
-import cs3500.easyanimator.provider.views.AnimationEditView;
-import cs3500.easyanimator.provider.views.IAnimationViewer;
+import cs3500.easyanimator.provider.view.AnimationEditView;
+import cs3500.easyanimator.provider.view.IAnimationViewer;
 
 import javax.swing.Timer;
 import javax.swing.AbstractButton;

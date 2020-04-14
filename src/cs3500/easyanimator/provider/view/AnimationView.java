@@ -1,4 +1,4 @@
-package cs3500.easyanimator.provider.views;
+package cs3500.easyanimator.provider.view;
 
 import cs3500.easyanimator.provider.model.AnimatorModel;
 
