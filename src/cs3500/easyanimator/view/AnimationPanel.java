@@ -15,7 +15,7 @@ import java.util.List;
  * JPanel specific to an animation, has a list of shapes that will be drawn onto the panel.
  */
 public class AnimationPanel extends JPanel {
-  List<IShape> shapes;
+  private List<IShape> shapes;
 
   /**
    * Basic Constructor for the Animation Panel.
