@@ -1,0 +1,85 @@
+package cs3500.easyanimator.layersimplementation.view.panels;
+
+import cs3500.easyanimator.layersimplementation.controller.PlaybackControls;
+
+import javax.swing.*;
+import java.awt.*;
+
+/**
+ * Panel only consisting of the playback control features.
+ */
+public class PlaybackPanel extends JPanel {
+
+  private JButton play;
+  private JButton pause;
+  private JButton restart;
+  private JButton toggleLooping;
+  private JButton speedUp;
+  private JButton speedDown;
+  private JButton tickUp;
+  private JButton tickDown;
+
+  private JLabel tickLabel;
+
+  /**
+   * A panel that handles holding the playback control components.
+   */
+  public PlaybackPanel() {
+    setLayout(new GridLayout());
+
+    //play button
+    play = new JButton("Play");
+    play.setActionCommand("Play");
+    add(play);
+
+    //pause button
+    pause = new JButton("Pause");
+    pause.setActionCommand("Pause");
+    add(pause);
+
+    //restart button
+    restart = new JButton("Restart");
+    restart.setActionCommand("Restart");
+    add(restart);
+
+    //toggle looping button
+    toggleLooping = new JButton("Loop");
+    toggleLooping.setActionCommand("Loop");
+    add(toggleLooping);
+
+    //speed up button
+    speedUp = new JButton("^Speed");
+    speedUp.setActionCommand("SpeedUp");
+    add(speedUp);
+
+    //speed down button
+    speedDown = new JButton("vSpeed");
+    speedDown.setActionCommand("SpeedDown");
+    add(speedDown);
+
+    //tick up button
+    tickUp = new JButton("^Tick");
+    tickUp.setActionCommand("TickUp");
+    add(tickUp);
+
+    //tick down button
+    tickDown = new JButton("vTick");
+    tickDown.setActionCommand("TickDown");
+    add(tickDown);
+  }
+
+  /**
+   * Adds the actions listeners to buttons, uses a playbackControls as the thing to call upon.
+   * @param playbackControls the playback controls to use.
+   */
+  public void addPlaybackControls(PlaybackControls playbackControls) {
+    play.addActionListener(evt -> playbackControls.play());
+    pause.addActionListener(evt -> playbackControls.pause());
+    restart.addActionListener(evt -> playbackControls.restart());
+    toggleLooping.addActionListener(evt -> playbackControls.toggleLooping());
+    speedUp.addActionListener(evt -> playbackControls.increaseSpeed());
+    speedDown.addActionListener(evt -> playbackControls.decreaseSpeed());
+    tickUp.addActionListener(evt -> playbackControls.increaseTick());
+    tickDown.addActionListener(evt -> playbackControls.decreaseTick());
+  }
+}

@@ -1,10 +1,34 @@
 package cs3500.easyanimator.layersimplementation.view;
 
+import cs3500.easyanimator.layersimplementation.controller.*;
 import cs3500.easyanimator.model.shapes.IShape;
 
 import java.util.List;
 
 public interface ILayerView {
+
+  /**
+   * Makes the layer view visible.
+   */
+  void makeVisible();
+
+  /**
+   * Sets the playbackListener controls.
+   * @param playbackControls the listener for playback controls.
+   */
+  void addPlaybackControls(PlaybackControls playbackControls);
+
+  /**
+   * Sets the editorListener controls.
+   * @param editorControls the listener for editor controls.
+   */
+  void addEditorControls(EditorControls editorControls);
+
+  /**
+   * Sets the layerListener controls.
+   * @param layerControls the listener for layer controls.
+   */
+  void addLayerControls(LayerControls layerControls);
 
   /**
    * Sets the shapes, this is for a specific tick. Should pass to the draw component of the view.
@@ -44,4 +68,6 @@ public interface ILayerView {
    * @param layers
    */
   void setLayers(List<Integer> layers);
+
+
 }

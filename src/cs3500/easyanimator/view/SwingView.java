@@ -14,7 +14,7 @@ import cs3500.easyanimator.model.shapes.WidthHeight;
  */
 public class SwingView extends JFrame implements IAnimatorView {
   private IAnimatorModelViewOnly model;
-  private AnimationPanel mainPanel;
+  private DrawPanel mainPanel;
   private Timer timer;
   private int tick;
 
@@ -26,7 +26,7 @@ public class SwingView extends JFrame implements IAnimatorView {
     // A good default size.
     this.setSize(new Dimension(800, 600));
     this.tick = 0;
-    this.mainPanel = new AnimationPanel();
+    this.mainPanel = new DrawPanel();
     JScrollPane scrollPane = new JScrollPane(mainPanel);
     this.add(scrollPane, BorderLayout.CENTER);
     this.setResizable(true);

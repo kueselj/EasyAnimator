@@ -411,7 +411,7 @@ public class EditorSwingView implements IEnhancedView {
     JPanel playbackPanel = new JPanel();
     playbackPanel.setLayout(new BoxLayout(playbackPanel, BoxLayout.Y_AXIS));
 
-    this.mainPanel = new AnimationPanel();
+    this.mainPanel = new DrawPanel();
     this.mainPanel.addKeyListener(saveKeyListener);
     JScrollPane scrollPane = new JScrollPane(this.mainPanel);
 
@@ -492,7 +492,7 @@ public class EditorSwingView implements IEnhancedView {
   private JTextField keyFrameB;
 
   // PLAYBACK
-  private AnimationPanel mainPanel;
+  private DrawPanel mainPanel;
 
 
   @Override
