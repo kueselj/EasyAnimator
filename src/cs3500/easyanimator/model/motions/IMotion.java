@@ -142,6 +142,10 @@ public interface IMotion {
     double bT = val2T;
     double t = tick;
 
+    if (val1T == val2T) {
+      return val2;
+    }
+
     double f1 = (bT - t) / (bT - aT);
     double f2 = a * f1;
 

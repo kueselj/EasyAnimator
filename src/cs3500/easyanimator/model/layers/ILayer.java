@@ -5,6 +5,8 @@ import cs3500.easyanimator.model.IAnimatorModel;
 /**
  * An ILayer is an interface describing the basic features needed out of a layer.
  * Namely, it should have a name, a state for describing visibility, and a link to an AnimatorModel.
+ * Note that we don't have setModel. That would be weird to dump all your objects like that and
+ * NOT delete the layer.
  */
 public interface ILayer {
   /**

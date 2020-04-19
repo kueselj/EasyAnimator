@@ -14,7 +14,8 @@ import cs3500.easyanimator.model.layers.ILayer;
  * Get shapes and get motions will still return what they need to. The only important difference is
  * that these will be lists made by compiling the results across all layers. The same thing happens
  * for canvases as well. There is one caveat to all of this, shapes across layers cannot have
- * duplicate names or there will be undefined behavior.
+ * duplicate names or there will be undefined behavior. The last added layer will have its shapes
+ * placed last into getShapesAtTick so they are displayed on top.
  */
 public interface ILayeredAnimatorModel extends ILayeredAnimatorModelViewOnly {
   /**
