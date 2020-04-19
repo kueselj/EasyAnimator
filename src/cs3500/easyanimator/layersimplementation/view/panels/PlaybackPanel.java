@@ -21,11 +21,15 @@ public class PlaybackPanel extends JPanel {
 
   private JLabel tickLabel;
 
+  private static Dimension MAX_PLAYBACK_BUTTONS_SIZE = new Dimension(Integer.MAX_VALUE, 50);
+
   /**
    * A panel that handles holding the playback control components.
    */
   public PlaybackPanel() {
     setLayout(new GridLayout());
+    setBackground(new Color(106, 35, 38));
+    setMaximumSize(MAX_PLAYBACK_BUTTONS_SIZE);
 
     //play button
     play = new JButton("Play");
@@ -81,5 +85,13 @@ public class PlaybackPanel extends JPanel {
     speedDown.addActionListener(evt -> playbackControls.decreaseSpeed());
     tickUp.addActionListener(evt -> playbackControls.increaseTick());
     tickDown.addActionListener(evt -> playbackControls.decreaseTick());
+  }
+
+  /**
+   * Updates the tick label to the give tick.
+   * @param tick the tick to display.
+   */
+  public void setTickLabel(int tick) {
+    this.tickLabel.setText(" " + tick);
   }
 }
