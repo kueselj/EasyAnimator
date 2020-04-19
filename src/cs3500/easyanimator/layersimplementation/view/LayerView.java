@@ -23,8 +23,6 @@ public class LayerView extends JFrame implements ILayerView {
   private EditorPanel editorPanel;
   private LayerPanel layerPanel;
 
-  private ILayerMVCController listener;
-
   public LayerView(int width, int height) {
 
     //Initialize panels
@@ -41,8 +39,6 @@ public class LayerView extends JFrame implements ILayerView {
   public void makeVisible() {
     this.setVisible(true);
   }
-
-
 
   @Override
   public void addPlaybackControls(PlaybackControls playbackControls) {
