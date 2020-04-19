@@ -74,6 +74,7 @@ public class LayerMVCController implements ILayerMVCController,
   public void refreshDrawing() {
     //update the shapes that should be drawn. This goes at start so first frame has it.
     view.setDrawShapes(model.getShapesAtTick(this.tick));
+    view.setTickLabel(this.tick);
   }
 
   @Override
@@ -156,7 +157,11 @@ public class LayerMVCController implements ILayerMVCController,
   }
 
   @Override
-  public void saveKeyFrame(String shapeName, int tick, int x, int y, int width, int height, int r, int g, int b) {
+  public void saveKeyFrame(String shapeName,
+                           int tick,
+                           int x, int y,
+                           int width, int height,
+                           int r, int g, int b) {
 
   }
 

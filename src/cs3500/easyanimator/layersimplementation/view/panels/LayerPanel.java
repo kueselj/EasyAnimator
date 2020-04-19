@@ -12,7 +12,7 @@ public class LayerPanel extends JPanel {
   //TODO add fields and constructor.
 
   /**
-   * Passes the necesary information to the controller when certain actions are performed.
+   * Passes the necessary information to the controller when certain actions are performed.
    * @param layerControls
    */
   public void addLayerControls(LayerControls layerControls) {

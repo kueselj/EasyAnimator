@@ -31,6 +31,12 @@ public interface ILayerView {
   void addLayerControls(LayerControls layerControls);
 
   /**
+   * Sets the tick label in playback controls to the given tick.
+   * @param tick the tick to set.
+   */
+  void setTickLabel(int tick);
+
+  /**
    * Sets the shapes, this is for a specific tick. Should pass to the draw component of the view.
    * @param shapes the shapes to display.
    */
@@ -68,6 +74,7 @@ public interface ILayerView {
    * @param layers
    */
   void setLayers(List<Integer> layers);
+
 
 
 }

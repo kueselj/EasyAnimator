@@ -1,20 +1,23 @@
 package cs3500.easyanimator.layersimplementation.view;
 
 import cs3500.easyanimator.layersimplementation.controller.EditorControls;
-import cs3500.easyanimator.layersimplementation.controller.ILayerMVCController;
 import cs3500.easyanimator.layersimplementation.controller.LayerControls;
 import cs3500.easyanimator.layersimplementation.controller.PlaybackControls;
 import cs3500.easyanimator.layersimplementation.view.panels.AnimationPanel;
 import cs3500.easyanimator.layersimplementation.view.panels.EditorPanel;
 import cs3500.easyanimator.layersimplementation.view.panels.LayerPanel;
-import cs3500.easyanimator.layersimplementation.view.panels.PlaybackPanel;
 import cs3500.easyanimator.model.shapes.IShape;
-import cs3500.easyanimator.view.DrawPanel;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 
+/**
+ * Frame representing the visual view of an EasyAnimator, contains three main panels.
+ * Editor Panel: Used for editing shapes and their keyFrames.
+ * Animation Panel: Used for displaying animation and contains playback controls.
+ * Layer Panel: Contains the layer information of the easyAnimator.
+ */
 public class LayerView extends JFrame implements ILayerView {
 
   //Animation panel will hold a drawPanel and the playBackControls. the original animation panel
@@ -23,41 +26,57 @@ public class LayerView extends JFrame implements ILayerView {
   private EditorPanel editorPanel;
   private LayerPanel layerPanel;
 
+  //TODO this constructor needs to be changed, no width height probably.
   public LayerView(int width, int height) {
 
     //Initialize panels
-    this.animationPanel = new AnimationPanel();
-    this.editorPanel = new EditorPanel();
-    this.layerPanel = new LayerPanel();
+    animationPanel = new AnimationPanel();
+    editorPanel = new EditorPanel();
+    layerPanel = new LayerPanel();
 
-    this.setResizable(true);
-    this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    this.setLayout(new BorderLayout());
+    //FRAME OPERATIONS
+    setResizable(true);
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setLayout(new BorderLayout());
+
+    //EDITOR PANEL.
+    add(editorPanel, BorderLayout.WEST);
+
+    //ANIMATION PANEL.
+    add(animationPanel);
+
+    //LAYER PANEL.
+    add(layerPanel, BorderLayout.EAST);
   }
 
   @Override
   public void makeVisible() {
-    this.setVisible(true);
+    setVisible(true);
   }
 
   @Override
   public void addPlaybackControls(PlaybackControls playbackControls) {
-    this.animationPanel.addPlaybackControls(playbackControls);
+    animationPanel.addPlaybackControls(playbackControls);
   }
 
   @Override
   public void addEditorControls(EditorControls editorControls) {
-    this.editorPanel.addEditorControls(editorControls);
+    editorPanel.addEditorControls(editorControls);
   }
 
   @Override
   public void addLayerControls(LayerControls layerControls) {
-    this.layerPanel.addLayerControls(layerControls);
+    layerPanel.addLayerControls(layerControls);
+  }
+
+  @Override
+  public void setTickLabel(int tick) {
+    animationPanel.setTickLabel(tick);
   }
 
   @Override
   public void setDrawShapes(List<IShape> shapes) {
-    this.animationPanel.setShapes(shapes);
+    animationPanel.setShapes(shapes);
   }
 
   @Override
