@@ -70,6 +70,10 @@ public class PlaybackPanel extends JPanel {
     tickDown = new JButton("vTick");
     tickDown.setActionCommand("TickDown");
     add(tickDown);
+
+    tickLabel = new JLabel();
+    tickLabel.setText("");
+    add(tickLabel);
   }
 
   /**
