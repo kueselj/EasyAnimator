@@ -5,6 +5,7 @@ import cs3500.easyanimator.layersimplementation.controller.EditorControls;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.List;
 
 /**
  * JPanel that holds all the editor components.
@@ -98,7 +99,6 @@ public class EditorPanel extends JPanel {
    */
   public void addEditorControls(EditorControls editorControls) {
 
-
   }
 
   /**
@@ -115,5 +115,20 @@ public class EditorPanel extends JPanel {
     group.add(field, BorderLayout.WEST);
     add(group);
     return field;
+  }
+
+  public void setAvailableShapes(List<String> shapes) {
+  }
+
+  public void setAvailableShapeTypes(List<String> shapeTypes) {
+  }
+
+  public void setAvailableTicks(List<Integer> ticks) {
+  }
+
+  public void setTextFields(List<Integer> components) {
+  }
+
+  public void setLayers(List<Integer> layers) {
   }
 }

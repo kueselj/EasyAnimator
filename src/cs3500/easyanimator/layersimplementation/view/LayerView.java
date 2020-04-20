@@ -88,27 +88,30 @@ public class LayerView extends JFrame implements ILayerView {
 
   @Override
   public void setAvailableShapes(List<String> shapes) {
+    editorPanel.setAvailableShapes(shapes);
 
   }
 
   @Override
   public void setAvailableShapeTypes(List<String> shapeTypes) {
+    editorPanel.setAvailableShapeTypes(shapeTypes);
 
   }
 
   @Override
   public void setAvailableTicks(List<Integer> ticks) {
-
+    editorPanel.setAvailableTicks(ticks);
   }
 
   @Override
   public void setTextFields(List<Integer> components) {
+    editorPanel.setTextFields(components);
 
   }
 
   @Override
   public void setLayers(List<Integer> layers) {
-
+    editorPanel.setLayers(layers);
   }
 
 

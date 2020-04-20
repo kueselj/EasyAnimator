@@ -4,6 +4,7 @@ import cs3500.easyanimator.layersimplementation.controller.LayerControls;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 /**
  * JPanel that holds all the layer components.
@@ -59,4 +60,6 @@ public class LayerPanel extends JPanel {
   }
 
 
+  public void setLayers(List<Integer> layers) {
+  }
 }

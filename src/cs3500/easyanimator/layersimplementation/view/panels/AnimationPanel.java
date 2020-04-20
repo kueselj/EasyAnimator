@@ -83,8 +83,4 @@ public class AnimationPanel extends JPanel {
   public void setTickLabel(int tick) {
     this.playbackPanel.setTickLabel(tick);
   }
-
-  public JScrollPane addScrollPane() {
-    return new JScrollPane(drawPanel);
-  }
 }
