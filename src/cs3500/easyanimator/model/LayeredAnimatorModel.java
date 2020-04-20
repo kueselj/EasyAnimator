@@ -196,6 +196,9 @@ public class LayeredAnimatorModel implements ILayeredAnimatorModel {
     List<IShape> shapes = new ArrayList<>();
     Point globalOffset = getCanvasPosition();
     for (ILayer layer: layers) {
+      if (!layer.getVisibility()) {
+        continue; // Next loop.
+      }
       Point layerOffset = layer.getModel().getCanvasPosition();
       int diffX = layerOffset.getX() - globalOffset.getX();
       int diffY = layerOffset.getY() - globalOffset.getY();

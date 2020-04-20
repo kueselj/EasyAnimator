@@ -16,6 +16,8 @@ import cs3500.easyanimator.model.layers.ILayer;
  * for canvases as well. There is one caveat to all of this, shapes across layers cannot have
  * duplicate names or there will be undefined behavior. The last added layer will have its shapes
  * placed last into getShapesAtTick so they are displayed on top.
+ *
+ * If a layer is not visible, then it won't appear in getShapesAtTick.
  */
 public interface ILayeredAnimatorModel extends ILayeredAnimatorModelViewOnly {
   /**

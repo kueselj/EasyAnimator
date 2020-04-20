@@ -3,7 +3,11 @@ package cs3500.easyanimator.layersimplementation.controller;
 import cs3500.easyanimator.layersimplementation.view.ILayerView;
 import cs3500.easyanimator.model.Color;
 import cs3500.easyanimator.model.IAnimatorModel;
+
 import cs3500.easyanimator.model.Point;
+
+import cs3500.easyanimator.model.ILayeredAnimatorModel;
+
 import cs3500.easyanimator.model.layers.BasicLayer;
 import cs3500.easyanimator.model.shapes.*;
 
@@ -22,10 +26,7 @@ public class LayerMVCController implements ILayerMVCController,
   private double speed;
   private boolean looping;
 
-  //TODO should really take in a layer implementation of it, this should be changed I would suggest
-  //TODO adding an extra interface that extends IAnimatorModel that the new layer model implements.
-  //TODO that new interface can define all new methods we need.
-  private IAnimatorModel model;
+  private ILayeredAnimatorModel model;
   private ILayerView view;
 
   //TODO I think we will need to hold the current layer that is selected from the view, as we need
@@ -38,7 +39,7 @@ public class LayerMVCController implements ILayerMVCController,
    * @param model the model to use.
    * @param view the view to use.
    */
-  public LayerMVCController(IAnimatorModel model, ILayerView view) {
+  public LayerMVCController(ILayeredAnimatorModel model, ILayerView view) {
     this.model = model;
     this.view = view;
     this.tick = 0;
@@ -85,7 +86,9 @@ public class LayerMVCController implements ILayerMVCController,
   @Override
   public void setSpeed(double tps) {
     this.speed = Math.max(tps, 1);
-    this.timer.setDelay((int) Math.max(1, (1.0 / speed * 1000.0)));
+    if (this.timer != null) {
+      this.timer.setDelay((int) Math.max(1, (1.0 / speed * 1000.0)));
+    }
   }
 
   //PLAYBACK CONTROLS

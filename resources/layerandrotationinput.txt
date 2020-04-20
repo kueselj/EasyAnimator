@@ -1,0 +1,34 @@
+This document appends the text definition first described in assignment 5 (with a small change in
+assignment 6 which added canvases) with layers and rotations.
+
+To define a named layer (and this must be done before it's used), users should create a line like:
+
+layer [name] [visibility]
+
+Where layer specifies adding a layer, and [name] can be replaced with the layer name,
+and [visibility] is a boolean value of if the layer is visible or not.
+
+To add shapes to a layer, shape definitions can now read (as an example).
+
+shape R rectangle name
+
+Where name is the name of the layer to add the shape to.
+Shapes with the same name, but across different layers are NOT allowed for backwards compatibility
+reasons.
+
+If shape definitions do not have a layer, they are added to a base layer which will sit
+at the bottom of the scene.
+
+Every layer will have the same canvas size and offset, though this was not necessary.
+This is to simplify input.
+
+To add rotation to a shape, motion definitions may include an extra two columns.
+They would read like:
+
+#        t  x   y   w  h   r   g  b  ROT    t   x   y   w  h   r   g  b ROT
+motion R 1  200 200 50 100 255 0  0  25     10  200 200 50 100 255 0  0 25
+
+Where ROT is the degrees counterclockwise the shape should be rotated.
+If the line is missing these two extra columns, then a default rotation of zero is taken.
+
+Keyframes are just one half of the column above.
