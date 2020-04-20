@@ -1,10 +1,15 @@
 package cs3500.easyanimator.layersimplementation.controller;
 
 import cs3500.easyanimator.layersimplementation.view.ILayerView;
+import cs3500.easyanimator.model.Color;
 import cs3500.easyanimator.model.IAnimatorModel;
+import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.layers.BasicLayer;
+import cs3500.easyanimator.model.shapes.*;
 
 import javax.swing.*;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Controller specifically for the layer implementation of a model.
@@ -146,28 +151,100 @@ public class LayerMVCController implements ILayerMVCController,
 
   //EDITOR FEATURES
 
+  private static IShapeFactory SHAPE_FACTORY = new BasicShapeFactory();
+  private static WidthHeight DEFAULT_WH = new WidthHeight(100, 100);
+  private static Point DEFAULT_POS = new Point(100, 100);
+  private static Color DEFAULT_COL = new Color(100, 100, 100);
+
   @Override
-  public void saveShape(String shapeName) {
-    //TODO i need to think a bit more about what this exactly needs.
+  public void addShape(String shapeName, String shapeType) {
+    //TODO make sure that there isnt a same name in the entire stack of layers.
+
+    IAnimatorModel layerModel = currentLayer.getModel();
+
+    try {
+      layerModel.addShape(shapeName,
+              SHAPE_FACTORY.getShape(shapeType, DEFAULT_WH, DEFAULT_POS, DEFAULT_COL));
+    } catch (IllegalArgumentException iae) {
+      iae.printStackTrace();
+      // Something failed.
+      view.makeErrorSound();
+    }
   }
 
   @Override
   public void deleteShape(String shapeName) {
+    IAnimatorModel layerModel = currentLayer.getModel();
 
+    try {
+      layerModel.removeShape(shapeName);
+    } catch (IllegalArgumentException iae) {
+      view.makeErrorSound();
+    }
+  }
+
+  @Override
+  public void renameShape(String name, String newName, String shapeType) {
+
+    //TODO make sure that there isnt a same name in the entire stack of layers.
+
+    // This is a trickier situation than calling something in the model.
+    IAnimatorModel layerModel = currentLayer.getModel();
+    // We won't rename ontop another shape. Or rename a non-existent shape.
+    List<String> shapeNames = layerModel.getShapeNames();
+    if (!shapeNames.contains(name) || shapeNames.contains(newName)) {
+      view.makeErrorSound();
+    }
+
+    try {
+      // Fetch old data.
+      Map<Integer, IShape> oldKeyframes = layerModel.getKeyframes(name);
+      // Create new recipient.
+      layerModel.addShape(newName, layerModel.getShapes().get(name));
+      for (Map.Entry<Integer, IShape> keyframe: oldKeyframes.entrySet()) {
+        layerModel.addKeyframe(newName, keyframe.getValue(), keyframe.getKey());
+      }
+      // Done with old shape.
+      layerModel.removeShape(name);
+    } catch (IllegalArgumentException iae) {
+      view.makeErrorSound();
+    }
   }
 
   @Override
   public void saveKeyFrame(String shapeName,
-                           int tick,
-                           int x, int y,
-                           int width, int height,
-                           int r, int g, int b) {
+                           String tick,
+                           String x, String y,
+                           String width, String height,
+                           String r, String g, String b) {
 
+    IAnimatorModel layerModel = currentLayer.getModel();
+
+    try {
+      if (!layerModel.getShapeNames().contains(shapeName)) {
+        view.makeErrorSound();
+      }
+      IShape keyframe = layerModel.getShapes().get(shapeName).accept(new ShapeF(
+              new WidthHeight(Integer.parseInt(width), Integer.parseInt(height)),
+              new Point(Integer.parseInt(x), Integer.parseInt(y)),
+              new Color(Integer.parseInt(r), Integer.parseInt(g), Integer.parseInt(b))));
+      layerModel.addKeyframe(shapeName, keyframe, Integer.parseInt(tick));
+
+    } catch (IllegalArgumentException iae) {
+      view.makeErrorSound();
+    }
   }
 
   @Override
-  public void deleteKeyFrame(String shapeName, int tickOfKeyFrame) {
+  public void deleteKeyFrame(String shapeName, String tickOfKeyFrame) {
 
+    IAnimatorModel layerModel = currentLayer.getModel();
+
+    try {
+      layerModel.removeKeyframe(shapeName, Integer.parseInt(tickOfKeyFrame));
+    } catch (IllegalArgumentException iae) {
+      view.makeErrorSound();
+    }
   }
 
   @Override
@@ -176,7 +253,7 @@ public class LayerMVCController implements ILayerMVCController,
   }
 
   @Override
-  public void selectTick(String shapeName, int tick) {
+  public void selectTick(String shapeName, String tick) {
 
   }
 }

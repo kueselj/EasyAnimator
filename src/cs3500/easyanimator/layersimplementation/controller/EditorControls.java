@@ -4,17 +4,27 @@ public interface EditorControls {
 
 
   //TODO I need to think about save shape a little more and what exactly it needs.
+
   /**
-   * Saves the newly created shape.
-   * @param shapeName the new shape.
+   * Adds a shape to the model.
+   * @param shapeName the name of the shape to add.
+   * @param shapeType the shapeType of the the new shape.
    */
-  void saveShape(String shapeName);
+  void addShape(String shapeName, String shapeType);
 
   /**
    * Deletes the given shape.
    * @param shapeName the name of the shape to delete.
    */
   void deleteShape(String shapeName);
+
+  /**
+   * Renames a shape.
+   * @param name the shape to rename.
+   * @param newName the new name of the shape.
+   * @param shapeType the shapeType of the shape.
+   */
+  void renameShape(String name, String newName, String shapeType);
 
   /**
    * Saves a keyFrame of the given shape.
@@ -29,17 +39,17 @@ public interface EditorControls {
    * @param b the blue value of the keyframe.
    */
   void saveKeyFrame(String shapeName,
-                    int tick,
-                    int x, int y,
-                    int width, int height,
-                    int r, int g, int b);
+                    String tick,
+                    String x, String y,
+                    String width, String height,
+                    String r, String g, String b);
 
   /**
    * Deletes the keyframe of the given shape at the given tick.
    * @param shapeName the name of the shape.
    * @param tickOfKeyFrame the tick of the keyframe to delete.
    */
-  void deleteKeyFrame(String shapeName, int tickOfKeyFrame);
+  void deleteKeyFrame(String shapeName, String tickOfKeyFrame);
 
   /**
    * Grabs all the data about the selected shape and hands it to the view.
@@ -52,5 +62,5 @@ public interface EditorControls {
    * @param shapeName the shape to grab data about at the given tick.
    * @param tick the tick to grab data about for the given shape.
    */
-  void selectTick(String shapeName, int tick);
+  void selectTick(String shapeName, String tick);
 }

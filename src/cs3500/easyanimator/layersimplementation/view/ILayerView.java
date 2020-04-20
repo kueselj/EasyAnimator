@@ -42,17 +42,25 @@ public interface ILayerView {
    */
   void setDrawShapes(List<IShape> shapes);
 
+
   /**
-   * Sets the available shapes that the user can choose from.
-   * @param shapes the shapes the user can pick from.
+   * Sets the available shapes of the editor panel.
+   * @param shapes the available shapes.
    */
   void setAvailableShapes(List<String> shapes);
 
+
   /**
-   * Sets the available shape types to choose from.
-   * @param shapeTypes the shape types to choose from.
+   * Sets the current shape in the editor view to the given shape.
+   * @param shape the shape to set.
    */
-  void setAvailableShapeTypes(List<String> shapeTypes);
+  void setCurrentShape(String shape);
+
+  /**
+   * Sets the available shapes that the user can choose from.
+   * @param shapeType the shapes the user can pick from.
+   */
+  void setShapeType(String shapeType);
 
   /**
    * Sets the available ticks that the user can pick from for the selected shape.
@@ -75,6 +83,8 @@ public interface ILayerView {
    */
   void setLayers(List<Integer> layers);
 
-
-
+  /**
+   * Sounds the alarm.
+   */
+  void makeErrorSound();
 }

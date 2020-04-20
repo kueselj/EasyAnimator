@@ -5,6 +5,7 @@ import cs3500.easyanimator.layersimplementation.controller.EditorControls;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 /**
@@ -18,15 +19,15 @@ public class EditorPanel extends JPanel {
   private static Dimension MAX_FIELD_SIZE = new Dimension(200, 25);
 
   //Shape Selection.
-  private JComboBox selectShape;
+  private JComboBox<String> selectShape;
   private JTextField shapeName;
-  private JComboBox<String> shapeType;
+  private JComboBox<String> selectShapeType;
 
   private JButton saveShape;
   private JButton deleteShape;
 
   //Keyframe Selection
-  private JComboBox selectTick;
+  private JComboBox<String> selectTick;
   private JTextField keyFrameTick;
   private JTextField keyFrameX;
   private JTextField keyFrameY;
@@ -56,8 +57,8 @@ public class EditorPanel extends JPanel {
 
     shapeName = createField("Shape Name");
 
-    shapeType = new JComboBox<>(DEFAULT_SHAPES);
-    add(shapeType);
+    selectShapeType = new JComboBox<>(DEFAULT_SHAPES);
+    add(selectShapeType);
 
     saveShape = new JButton("Save Shape");
     add(saveShape);
@@ -98,7 +99,57 @@ public class EditorPanel extends JPanel {
    * @param editorControls
    */
   public void addEditorControls(EditorControls editorControls) {
+    selectShape.addActionListener(evt -> editorControls.selectShape(
+            selectShape.getSelectedItem().toString()));
 
+    selectTick.addActionListener(evt -> editorControls.selectTick(
+            selectShape.getSelectedItem().toString(), selectTick.getSelectedItem().toString()));
+
+    addSaveShapeListener(editorControls);
+
+    deleteShape.addActionListener(evt -> editorControls.deleteShape(
+            selectShape.getSelectedItem().toString()));
+
+
+    saveKeyframe.addActionListener(evt -> editorControls.saveKeyFrame(
+            selectShape.getSelectedItem().toString(),
+            keyFrameTick.getText(),
+            keyFrameX.getText(),
+            keyFrameY.getText(),
+            keyFrameWidth.getText(),
+            keyFrameHeight.getText(),
+            keyFrameR.getText(),
+            keyFrameG.getText(),
+            keyFrameB.getText()));
+
+
+    deleteKeyframe.addActionListener(evt -> editorControls.deleteKeyFrame(
+            selectShape.getSelectedItem().toString(), selectTick.getSelectedItem().toString()));
+
+  }
+
+  /**
+   * Listener for the saveShape button.
+   * @param editorControls the controls it can use.
+   */
+  private void addSaveShapeListener(EditorControls editorControls) {
+    saveShape.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        //New Shape
+        if(selectShape.getSelectedItem().toString() == "New Shape") {
+          editorControls.addShape(shapeName.getText(),
+                  selectShapeType.getSelectedItem().toString());
+        }
+        //Rename a Shape
+        else if (selectShape.getSelectedItem().toString() != shapeName.getText()) {
+          editorControls.renameShape(
+                  shapeName.getText(),
+                  selectShapeType.getSelectedItem().toString(),
+                  selectShapeType.getSelectedItem().toString());
+        }
+      }
+    });
   }
 
   /**
@@ -118,17 +169,44 @@ public class EditorPanel extends JPanel {
   }
 
   public void setAvailableShapes(List<String> shapes) {
+    selectShape.removeAllItems();
+    for (String s: shapes) {
+      selectShape.addItem(s);
+    }
   }
 
-  public void setAvailableShapeTypes(List<String> shapeTypes) {
+  public void setCurrentShape(String shape) {
+    shapeName.setText(shape);
+  }
+
+  public void setShapeType(String shapeType) {
+    if (shapeType == "rectangle") {
+      selectShapeType.setSelectedIndex(0);
+    }
+    else if (shapeType == "oval") {
+      selectShapeType.setSelectedIndex(1);
+    }
   }
 
   public void setAvailableTicks(List<Integer> ticks) {
+    selectTick.removeAllItems();
+    for (int i: ticks) {
+      selectTick.addItem(Integer.toString(i));
+    }
   }
 
-  public void setTextFields(List<Integer> components) {
-  }
+  public void setTextFields(List<Integer> textFields) {
+    if (textFields.size() > 8) {
+      throw new IllegalArgumentException("Too many components!");
+    }
 
-  public void setLayers(List<Integer> layers) {
+    keyFrameTick.setText(Integer.toString(textFields.get(0)));
+    keyFrameX.setText(Integer.toString(textFields.get(1)));
+    keyFrameY.setText(Integer.toString(textFields.get(2)));
+    keyFrameWidth.setText(Integer.toString(textFields.get(3)));
+    keyFrameHeight.setText(Integer.toString(textFields.get(4)));
+    keyFrameR.setText(Integer.toString(textFields.get(5)));
+    keyFrameG.setText(Integer.toString(textFields.get(6)));
+    keyFrameB.setText(Integer.toString(textFields.get(7)));
   }
 }

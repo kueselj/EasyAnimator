@@ -86,16 +86,18 @@ public class LayerView extends JFrame implements ILayerView {
     animationPanel.setShapes(shapes);
   }
 
-  @Override
   public void setAvailableShapes(List<String> shapes) {
     editorPanel.setAvailableShapes(shapes);
-
   }
 
   @Override
-  public void setAvailableShapeTypes(List<String> shapeTypes) {
-    editorPanel.setAvailableShapeTypes(shapeTypes);
+  public void setCurrentShape(String shape) {
+    editorPanel.setCurrentShape(shape);
+  }
 
+  @Override
+  public void setShapeType(String shapeType) {
+    editorPanel.setShapeType(shapeType);
   }
 
   @Override
@@ -106,13 +108,20 @@ public class LayerView extends JFrame implements ILayerView {
   @Override
   public void setTextFields(List<Integer> components) {
     editorPanel.setTextFields(components);
-
   }
 
   @Override
   public void setLayers(List<Integer> layers) {
-    editorPanel.setLayers(layers);
+    layerPanel.setLayers(layers);
   }
 
 
+
+
+  private static Toolkit tk = Toolkit.getDefaultToolkit();
+
+  @Override
+  public void makeErrorSound() {
+        tk.beep();
+      }
 }
