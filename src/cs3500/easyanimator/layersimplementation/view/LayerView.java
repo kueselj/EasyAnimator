@@ -50,9 +50,10 @@ public class LayerView extends JFrame implements ILayerView {
     //ANIMATION PANEL.
     add(animationPanel, BorderLayout.CENTER);
 
-
     //LAYER PANEL.
     add(layerPanel, BorderLayout.EAST);
+
+    pack();
   }
 
   @Override

@@ -4,6 +4,7 @@ import cs3500.easyanimator.layersimplementation.controller.PlaybackControls;
 import cs3500.easyanimator.model.Color;
 import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.model.shapes.Oval;
+import cs3500.easyanimator.model.shapes.Rectangle;
 import cs3500.easyanimator.model.shapes.WidthHeight;
 import cs3500.easyanimator.view.DrawPanel;
 
@@ -26,26 +27,35 @@ public class AnimationPanel extends JPanel {
    * DrawPanel and a PlayBack panel to use.
    */
   public AnimationPanel() {
+
     drawPanel = new DrawPanel();
     playbackPanel = new PlaybackPanel();
 
     setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+    //setLayout(new BorderLayout());
 
-    JScrollPane scrollPane = new JScrollPane(drawPanel);
 
-    add(scrollPane, BorderLayout.CENTER);
+
+
+
+    List<IShape> shapes = new ArrayList<>();
+    IShape shp = new Oval(new WidthHeight(30, 30), new cs3500.easyanimator.model.Point(60, 60), new Color(100, 100, 100));
+    IShape shpd = new Rectangle(new WidthHeight(30, 30), new cs3500.easyanimator.model.Point(450, 450), new Color(255, 100, 100));
+    shapes.add(shp);
+    shapes.add(shpd);
+    setShapes(shapes);
 
     //DRAW PANEL
-    //JScrollPane scrollPane = new JScrollPane(drawPanel);
-    //add(scrollPane, BorderLayout.CENTER);
+    //TODO fix the scroll pane holy shit wtf.
+    drawPanel.setSize(500, 500);
+    drawPanel.setPreferredSize(new Dimension(500, 500));
+    JScrollPane scrollPane = new JScrollPane(drawPanel);
+    scrollPane.setSize(0, 0);
+    add(scrollPane);
 
     //PLAYBACK PANEL
     add(playbackPanel);
 
-    List<IShape> shapes = new ArrayList<>();
-    IShape shp = new Oval(new WidthHeight(30, 30), new cs3500.easyanimator.model.Point(60, 60), new Color(100, 100, 100));
-    shapes.add(shp);
-    setShapes(shapes);
 
     drawPanel.repaint();
   }
@@ -72,5 +82,9 @@ public class AnimationPanel extends JPanel {
    */
   public void setTickLabel(int tick) {
     this.playbackPanel.setTickLabel(tick);
+  }
+
+  public JScrollPane addScrollPane() {
+    return new JScrollPane(drawPanel);
   }
 }
