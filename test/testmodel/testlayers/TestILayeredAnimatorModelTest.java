@@ -9,11 +9,11 @@ import cs3500.easyanimator.model.Color;
 import cs3500.easyanimator.model.EasyAnimator;
 import cs3500.easyanimator.model.IAnimatorModel;
 import cs3500.easyanimator.model.ILayeredAnimatorModel;
-import cs3500.easyanimator.model.ILayeredAnimatorModelViewOnly;
 import cs3500.easyanimator.model.LayeredAnimatorModel;
 import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.layers.BasicLayer;
 import cs3500.easyanimator.model.layers.ILayer;
+import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.model.shapes.Oval;
 import cs3500.easyanimator.model.shapes.Rectangle;
 import cs3500.easyanimator.model.shapes.WidthHeight;
@@ -69,7 +69,7 @@ public abstract class TestILayeredAnimatorModelTest {
     IAnimatorModel modelTwo = new EasyAnimator();
     modelTwo.addShape("oval", OVAL);
     modelTwo.addKeyframe("oval", OVAL, 25);
-    modelTwo.addKeyframe("oval", OVAL, 75);
+    modelTwo.addKeyframe("oval", OVAL_TWO, 75);
     modelTwo.setCanvas(ORIGIN, LARGE);
     LAYER_TWO = new BasicLayer("BOTTOM", true, modelTwo);
   }
@@ -177,11 +177,11 @@ public abstract class TestILayeredAnimatorModelTest {
     assertEquals("Expected the rectangle shape at tick 0 to match what we had set for it.",
             RECT, model.getShapeAtTick("rectangle", 0));
     assertEquals("Expected the rect shape at tick 100 to match what we had set for it.",
-            RECT_TWO, model.getShapeAtTick("oval", 100));
-    assertEquals("Expected the oval shape at tick 0 to match what we had set for it.",
-            RECT, model.getShapeAtTick("rectangle", 0));
-    assertEquals("Expected the oval shape at tick 100 to match what we had set for it.",
-            RECT_TWO, model.getShapeAtTick("oval", 100));
+            RECT_TWO, model.getShapeAtTick("rectangle", 100));
+    assertEquals("Expected the oval shape at tick 25 to match what we had set for it.",
+            OVAL, model.getShapeAtTick("oval", 25));
+    assertEquals("Expected the oval shape at tick 75 to match what we had set for it.",
+            OVAL_TWO, model.getShapeAtTick("oval", 75));
   }
 
   /**
@@ -193,8 +193,8 @@ public abstract class TestILayeredAnimatorModelTest {
     ILayeredAnimatorModel model = doubleLayered();
     assertEquals("Expected max tick of the rectangle to be 100.",
             100, model.getShapeMaxTick("rectangle"));
-    assertEquals("Expected max tick of the oval to be 100 as well.",
-            100, model.getShapeMaxTick("oval"));
+    assertEquals("Expected max tick of the oval to be 75 as well.",
+            75, model.getShapeMaxTick("oval"));
   }
 
   // I don't get getSortedMotions because really the methods we are now looking to use are below.
@@ -235,12 +235,12 @@ public abstract class TestILayeredAnimatorModelTest {
     model.addLayer(LAYER_ONE);
     // Since I've added layers in this order, I expect the oval to always appear first.
     assertEquals("Expected oval to be the first shape in the list due to layer order.",
-            OVAL, model.getShapeNames().get(0));
+            "oval", model.getShapeNames().get(0));
     assertEquals("Expected oval to be the first shape when fetching shapes at tick " +
-            "due to layer order.",
-            OVAL, model.getShapesAtTick(0).get(0));
-    assertEquals("Expected the first layer in getLayers to be the second layer " +
-            "since we added it first",
+            "due to layer order. This means it's on the bottom.",
+            OVAL, model.getShapesAtTick(25).get(0)); // Has to be tick 25, when oval first appears.
+    assertEquals("Expected the first layer in getLayers to be LAYER_TWO " +
+            "since we added it first in this test.",
             LAYER_TWO, model.getLayer(0));
   }
 
@@ -337,6 +337,7 @@ public abstract class TestILayeredAnimatorModelTest {
     assertEquals("Expected layer one be the second layer after swap.",
             LAYER_ONE, model.getLayer(1));
     // We swap again, we should get the original order.
+    model.swapLayer(1, 0); // This shouldn't really matter that the order is different.
     assertEquals("Expected layer one be the first layer after two swaps.",
             LAYER_ONE, model.getLayer(0));
     assertEquals("Expected layer two be the second layer after two swaps.",
