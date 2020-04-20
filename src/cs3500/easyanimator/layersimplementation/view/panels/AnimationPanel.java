@@ -1,11 +1,15 @@
 package cs3500.easyanimator.layersimplementation.view.panels;
 
 import cs3500.easyanimator.layersimplementation.controller.PlaybackControls;
+import cs3500.easyanimator.model.Color;
 import cs3500.easyanimator.model.shapes.IShape;
+import cs3500.easyanimator.model.shapes.Oval;
+import cs3500.easyanimator.model.shapes.WidthHeight;
 import cs3500.easyanimator.view.DrawPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,15 +26,28 @@ public class AnimationPanel extends JPanel {
    * DrawPanel and a PlayBack panel to use.
    */
   public AnimationPanel() {
-    this.drawPanel = new DrawPanel();
-    this.playbackPanel = new PlaybackPanel();
+    drawPanel = new DrawPanel();
+    playbackPanel = new PlaybackPanel();
+
+    setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+    JScrollPane scrollPane = new JScrollPane(drawPanel);
+
+    add(scrollPane, BorderLayout.CENTER);
 
     //DRAW PANEL
-    JScrollPane scrollPane = new JScrollPane(drawPanel);
-    add(scrollPane, BorderLayout.CENTER);
+    //JScrollPane scrollPane = new JScrollPane(drawPanel);
+    //add(scrollPane, BorderLayout.CENTER);
 
     //PLAYBACK PANEL
     add(playbackPanel);
+
+    List<IShape> shapes = new ArrayList<>();
+    IShape shp = new Oval(new WidthHeight(30, 30), new cs3500.easyanimator.model.Point(60, 60), new Color(100, 100, 100));
+    shapes.add(shp);
+    setShapes(shapes);
+
+    drawPanel.repaint();
   }
 
   /**

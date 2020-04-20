@@ -6,10 +6,15 @@ import cs3500.easyanimator.layersimplementation.controller.PlaybackControls;
 import cs3500.easyanimator.layersimplementation.view.panels.AnimationPanel;
 import cs3500.easyanimator.layersimplementation.view.panels.EditorPanel;
 import cs3500.easyanimator.layersimplementation.view.panels.LayerPanel;
+import cs3500.easyanimator.model.Color;
+import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.shapes.IShape;
+import cs3500.easyanimator.model.shapes.Oval;
+import cs3500.easyanimator.model.shapes.WidthHeight;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,7 +48,8 @@ public class LayerView extends JFrame implements ILayerView {
     add(editorPanel, BorderLayout.WEST);
 
     //ANIMATION PANEL.
-    add(animationPanel);
+    add(animationPanel, BorderLayout.CENTER);
+
 
     //LAYER PANEL.
     add(layerPanel, BorderLayout.EAST);
