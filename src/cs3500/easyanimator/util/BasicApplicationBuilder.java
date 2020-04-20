@@ -6,9 +6,17 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import cs3500.easyanimator.controller.MVCController;
+import cs3500.easyanimator.layersimplementation.controller.ILayerMVCController;
+import cs3500.easyanimator.layersimplementation.controller.LayerMVCController;
+import cs3500.easyanimator.layersimplementation.view.ILayerView;
+import cs3500.easyanimator.layersimplementation.view.LayerView;
 import cs3500.easyanimator.model.EasyAnimator;
 import cs3500.easyanimator.model.IAnimatorModel;
+import cs3500.easyanimator.model.ILayeredAnimatorModel;
+import cs3500.easyanimator.model.LayeredAnimatorModel;
 import cs3500.easyanimator.model.Point;
+import cs3500.easyanimator.model.layers.BasicLayer;
+import cs3500.easyanimator.model.layers.ILayer;
 import cs3500.easyanimator.model.shapes.WidthHeight;
 import cs3500.easyanimator.provider.controller.AnimatorController;
 import cs3500.easyanimator.provider.model.AnimatorModel;
@@ -65,10 +73,34 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
   public void launch() throws IllegalStateException {
     // We need the output for the text views. So it is supplied to the factory.
     // It's simply unused for visual views.
-    if (viewType == null || (!viewType.equals("edit") && input == null)) {
+    if (viewType == null || (!viewType.equals("edit") && !viewType.equals("oldedit") && input == null)) {
       // We hotfix in a change to allow you to edit a fresh model.
       throw new IllegalStateException("Failed to provide both a view type and an input " +
               "file.");
+    }
+
+    // A rule to hot fix in using a model that's layered.
+    if (viewType.equals("edit")) {
+      ILayeredAnimatorModel model;
+      if (input == null) {
+        model = new LayeredAnimatorModel();
+        ILayer base = new BasicLayer("Base", true, new EasyAnimator());
+        base.getModel().setCanvas(new Point(0, 0), new WidthHeight(800, 600));
+        model.addLayer(base);
+      } else {
+        AdvancedAnimationBuilder<ILayeredAnimatorModel> builder =
+                new LayeredAnimatorModelBuilder("Base");
+        new AdvancedAnimationReader().parseFile(input, builder);
+        model = builder.build();
+      }
+      int canvasX = model.getCanvasSize().getWidth();
+      int canvasY = model.getCanvasSize().getHeight();
+      ILayerView view = new LayerView(canvasX, canvasY);
+      LayerMVCController controller = new LayerMVCController(model, view);
+      controller.setSpeed(speed);
+      controller.go();
+      // Skip the rest of the code that's here.
+      return;
     }
 
     IAnimatorModel model;
@@ -83,7 +115,7 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
       model = modelBuilder.build();
     }
 
-    if (viewType.equals("edit")) {
+    if (viewType.equals("oldedit")) {
       // We hotfix this change in to support an editor.
       MVCController controller = new MVCController(model);
       controller.setView(new EditorSwingView(controller), this.speed);
