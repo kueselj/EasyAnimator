@@ -1,5 +1,7 @@
 package cs3500.easyanimator.layersimplementation.view.panels;
 
+import com.sun.jdi.StringReference;
+
 import cs3500.easyanimator.layersimplementation.controller.EditorControls;
 
 import javax.swing.*;
@@ -97,16 +99,29 @@ public class EditorPanel extends JPanel {
   }
 
   /**
+   * Returns the integer representation of the string OR null.
+   * @param s The string to parse into an integer.
+   * @return  The parsed integer or null if the string was null.
+   */
+  private static Integer integerOrNull(String s) {
+    if (s == null) {
+      return null;
+    } else {
+      return Integer.parseInt(s);
+    }
+  }
+
+  /**
    * The editor features that the panel can use.
    * @param editorControls
    */
   public void addEditorControls(EditorControls editorControls) {
     selectShape.addActionListener(evt -> editorControls.selectShape(
-            selectShape.getSelectedItem().toString()));
+            (String) selectShape.getSelectedItem()));
 
     selectTick.addActionListener(evt -> editorControls.selectTick(
             selectShape.getSelectedItem().toString(),
-            Integer.parseInt(selectTick.getSelectedItem().toString())));
+            integerOrNull((String) selectTick.getSelectedItem())));
 
     addSaveShapeListener(editorControls);
 
@@ -127,7 +142,7 @@ public class EditorPanel extends JPanel {
 
 
     deleteKeyframe.addActionListener(evt -> editorControls.deleteKeyFrame(
-            selectShape.getSelectedItem().toString(), selectTick.getSelectedItem().toString()));
+            (String) selectShape.getSelectedItem(), (String) selectTick.getSelectedItem()));
 
   }
 
@@ -142,14 +157,14 @@ public class EditorPanel extends JPanel {
         //New Shape
         if(selectShape.getSelectedItem().toString() == "New Shape") {
           editorControls.addShape(shapeName.getText(),
-                  selectShapeType.getSelectedItem().toString());
+                  (String) selectShapeType.getSelectedItem());
         }
         //Rename a Shape
         else if (selectShape.getSelectedItem().toString() != shapeName.getText()) {
           editorControls.renameShape(
                   shapeName.getText(),
-                  selectShapeType.getSelectedItem().toString(),
-                  selectShapeType.getSelectedItem().toString());
+                  (String) selectShapeType.getSelectedItem(),
+                  (String) selectShapeType.getSelectedItem());
         }
       }
     });

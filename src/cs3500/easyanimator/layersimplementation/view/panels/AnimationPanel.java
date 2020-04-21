@@ -62,6 +62,7 @@ public class AnimationPanel extends JPanel {
    */
   public void setShapes(List<IShape> shapes) {
     this.drawPanel.setShapes(shapes);
+    this.drawPanel.repaint();
   }
 
   /**

@@ -42,7 +42,10 @@ public class AdvancedAnimationReader {
     s.useDelimiter(Pattern.compile("(\\p{Space}+|#.*)+")); 
     while (s.hasNextLine()) {
       String line = s.nextLine();
-      Scanner lineScanner = new Scanner(line);
+      Scanner lineScanner = new Scanner(line.trim());
+      if (lineScanner.hasNext() == false) {
+        continue;
+      }
       String word = lineScanner.next();
       switch (word) {
         case "canvas":
@@ -57,6 +60,9 @@ public class AdvancedAnimationReader {
         case "motion":
           readMotion(lineScanner, builder);
           break;
+        case "#": // This was supposed to be caught by their scanner, but I guess I messed it up with lines.
+          continue;
+        // I'm scared to do keyframes away from their code.
         default:
           throw new IllegalStateException("Unexpected keyword: " + word + lineScanner.nextLine());
       }
@@ -135,7 +141,7 @@ public class AdvancedAnimationReader {
     for (int i = 0; i < 18; i++) {
       if (i == 16 && s.hasNext()) {
         rot = true;
-      } else {
+      } else if (i == 16) {
         break; // We leave the last 2 null. We probably didn't have more.
       }
       if (rot) {

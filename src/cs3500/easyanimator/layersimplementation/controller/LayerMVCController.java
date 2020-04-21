@@ -7,11 +7,9 @@ import cs3500.easyanimator.model.IAnimatorModel;
 import cs3500.easyanimator.model.Point;
 
 import cs3500.easyanimator.model.ILayeredAnimatorModel;
-
-import cs3500.easyanimator.model.layers.BasicLayer;
+import cs3500.easyanimator.model.layers.ILayer;
 import cs3500.easyanimator.model.shapes.*;
 
-import javax.swing.*;
 import javax.swing.Timer;
 import java.util.*;
 
@@ -29,10 +27,7 @@ public class LayerMVCController implements ILayerMVCController,
   private ILayeredAnimatorModel model;
   private ILayerView view;
 
-  //TODO I think we will need to hold the current layer that is selected from the view, as we need
-  //TODO to update stuff about it, alternatively we pass in the layer number for each method but
-  //TODO we still need to store a layer number if the layer is in a different panel.
-  private BasicLayer currentLayer;
+  private ILayer currentLayer;
 
   /**
    * Basic constructor that takes in a model and a view for the controller to use.
@@ -44,13 +39,14 @@ public class LayerMVCController implements ILayerMVCController,
     this.view = view;
     this.tick = 0;
     this.looping = false;
-    //TODO would prefer not to set to -1 but i want to make sure the user sets speed before starting
-    this.speed = -1.0;
+    // We use the value negative -1 for the speed as a way to mark the speed as uninitialized.
     this.view.addPlaybackControls(this);
     this.view.addEditorControls(this);
     this.view.addLayerControls(this);
 
-
+    // Start timer with the speed of view.
+    this.timer = new Timer(0, e -> this.refreshTick());
+    this.timer.stop();
   }
 
   @Override
@@ -59,11 +55,10 @@ public class LayerMVCController implements ILayerMVCController,
       throw new IllegalArgumentException("Can't start if speed has not been set.");
     }
 
+    // We update the shapes and select a layer before going visible.
+    currentLayer = model.getLayer(0); // We expect at least one layer.
+    updateShapes();
     view.makeVisible();
-
-    //start timer with the speed of view.
-    this.timer = new Timer((int)this.speed, e -> this.refreshTick());
-    this.timer.stop();
   }
 
   @Override
@@ -80,7 +75,7 @@ public class LayerMVCController implements ILayerMVCController,
 
   @Override
   public void refreshDrawing() {
-    //update the shapes that should be drawn. This goes at start so first frame has it.
+    // Update the shapes that should be drawn. This goes at start so first frame has it.
     view.setDrawShapes(model.getShapesAtTick(this.tick));
     view.setTickLabel(this.tick);
   }
@@ -93,7 +88,7 @@ public class LayerMVCController implements ILayerMVCController,
     }
   }
 
-  //PLAYBACK CONTROLS
+  // PLAYBACK CONTROLS
 
   @Override
   public void play() {
@@ -154,7 +149,7 @@ public class LayerMVCController implements ILayerMVCController,
     refreshDrawing();
   }
 
-  //EDITOR FEATURES
+  // EDITOR FEATURES
 
   private static IShapeFactory SHAPE_FACTORY = new BasicShapeFactory();
   private static WidthHeight DEFAULT_WH = new WidthHeight(100, 100);
@@ -163,10 +158,20 @@ public class LayerMVCController implements ILayerMVCController,
 
   @Override
   public void addShape(String shapeName, String shapeType) {
-    //TODO make sure that there isnt a same name in the entire stack of layers.
-
+    // We make sure that there isn't a same name in the entire stack of layers.
+    // This isn't a piece of state that the model itself can maintain, instead as users we must.
+    // Whilst the editor is unaffected if we don't, it does affect text views.
     IAnimatorModel layerModel = currentLayer.getModel();
-
+    // If we aren't replacing a shape in the current layer,
+    // then we'd be adding a shape with the same name.
+    // We error out in this specific case.
+    if (model.getShapeNames().contains(shapeName) &&
+            !layerModel.getShapeNames().contains(shapeName)) {
+      System.out.println("Unable to add shape with the same name as another in a different layer.");
+      view.makeErrorSound();
+      return;
+    }
+    // We passed that check, time to update / add the shape.
     try {
       layerModel.addShape(shapeName,
               SHAPE_FACTORY.getShape(shapeType, DEFAULT_WH, DEFAULT_POS, DEFAULT_COL));
@@ -192,15 +197,22 @@ public class LayerMVCController implements ILayerMVCController,
 
   @Override
   public void renameShape(String name, String newName, String shapeType) {
-
-    //TODO make sure that there isnt a same name in the entire stack of layers.
-
     // This is a trickier situation than calling something in the model.
     IAnimatorModel layerModel = currentLayer.getModel();
-    // We won't rename ontop another shape. Or rename a non-existent shape.
+
+    // We won't rename a non-existent shape.
     List<String> shapeNames = layerModel.getShapeNames();
-    if (!shapeNames.contains(name) || shapeNames.contains(newName)) {
+    if (!shapeNames.contains(name)) {
+      System.out.println("Unable to rename non-existent shape.");
       view.makeErrorSound();
+      return;
+    }
+
+    // We also make sure that there isn't a same name in the entire stack of layers.
+    if (model.getShapeNames().contains(newName)) {
+      System.out.println("Unable to add shape with the same name as another in a different layer.");
+      view.makeErrorSound();
+      return;
     }
 
     try {

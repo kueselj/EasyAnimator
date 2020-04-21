@@ -1,6 +1,9 @@
 package testmodel.testlayers;
 
 import org.junit.Test;
+
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -342,5 +345,23 @@ public abstract class TestILayeredAnimatorModelTest {
             LAYER_ONE, model.getLayer(0));
     assertEquals("Expected layer two be the second layer after two swaps.",
             LAYER_TWO, model.getLayer(1));
+  }
+
+  /**
+   * A test to verify the affects of visibility on getShapesAtTick.
+   */
+  @Test
+  public void testVisibilityEffects() {
+    ILayeredAnimatorModel model = doubleLayered();
+    ILayer layerOneInvisible = model.getLayer(0).setVisibility(false);
+    model.removeLayer(0);
+    model.addLayer(layerOneInvisible);
+    // With one invisible shape, at tick 25 (when the oval first appears) we should get only
+    // one shape, the oval.
+    assertEquals("After making layer one invisible, we expected only one shape to be visible.",
+            1, model.getShapesAtTick(25).size());
+    assertEquals("After making layer one invisible, we expected to only get the oval.",
+            OVAL, model.getShapesAtTick(25).get(0));
+
   }
 }

@@ -79,9 +79,9 @@ public interface ILayerView {
   /**
    * Sets the available layers as a list of integers representing the layers. Should pass on
    * to the layers selector component.
-   * @param layers
+   * @param layers  The names of the layers.
    */
-  void setLayers(List<Integer> layers);
+  void setLayers(List<String> layers);
 
   /**
    * Sounds the alarm.

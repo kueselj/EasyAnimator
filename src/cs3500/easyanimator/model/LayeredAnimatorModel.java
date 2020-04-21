@@ -3,6 +3,7 @@ package cs3500.easyanimator.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
@@ -127,7 +128,9 @@ public class LayeredAnimatorModel implements ILayeredAnimatorModel {
     return layers.stream()
             .map(layer -> layer.getModel()) // Turn a stream of layers into one of models.
             .flatMap(model -> model.getShapes().entrySet().stream()) // -> named shapes.
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)); // collect.
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                    (k1, k2) -> {throw new IllegalStateException("Unable to merge shape names.");},
+                    LinkedHashMap::new)); // collect.
   }
 
   @Override

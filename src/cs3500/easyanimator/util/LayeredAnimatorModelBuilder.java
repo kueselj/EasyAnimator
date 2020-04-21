@@ -12,6 +12,7 @@ import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.layers.BasicLayer;
 import cs3500.easyanimator.model.layers.ILayer;
 import cs3500.easyanimator.model.motions.BasicMotion;
+import cs3500.easyanimator.model.motions.IMotion;
 import cs3500.easyanimator.model.shapes.BasicShapeFactory;
 import cs3500.easyanimator.model.shapes.IShapeFactory;
 import cs3500.easyanimator.model.shapes.WidthHeight;
@@ -60,7 +61,7 @@ public class LayeredAnimatorModelBuilder
    */
   private ILayer getShapeLayer(String name) {
     for (ILayer layer: model.getLayers()) {
-      if (model.getShapeNames().contains(name)) {
+      if (layer.getModel().getShapeNames().contains(name)) {
         return layer;
       }
     }
@@ -88,6 +89,7 @@ public class LayeredAnimatorModelBuilder
       throw new IllegalStateException("A layer with that name already exists.");
     }
     ILayer newLayer = new BasicLayer(name, visibility, new EasyAnimator());
+    model.addLayer(newLayer);
     return this;
   }
 
@@ -119,7 +121,7 @@ public class LayeredAnimatorModelBuilder
     if (getShapeLayer(name) != null) {
       throw new IllegalStateException("Unable to create a shape with the same name.");
     }
-    ILayer layerByName = getLayer(name);
+    ILayer layerByName = getLayer(layer);
     if (layerByName == null) {
       throw new IllegalStateException("Unable to add a shape to an undefined layer.");
     }
@@ -152,10 +154,11 @@ public class LayeredAnimatorModelBuilder
     if (shapeLayer == null) {
       throw new IllegalStateException("Unable to create a motion for an undefined shape.");
     }
-    shapeLayer.getModel().addMotion(name, new BasicMotion(t1, t2,
+    IMotion motion = new BasicMotion(t1, t2,
             new WidthHeight(w1, h1), new WidthHeight(w2, h2),
             new Point(x1, y1), new Point(x2, y2),
-            new Color(r1, b1, g1), new Color(r2, b2, g2)));
+            new Color(r1, g1, b1), new Color(r2, g2, b2));
+    shapeLayer.getModel().addMotion(name, motion);
     return this;
   }
 
@@ -170,7 +173,6 @@ public class LayeredAnimatorModelBuilder
                                                                    int x2, int y2,
                                                                    int w2, int h2,
                                                                    int r2, int g2, int b2) {
-    // Re-use but with defaults.
     return this.addMotion(name, t1, x1, y1, w1, h1, r1, g1, b1, DEFAULT_ROT,
             t2, x2, y2, w2, h2, r2, g2, b2, DEFAULT_ROT);
   }

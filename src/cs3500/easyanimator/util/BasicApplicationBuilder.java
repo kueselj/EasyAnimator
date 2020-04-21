@@ -92,6 +92,7 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
                 new LayeredAnimatorModelBuilder("Base");
         new AdvancedAnimationReader().parseFile(input, builder);
         model = builder.build();
+
       }
       int canvasX = model.getCanvasSize().getWidth();
       int canvasY = model.getCanvasSize().getHeight();

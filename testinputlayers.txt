@@ -1,0 +1,17 @@
+canvas 0 0 800 600
+layer l_zero true
+layer l_one true
+layer l_two true
+# the rectangle should be above the ellipse
+# and the yellow ellipse should always be on-top.
+shape R rectangle l_one
+shape Y ellipse l_two
+shape C ellipse l_zero
+
+motion Y 0 50 50 50 50 255 255 0 120 50 50 50 50 255 255 255
+
+motion R 0 0 0 0 0 255 0 0 60 0 0 400 300 255 0 0
+motion R 60 0 0 400 300 255 0 0 120 0 0 0 0 255 0 0
+
+motion C 0 0 0 400 300 0 0 255 60 0 0 0 0 0 0 255
+motion C 60 0 0 0 0 0 0 255 120 0 0 400 300 0 0 255
