@@ -66,7 +66,7 @@ public interface ILayerView {
    * Sets the available ticks that the user can pick from for the selected shape.
    * @param ticks the ticks the user can pick from.
    */
-  void setAvailableTicks(List<Integer> ticks);
+  void setAvailableTicks(List<String> ticks);
 
   /**
    * Sets the text fields to the integers provided representing keyFrame tick, x, y, width, height,
@@ -74,7 +74,7 @@ public interface ILayerView {
    * @param components the integers to set the fields as.
    * @throws IllegalArgumentException if it tries to pass more than 8 components.
    */
-  void setTextFields(List<Integer> components);
+  void setTextFields(List<String> components);
 
   /**
    * Sets the available layers as a list of integers representing the layers. Should pass on

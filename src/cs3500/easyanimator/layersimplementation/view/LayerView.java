@@ -101,12 +101,12 @@ public class LayerView extends JFrame implements ILayerView {
   }
 
   @Override
-  public void setAvailableTicks(List<Integer> ticks) {
+  public void setAvailableTicks(List<String> ticks) {
     editorPanel.setAvailableTicks(ticks);
   }
 
   @Override
-  public void setTextFields(List<Integer> components) {
+  public void setTextFields(List<String> components) {
     editorPanel.setTextFields(components);
   }
 

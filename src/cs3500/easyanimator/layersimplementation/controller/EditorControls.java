@@ -62,5 +62,5 @@ public interface EditorControls {
    * @param shapeName the shape to grab data about at the given tick.
    * @param tick the tick to grab data about for the given shape.
    */
-  void selectTick(String shapeName, String tick);
+  void selectTick(String shapeName, Integer tick);
 }

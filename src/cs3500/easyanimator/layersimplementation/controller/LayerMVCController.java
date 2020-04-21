@@ -12,8 +12,8 @@ import cs3500.easyanimator.model.layers.BasicLayer;
 import cs3500.easyanimator.model.shapes.*;
 
 import javax.swing.*;
-import java.util.List;
-import java.util.Map;
+import javax.swing.Timer;
+import java.util.*;
 
 /**
  * Controller specifically for the layer implementation of a model.
@@ -49,6 +49,8 @@ public class LayerMVCController implements ILayerMVCController,
     this.view.addPlaybackControls(this);
     this.view.addEditorControls(this);
     this.view.addLayerControls(this);
+
+
   }
 
   @Override
@@ -168,6 +170,7 @@ public class LayerMVCController implements ILayerMVCController,
     try {
       layerModel.addShape(shapeName,
               SHAPE_FACTORY.getShape(shapeType, DEFAULT_WH, DEFAULT_POS, DEFAULT_COL));
+      updateShapes();
     } catch (IllegalArgumentException iae) {
       iae.printStackTrace();
       // Something failed.
@@ -181,6 +184,7 @@ public class LayerMVCController implements ILayerMVCController,
 
     try {
       layerModel.removeShape(shapeName);
+      updateShapes();
     } catch (IllegalArgumentException iae) {
       view.makeErrorSound();
     }
@@ -209,6 +213,7 @@ public class LayerMVCController implements ILayerMVCController,
       }
       // Done with old shape.
       layerModel.removeShape(name);
+      updateShapes();
     } catch (IllegalArgumentException iae) {
       view.makeErrorSound();
     }
@@ -232,6 +237,7 @@ public class LayerMVCController implements ILayerMVCController,
               new Point(Integer.parseInt(x), Integer.parseInt(y)),
               new Color(Integer.parseInt(r), Integer.parseInt(g), Integer.parseInt(b))));
       layerModel.addKeyframe(shapeName, keyframe, Integer.parseInt(tick));
+      updateKeyframeSelector(shapeName);
 
     } catch (IllegalArgumentException iae) {
       view.makeErrorSound();
@@ -245,18 +251,117 @@ public class LayerMVCController implements ILayerMVCController,
 
     try {
       layerModel.removeKeyframe(shapeName, Integer.parseInt(tickOfKeyFrame));
+      updateKeyframeSelector(shapeName);
     } catch (IllegalArgumentException iae) {
       view.makeErrorSound();
     }
   }
 
+  private IShapeVisitor<String> getName = new ShapeNameVisitor();
+
   @Override
   public void selectShape(String shapeName) {
 
+    IAnimatorModel layerModel = currentLayer.getModel();
+
+    // If the shape doesn't exist then we don't bother updating fields.
+    if (!layerModel.getShapes().containsKey(shapeName)) {
+      return;
+    }
+    // Shape fields.
+    view.setCurrentShape(shapeName);
+    //shapeName.setText(name);
+
+    view.setShapeType(layerModel.getShapes().get(shapeName).accept(getName));
+
+    // Keyframe fields.
+    updateKeyframeSelector(shapeName);
+    if (layerModel.getKeyframes(shapeName).size() > 0) {
+      selectTick(shapeName, layerModel.getKeyframes(shapeName).firstKey());
+    }
+    // We don't select a keyframe if there are no keyframes.
+    // This will leave the keyframes fields on whatever they were previously.
+    // I'm okay with this.
   }
 
+  /**
+   * A helper method to update the shape selector.
+   */
+  private void updateShapes() {
+
+    IAnimatorModel layerModel = currentLayer.getModel();
+
+    List<String> shapesToDisplay = new ArrayList<String>();
+    for (String name: layerModel.getShapeNames()) {
+      shapesToDisplay.add(name);
+    }
+    view.setAvailableShapes(shapesToDisplay);
+  }
+
+  /**
+   * A helper method to update the keyframe selector.
+   * @param name  The name of the shape to use to lookup keyframes.
+   */
+  private void updateKeyframeSelector(String name) {
+
+    IAnimatorModel layerModel = currentLayer.getModel();
+
+    List<String> ticksToDisplay = new ArrayList<String>();
+    for (Integer tick: layerModel.getKeyframes(name).keySet()) {
+      ticksToDisplay.add(Integer.toString(tick));
+    }
+    view.setAvailableTicks(ticksToDisplay);
+  }
+
+  private static String DEFAULT = "100";
+
   @Override
-  public void selectTick(String shapeName, String tick) {
+  public void selectTick(String shapeName, Integer tick) {
+
+    IAnimatorModel layerModel = currentLayer.getModel();
+
+    String w = DEFAULT;
+    String h = DEFAULT;
+    String x = DEFAULT;
+    String y = DEFAULT;
+    String r = DEFAULT;
+    String g = DEFAULT;
+    String b = DEFAULT;
+    // If we have actually selected the New Keyframe we just want to use the playback tick.
+    if (tick == null) {
+      tick = this.tick;
+    }
+    if (shapeName == null || !layerModel.getShapeNames().contains(shapeName)) {
+      return;
+    }
+    SortedMap<Integer, IShape> keyframes = layerModel.getKeyframes(shapeName);
+    if (keyframes.size() > 0) {
+      IShape state;
+      SortedMap<Integer, IShape> tailMap = keyframes.tailMap(tick);
+      SortedMap<Integer, IShape> headMap = keyframes.headMap(tick);
+      if (keyframes.containsKey(tick)) {
+        state = keyframes.get(tick);
+        // I have this extra from the bottom since I think getShapeAtTick may have rounding errors.
+      } else if (tailMap.size() > 0 && headMap.size() > 0) {
+        state = layerModel.getShapeAtTick(shapeName, tick);
+      } else if (tailMap.size() > 0) {
+        state = keyframes.get(tailMap.firstKey());
+      } else {
+        state = keyframes.get(headMap.firstKey());
+      }
+      w = Integer.toString(state.getSize().getWidth());
+      h = Integer.toString(state.getSize().getHeight());
+      x = Integer.toString(state.getPosition().getX());
+      y = Integer.toString(state.getPosition().getY());
+      r = Integer.toString(state.getColor().getRed());
+      g = Integer.toString(state.getColor().getGreen());
+      b = Integer.toString(state.getColor().getBlue());
+    }
+    // We do NOT set the selected tick. That must be done somewhere else.
+
+    List<String> components = new ArrayList<String>();
+    components.addAll(Arrays.asList(Integer.toString(tick), x, y, w, h, r, g, b));
+    view.setTextFields(components);
 
   }
 }

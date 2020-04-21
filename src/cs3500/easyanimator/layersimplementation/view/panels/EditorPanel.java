@@ -13,6 +13,8 @@ import java.util.List;
  */
 public class EditorPanel extends JPanel {
 
+  private static String NEW_KEYFRAME = "New Keyframe";
+  private static String NEW_SHAPE = "New Shape";
   private static String[] DEFAULT_SHAPES = new String[]{"rectangle", "oval"};
   private static final Dimension EDITOR_PANEL_SIZE = new Dimension(300, 500);
   private static final Color EDITOR_PANEL_BACKGROUND = Color.GRAY;
@@ -103,7 +105,8 @@ public class EditorPanel extends JPanel {
             selectShape.getSelectedItem().toString()));
 
     selectTick.addActionListener(evt -> editorControls.selectTick(
-            selectShape.getSelectedItem().toString(), selectTick.getSelectedItem().toString()));
+            selectShape.getSelectedItem().toString(),
+            Integer.parseInt(selectTick.getSelectedItem().toString())));
 
     addSaveShapeListener(editorControls);
 
@@ -173,6 +176,7 @@ public class EditorPanel extends JPanel {
     for (String s: shapes) {
       selectShape.addItem(s);
     }
+    this.selectShape.addItem(NEW_SHAPE);
   }
 
   public void setCurrentShape(String shape) {
@@ -188,25 +192,26 @@ public class EditorPanel extends JPanel {
     }
   }
 
-  public void setAvailableTicks(List<Integer> ticks) {
+  public void setAvailableTicks(List<String> ticks) {
     selectTick.removeAllItems();
-    for (int i: ticks) {
-      selectTick.addItem(Integer.toString(i));
+    for (String s: ticks) {
+      selectTick.addItem(s);
     }
+    this.selectTick.addItem(NEW_KEYFRAME);
   }
 
-  public void setTextFields(List<Integer> textFields) {
+  public void setTextFields(List<String> textFields) {
     if (textFields.size() > 8) {
       throw new IllegalArgumentException("Too many components!");
     }
 
-    keyFrameTick.setText(Integer.toString(textFields.get(0)));
-    keyFrameX.setText(Integer.toString(textFields.get(1)));
-    keyFrameY.setText(Integer.toString(textFields.get(2)));
-    keyFrameWidth.setText(Integer.toString(textFields.get(3)));
-    keyFrameHeight.setText(Integer.toString(textFields.get(4)));
-    keyFrameR.setText(Integer.toString(textFields.get(5)));
-    keyFrameG.setText(Integer.toString(textFields.get(6)));
-    keyFrameB.setText(Integer.toString(textFields.get(7)));
+    keyFrameTick.setText(textFields.get(0));
+    keyFrameX.setText(textFields.get(1));
+    keyFrameY.setText(textFields.get(2));
+    keyFrameWidth.setText(textFields.get(3));
+    keyFrameHeight.setText(textFields.get(4));
+    keyFrameR.setText(textFields.get(5));
+    keyFrameG.setText(textFields.get(6));
+    keyFrameB.setText(textFields.get(7));
   }
 }
