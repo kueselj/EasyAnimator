@@ -111,7 +111,7 @@ public class LayerView extends JFrame implements ILayerView {
   }
 
   @Override
-  public void setLayers(List<Integer> layers) {
+  public void setLayers(List<String> layers) {
     layerPanel.setLayers(layers);
   }
 

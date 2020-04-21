@@ -77,7 +77,7 @@ public interface ILayerView {
   void setTextFields(List<String> components);
 
   /**
-   * Sets the available layers as a list of integers representing the layers. Should pass on
+   * Sets the available layers as a list of strings representing the layer names. Should pass on
    * to the layers selector component.
    * @param layers  The names of the layers.
    */

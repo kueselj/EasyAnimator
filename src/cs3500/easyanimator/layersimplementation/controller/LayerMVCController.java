@@ -2,16 +2,19 @@ package cs3500.easyanimator.layersimplementation.controller;
 
 import cs3500.easyanimator.layersimplementation.view.ILayerView;
 import cs3500.easyanimator.model.Color;
+import cs3500.easyanimator.model.EasyAnimator;
 import cs3500.easyanimator.model.IAnimatorModel;
 
 import cs3500.easyanimator.model.Point;
 
 import cs3500.easyanimator.model.ILayeredAnimatorModel;
+import cs3500.easyanimator.model.layers.BasicLayer;
 import cs3500.easyanimator.model.layers.ILayer;
 import cs3500.easyanimator.model.shapes.*;
 
 import javax.swing.Timer;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Controller specifically for the layer implementation of a model.
@@ -58,6 +61,7 @@ public class LayerMVCController implements ILayerMVCController,
     // We update the shapes and select a layer before going visible.
     currentLayer = model.getLayer(0); // We expect at least one layer.
     updateShapes();
+    updateLayers();
     view.makeVisible();
   }
 
@@ -297,6 +301,14 @@ public class LayerMVCController implements ILayerMVCController,
   }
 
   /**
+   * A helper method to update the layer selector.
+   */
+  private void updateLayers() {
+    view.setLayers(model.getLayers().stream().map(l -> l.getName()).collect(Collectors.toList()));
+    refreshDrawing();
+  }
+
+  /**
    * A helper method to update the shape selector.
    */
   private void updateShapes() {
@@ -375,5 +387,104 @@ public class LayerMVCController implements ILayerMVCController,
     components.addAll(Arrays.asList(Integer.toString(tick), x, y, w, h, r, g, b));
     view.setTextFields(components);
 
+  }
+
+  private static String NEW_LAYER = "New Layer";
+
+  /**
+   * A private helper method to return an ILayer by name in the model or null.
+   * @param name  The name of the layer.
+   * @return  The ilayer or null if it's not found.
+   */
+  private ILayer getLayerByName(String name) {
+    return model.getLayers().stream()
+            .filter(l -> l.getName().equals(name))
+            .findFirst().orElse(null);
+  }
+
+  @Override
+  public void selectLayer(String layer) {
+    if (layer == null || layer.equals(NEW_LAYER)) {
+      return; // We don't actually do anything ...
+    }
+    ILayer newlySelectedLayer = getLayerByName(layer);
+    if (newlySelectedLayer == null) {
+      view.makeErrorSound();
+      return;
+    }
+    currentLayer = newlySelectedLayer;
+    updateShapes();
+  }
+
+  @Override
+  public void deleteLayer(String layer) {
+    if (layer == null || layer.equals(NEW_LAYER)) {
+      return; // We don't actually do anything ...
+    }
+    ILayer layerToDelete = getLayerByName(layer);
+    if (layerToDelete == null) {
+      view.makeErrorSound();
+      return;
+    } else if (model.getLayers().size() < 2) {
+      view.makeErrorSound(); // We don't want to deal with no layers, that's an extra state ...
+    }
+    model.removeLayer(layerToDelete);
+    currentLayer = model.getLayer(0); // Get the remaining layer.
+    updateShapes();
+    updateLayers();
+  }
+
+  @Override
+  public void saveLayer(String selectedLayer, String layerName) {
+    // Is it an invalid new layer name?
+    if (getLayerByName(layerName) != null || layerName == null || layerName.equals(NEW_LAYER)) {
+      // Is there a layer already with this name? Then we complain.
+      view.makeErrorSound();
+      return;
+    }
+
+    if (selectedLayer == null || selectedLayer.equals(NEW_LAYER)) {
+      // We are saving a new layer.
+      ILayer newLayer = new BasicLayer(layerName, true, new EasyAnimator());
+      model.addLayer(newLayer);
+      currentLayer = newLayer;
+      updateShapes();
+    } else {
+      // We are renaming a layer.
+      ILayer oldLayer = getLayerByName(selectedLayer);
+      if (oldLayer == null) {
+        // Does this layer actually exist?
+        view.makeErrorSound();
+        return;
+      }
+      int oldIndex = model.getLayers().indexOf(oldLayer);
+      int lastIndex = model.getLayers().size() - 1;
+      ILayer newLayer = oldLayer.setName(layerName);
+      model.removeLayer(oldLayer);
+      model.addLayer(newLayer);
+      for (int i = lastIndex; i > oldIndex; i--) {
+        model.swapLayer(i, i - 1);
+        // The new layer when i = oldIndex + 1 will be swapped into oldIndex.
+      }
+      currentLayer = newLayer;
+      updateShapes();
+    }
+    updateLayers();
+  }
+
+  @Override
+  public void moveLayer(String layer, int delta) {
+    ILayer selectedLayer = getLayerByName(layer);
+    if (selectedLayer == null) {
+      view.makeErrorSound();
+      return;
+    }
+    int layerIndex = model.getLayers().indexOf(selectedLayer);
+    if (delta + layerIndex < 0 || delta + layerIndex >= model.getLayers().size()) {
+      view.makeErrorSound();
+      return;
+    }
+    model.swapLayer(layerIndex, delta + layerIndex);
+    updateLayers();
   }
 }
