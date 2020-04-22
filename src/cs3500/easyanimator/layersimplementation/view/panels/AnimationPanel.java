@@ -35,10 +35,6 @@ public class AnimationPanel extends JPanel {
     //setLayout(new BorderLayout());
 
     List<IShape> shapes = new ArrayList<>();
-    IShape shp = new Oval(new WidthHeight(30, 30), new cs3500.easyanimator.model.Point(60, 60), new Color(100, 100, 100));
-    IShape shpd = new Rectangle(new WidthHeight(30, 30), new cs3500.easyanimator.model.Point(450, 450), new Color(255, 100, 100));
-    shapes.add(shp);
-    shapes.add(shpd);
     setShapes(shapes);
 
     //DRAW PANEL

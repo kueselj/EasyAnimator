@@ -29,6 +29,15 @@ public interface ILayeredAnimatorModel extends ILayeredAnimatorModelViewOnly {
   void addLayer(ILayer layer);
 
   /**
+   * Add a new layer to this model, at the specified index.
+   * @param layer The layer to add to the panel.
+   * @param index The index to add this layer at.
+   * @throws IllegalArgumentException If the layer is uninitialized,
+   *                                  or the index is out of range for insertion.
+   */
+  void addLayer(ILayer layer, int index);
+
+  /**
    * Remove a layer from this model.
    * @param layer   The layer instance to remove from this model.
    * @throws IllegalArgumentException If the layer is uninitialized.

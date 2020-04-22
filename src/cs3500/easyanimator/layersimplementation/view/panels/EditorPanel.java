@@ -104,7 +104,7 @@ public class EditorPanel extends JPanel {
    * @return  The parsed integer or null if the string was null.
    */
   private static Integer integerOrNull(String s) {
-    if (s == null) {
+    if (s == null || s == NEW_KEYFRAME) {
       return null;
     } else {
       return Integer.parseInt(s);
@@ -147,23 +147,26 @@ public class EditorPanel extends JPanel {
   }
 
   /**
-   * Listener for the saveShape button.
+   * Listener for the saveShape button. This is here because save shape actually could correspond
+   * to two different actions.
    * @param editorControls the controls it can use.
    */
   private void addSaveShapeListener(EditorControls editorControls) {
     saveShape.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        //New Shape
-        if(selectShape.getSelectedItem().toString() == "New Shape") {
+        if(NEW_SHAPE.equals(selectShape.getSelectedItem())) {
+          // We are adding a new shape.
           editorControls.addShape(shapeName.getText(),
                   (String) selectShapeType.getSelectedItem());
         }
-        //Rename a Shape
-        else if (selectShape.getSelectedItem().toString() != shapeName.getText()) {
+        // Rename a Shape
+        else {
+          // Otherwise, we are renaming (if the text is different,
+          // that's for the controller to figure out).
           editorControls.renameShape(
+                  (String) selectShape.getSelectedItem(),
                   shapeName.getText(),
-                  (String) selectShapeType.getSelectedItem(),
                   (String) selectShapeType.getSelectedItem());
         }
       }

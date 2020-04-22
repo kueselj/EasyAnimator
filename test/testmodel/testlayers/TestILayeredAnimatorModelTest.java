@@ -364,4 +364,58 @@ public abstract class TestILayeredAnimatorModelTest {
             OVAL, model.getShapesAtTick(25).get(0));
 
   }
+
+  /**
+   * A test to verify the new addLayer (with an index) fails with bad arguments (out of range
+   * indices or a null layer).
+   */
+  @Test
+  public void testAddLayerWithIndexBadArguments() {
+    ILayeredAnimatorModel model = doubleLayered();
+    // First check null layer.
+    try {
+      model.addLayer(null, 0);
+      fail("Expected addLayer with index to fail with uninitialized layer.");
+    } catch (IllegalArgumentException iae) {
+      // Nice, we wanted this.
+    }
+    // Now we check out of bounds indices.
+    // Some valid thirdLayer.
+    ILayer thirdLayer = LAYER_TWO.setName("Third Layer");
+    try {
+      model.addLayer(thirdLayer, -1);
+      fail("Expected addLayer with index to fail with out of bounds index to the left.");
+    } catch (IllegalArgumentException iae) {
+      // Should be here.
+    }
+    try {
+      model.addLayer(thirdLayer, 3);
+      fail("Expected addLayer with index to fail with out of bounds index to the right.");
+    } catch (IllegalArgumentException iae) {
+      // This is right.
+    }
+  }
+
+  /**
+   * A set of rules to check that addLayer with index works as expected.
+   */
+  @Test
+  public void testAddLayerWithIndexWorks() {
+    ILayeredAnimatorModel model = doubleLayered();
+    // If I add layer two again, but at index 0,
+    model.addLayer(LAYER_TWO, 0);
+    // then I should see it in the right spot with getLayers.
+    assertEquals("Expected to get layer two at index 0 since I added it there.",
+            LAYER_TWO, model.getLayers().get(0));
+    assertEquals("After adding the layer, I should now have three layers.",
+            3, model.getLayers().size());
+    // additionally when I get shapesAtTick I should get an oval, rectangle, oval.
+    assertEquals("Expected three shapes at tick 25.",
+            3, model.getShapesAtTick(25).size());
+    assertEquals("Expected the first shape at tick 25 to be the oval.",
+            OVAL, model.getShapesAtTick(25).get(0));
+    assertEquals("Expected the last shape at tick 25 to be the oval.",
+            OVAL, model.getShapesAtTick(25).get(2));
+
+  }
 }

@@ -39,6 +39,17 @@ public class LayeredAnimatorModel implements ILayeredAnimatorModel {
   }
 
   @Override
+  public void addLayer(ILayer layer, int index) {
+    if (layer == null) {
+      throw new IllegalArgumentException("Unable to add uninitialized layer.");
+    } else if (index < 0 || index > layers.size()) {
+      // I couldn't use indexCheck because index == list.size.
+      throw new IllegalArgumentException("The given index to add a layer is out of bounds.");
+    }
+    layers.add(index, layer); // BOOM! Does the shifting for me.
+  }
+
+  @Override
   public void removeLayer(ILayer layer) {
     if (!layers.contains(layer)) {
       throw new IllegalArgumentException("Unable to remove layer that is not in the model.");
@@ -93,6 +104,11 @@ public class LayeredAnimatorModel implements ILayeredAnimatorModel {
     // Our canvas size needs to stretch from the top-left-most offset,
     // down to the bottom-right-most point.
     // We can re-use getCanvasPosition for that top-left most point.
+    if (layers.size() == 0) {
+      // Hotfixed default.
+      return new WidthHeight(800, 600);
+    }
+
     Point topLeft = getCanvasPosition();
     int bottomRightX = topLeft.getX();
     int bottomRightY = topLeft.getY();
@@ -109,6 +125,11 @@ public class LayeredAnimatorModel implements ILayeredAnimatorModel {
 
   @Override
   public Point getCanvasPosition() {
+    if (layers.size() == 0) {
+      // Hotfixed default.
+      return new Point(0, 0);
+    }
+
     // We get the top-left most offset.
     int topLeftX = Integer.MAX_VALUE;
     int topLeftY = Integer.MAX_VALUE;

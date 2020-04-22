@@ -30,6 +30,8 @@ public class LayerMVCController implements ILayerMVCController,
   private ILayeredAnimatorModel model;
   private ILayerView view;
 
+  // Current layer can be null,
+  // for example if there are no layers in the editor, or none of them are selected.
   private ILayer currentLayer;
 
   /**
@@ -58,9 +60,8 @@ public class LayerMVCController implements ILayerMVCController,
       throw new IllegalArgumentException("Can't start if speed has not been set.");
     }
 
-    // We update the shapes and select a layer before going visible.
-    currentLayer = model.getLayer(0); // We expect at least one layer.
-    updateShapes();
+    // We update the layers before going visible.
+    // Current layer is null by default.
     updateLayers();
     view.makeVisible();
   }
@@ -162,10 +163,24 @@ public class LayerMVCController implements ILayerMVCController,
 
   @Override
   public void addShape(String shapeName, String shapeType) {
+    shapeName = shapeName.trim();
+    if (currentLayer == null) {
+      // If there is no currently selected layer then this is not applicable.
+      view.makeErrorSound();
+      return;
+    }
+
     // We make sure that there isn't a same name in the entire stack of layers.
     // This isn't a piece of state that the model itself can maintain, instead as users we must.
     // Whilst the editor is unaffected if we don't, it does affect text views.
     IAnimatorModel layerModel = currentLayer.getModel();
+
+    if (shapeName.equals("New Shape") || shapeName.equals("")) {
+      System.out.println("Bad name to add.");
+      view.makeErrorSound();
+      return;
+    }
+
     // If we aren't replacing a shape in the current layer,
     // then we'd be adding a shape with the same name.
     // We error out in this specific case.
@@ -189,6 +204,12 @@ public class LayerMVCController implements ILayerMVCController,
 
   @Override
   public void deleteShape(String shapeName) {
+    if (currentLayer == null) {
+      // If there is no currently selected layer then this is not applicable.
+      view.makeErrorSound();
+      return;
+    }
+
     IAnimatorModel layerModel = currentLayer.getModel();
 
     try {
@@ -197,10 +218,18 @@ public class LayerMVCController implements ILayerMVCController,
     } catch (IllegalArgumentException iae) {
       view.makeErrorSound();
     }
+    updateShapes();
+    updateKeyframeSelector(null);
   }
 
   @Override
   public void renameShape(String name, String newName, String shapeType) {
+    if (currentLayer == null) {
+      // If there is no currently selected layer then this is not applicable.
+      view.makeErrorSound();
+      return;
+    }
+
     // This is a trickier situation than calling something in the model.
     IAnimatorModel layerModel = currentLayer.getModel();
 
@@ -209,6 +238,14 @@ public class LayerMVCController implements ILayerMVCController,
     if (!shapeNames.contains(name)) {
       System.out.println("Unable to rename non-existent shape.");
       view.makeErrorSound();
+      return;
+    }
+
+    // Rename is also how we change the type of shape something is.
+    if (newName.equals(name)) {
+      currentLayer.getModel().addShape(name, SHAPE_FACTORY.getShape(shapeType,
+              DEFAULT_WH, DEFAULT_POS, DEFAULT_COL));
+      refreshDrawing(); // Shape might have changed.
       return;
     }
 
@@ -241,6 +278,11 @@ public class LayerMVCController implements ILayerMVCController,
                            String x, String y,
                            String width, String height,
                            String r, String g, String b) {
+    if (currentLayer == null) {
+      // If there is no currently selected layer then this is not applicable.
+      view.makeErrorSound();
+      return;
+    }
 
     IAnimatorModel layerModel = currentLayer.getModel();
 
@@ -254,7 +296,6 @@ public class LayerMVCController implements ILayerMVCController,
               new Color(Integer.parseInt(r), Integer.parseInt(g), Integer.parseInt(b))));
       layerModel.addKeyframe(shapeName, keyframe, Integer.parseInt(tick));
       updateKeyframeSelector(shapeName);
-
     } catch (IllegalArgumentException iae) {
       view.makeErrorSound();
     }
@@ -262,6 +303,11 @@ public class LayerMVCController implements ILayerMVCController,
 
   @Override
   public void deleteKeyFrame(String shapeName, String tickOfKeyFrame) {
+    if (currentLayer == null) {
+      // If there is no currently selected layer then this is not applicable.
+      view.makeErrorSound();
+      return;
+    }
 
     IAnimatorModel layerModel = currentLayer.getModel();
 
@@ -277,6 +323,11 @@ public class LayerMVCController implements ILayerMVCController,
 
   @Override
   public void selectShape(String shapeName) {
+    if (currentLayer == null) {
+      // If there is no currently selected layer then this is not applicable.
+      view.makeErrorSound();
+      return;
+    }
 
     IAnimatorModel layerModel = currentLayer.getModel();
 
@@ -305,13 +356,17 @@ public class LayerMVCController implements ILayerMVCController,
    */
   private void updateLayers() {
     view.setLayers(model.getLayers().stream().map(l -> l.getName()).collect(Collectors.toList()));
-    refreshDrawing();
+    refreshDrawing(); // We refresh the drawing so users can see their layer changes working.
   }
 
   /**
    * A helper method to update the shape selector.
    */
   private void updateShapes() {
+    if (currentLayer == null) {
+      view.setAvailableShapes(Collections.EMPTY_LIST);
+      return;
+    }
 
     IAnimatorModel layerModel = currentLayer.getModel();
 
@@ -324,9 +379,19 @@ public class LayerMVCController implements ILayerMVCController,
 
   /**
    * A helper method to update the keyframe selector.
-   * @param name  The name of the shape to use to lookup keyframes.
+   * @param name  The name of the shape to use to lookup keyframes. Null if there is no shape.
    */
   private void updateKeyframeSelector(String name) {
+    if (name == null) {
+      view.setAvailableTicks(Collections.EMPTY_LIST);
+      return;
+    }
+
+    if (currentLayer == null) {
+      // If there is no currently selected layer then this is not applicable.
+      view.makeErrorSound();
+      return;
+    }
 
     IAnimatorModel layerModel = currentLayer.getModel();
 
@@ -341,6 +406,11 @@ public class LayerMVCController implements ILayerMVCController,
 
   @Override
   public void selectTick(String shapeName, Integer tick) {
+    if (currentLayer == null) {
+      // If there is no currently selected layer then this is not applicable.
+      view.makeErrorSound();
+      return;
+    }
 
     IAnimatorModel layerModel = currentLayer.getModel();
 
@@ -429,15 +499,19 @@ public class LayerMVCController implements ILayerMVCController,
       view.makeErrorSound(); // We don't want to deal with no layers, that's an extra state ...
     }
     model.removeLayer(layerToDelete);
-    currentLayer = model.getLayer(0); // Get the remaining layer.
+    currentLayer = null;
     updateShapes();
+    updateKeyframeSelector(null);
     updateLayers();
   }
 
   @Override
   public void saveLayer(String selectedLayer, String layerName) {
+    layerName = layerName.trim(); // We don't want different layer names by spaces.
+
     // Is it an invalid new layer name?
-    if (getLayerByName(layerName) != null || layerName == null || layerName.equals(NEW_LAYER)) {
+    if (getLayerByName(layerName) != null || layerName == null ||
+            layerName.equals(NEW_LAYER) || layerName.equals("")) {
       // Is there a layer already with this name? Then we complain.
       view.makeErrorSound();
       return;
@@ -445,7 +519,9 @@ public class LayerMVCController implements ILayerMVCController,
 
     if (selectedLayer == null || selectedLayer.equals(NEW_LAYER)) {
       // We are saving a new layer.
-      ILayer newLayer = new BasicLayer(layerName, true, new EasyAnimator());
+      IAnimatorModel newModel = new EasyAnimator();
+      newModel.setCanvas(model.getCanvasPosition(), model.getCanvasSize());
+      ILayer newLayer = new BasicLayer(layerName, true, newModel);
       model.addLayer(newLayer);
       currentLayer = newLayer;
       updateShapes();
@@ -458,14 +534,9 @@ public class LayerMVCController implements ILayerMVCController,
         return;
       }
       int oldIndex = model.getLayers().indexOf(oldLayer);
-      int lastIndex = model.getLayers().size() - 1;
       ILayer newLayer = oldLayer.setName(layerName);
       model.removeLayer(oldLayer);
-      model.addLayer(newLayer);
-      for (int i = lastIndex; i > oldIndex; i--) {
-        model.swapLayer(i, i - 1);
-        // The new layer when i = oldIndex + 1 will be swapped into oldIndex.
-      }
+      model.addLayer(newLayer, oldIndex);
       currentLayer = newLayer;
       updateShapes();
     }
