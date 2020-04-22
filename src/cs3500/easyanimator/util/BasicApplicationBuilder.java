@@ -18,8 +18,6 @@ import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.layers.BasicLayer;
 import cs3500.easyanimator.model.layers.ILayer;
 import cs3500.easyanimator.model.shapes.WidthHeight;
-import cs3500.easyanimator.provider.controller.AnimatorController;
-import cs3500.easyanimator.provider.model.AnimatorModel;
 import cs3500.easyanimator.view.BasicViewFactory;
 import cs3500.easyanimator.view.EditorSwingView;
 import cs3500.easyanimator.view.IAnimatorView;
@@ -121,15 +119,6 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
       MVCController controller = new MVCController(model);
       controller.setView(new EditorSwingView(controller), this.speed);
       controller.start();
-    } else if (viewType.equals("provider")) {
-      int canvasX = model.getCanvasSize().getWidth();
-      int canvasY = model.getCanvasSize().getHeight();
-      AnimatorModel adaptedModel =
-              //TODO just put dummy values here for now.
-              new AnimatorModel(model, canvasX, canvasY, 0, 0);
-      AnimatorController controller = new AnimatorController(adaptedModel, this.speed);
-
-      return; // Quit out early.
     } else {
       IAnimatorView view;
       try {

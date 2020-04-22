@@ -1,4 +1,0 @@
-After sending our code we only had to make one change that we sent to our customer. When setting
-the speed in our view we accidentally set the timer DELAY to that speed instead of making the
-tick speed that speed. They noticed this issue, asked us about it, and we sent them an update
-fixing the issue.
