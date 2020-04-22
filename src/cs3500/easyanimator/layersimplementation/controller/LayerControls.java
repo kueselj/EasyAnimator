@@ -17,7 +17,7 @@ public interface LayerControls {
   void deleteLayer(String layer);
 
   /**
-   * Save the layer with the given name with a new name,
+   * Save the layer with the given name with a new name.
    * @param selectedLayer The name of the layer selected,
    *                      if "New Layer" then this action creates a layer.
    * @param layerName     The new name of the layer.

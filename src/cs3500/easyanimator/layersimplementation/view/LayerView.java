@@ -6,15 +6,11 @@ import cs3500.easyanimator.layersimplementation.controller.PlaybackControls;
 import cs3500.easyanimator.layersimplementation.view.panels.AnimationPanel;
 import cs3500.easyanimator.layersimplementation.view.panels.EditorPanel;
 import cs3500.easyanimator.layersimplementation.view.panels.LayerPanel;
-import cs3500.easyanimator.model.Color;
-import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.shapes.IShape;
-import cs3500.easyanimator.model.shapes.Oval;
-import cs3500.easyanimator.model.shapes.WidthHeight;
 
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
+import javax.swing.JFrame;
+import java.awt.BorderLayout;
+import java.awt.Toolkit;
 import java.util.List;
 
 /**
@@ -31,7 +27,11 @@ public class LayerView extends JFrame implements ILayerView {
   private EditorPanel editorPanel;
   private LayerPanel layerPanel;
 
-  //TODO this constructor needs to be changed, no width height probably.
+  /**
+   * Construct a new LayerView with a given width and height of the window.
+   * @param width   The width of the window.
+   * @param height  The height of the window.
+   */
   public LayerView(int width, int height) {
 
     //Initialize panels
@@ -115,13 +115,10 @@ public class LayerView extends JFrame implements ILayerView {
     layerPanel.setLayers(layers);
   }
 
-
-
-
   private static Toolkit tk = Toolkit.getDefaultToolkit();
 
   @Override
   public void makeErrorSound() {
-        tk.beep();
-      }
+    tk.beep();
+  }
 }

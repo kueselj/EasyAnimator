@@ -1,11 +1,18 @@
 package cs3500.easyanimator.layersimplementation.view.panels;
 
-import com.sun.jdi.StringReference;
-
 import cs3500.easyanimator.layersimplementation.controller.EditorControls;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.BoxLayout;
+
+import java.awt.Dimension;
+import java.awt.Color;
+import java.awt.BorderLayout;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -40,7 +47,6 @@ public class EditorPanel extends JPanel {
   private JTextField keyFrameR;
   private JTextField keyFrameG;
   private JTextField keyFrameB;
-  private JTextField keyFrameRotation;
 
   private JButton saveKeyframe;
   private JButton deleteKeyframe;
@@ -89,8 +95,6 @@ public class EditorPanel extends JPanel {
 
     keyFrameB = createField("B");
 
-    keyFrameRotation = createField("Degrees Rotated");
-
     saveKeyframe = new JButton("Save Keyframe");
     add(saveKeyframe);
 
@@ -112,8 +116,8 @@ public class EditorPanel extends JPanel {
   }
 
   /**
-   * The editor features that the panel can use.
-   * @param editorControls
+   * Add editor controls to this panel.
+   * @param editorControls  The listener for the edit events from this editor panel.
    */
   public void addEditorControls(EditorControls editorControls) {
     selectShape.addActionListener(evt -> editorControls.selectShape(
@@ -155,7 +159,7 @@ public class EditorPanel extends JPanel {
     saveShape.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(ActionEvent e) {
-        if(NEW_SHAPE.equals(selectShape.getSelectedItem())) {
+        if (NEW_SHAPE.equals(selectShape.getSelectedItem())) {
           // We are adding a new shape.
           editorControls.addShape(shapeName.getText(),
                   (String) selectShapeType.getSelectedItem());
@@ -189,6 +193,10 @@ public class EditorPanel extends JPanel {
     return field;
   }
 
+  /**
+   * Set the available shapes to edit in this panel.
+   * @param shapes  The shapes to list as editable.
+   */
   public void setAvailableShapes(List<String> shapes) {
     selectShape.removeAllItems();
     for (String s: shapes) {
@@ -197,19 +205,31 @@ public class EditorPanel extends JPanel {
     this.selectShape.addItem(NEW_SHAPE);
   }
 
+  /**
+   * Set the current shape that is being edited in this panel.
+   * @param shape The shape that is being edited.
+   */
   public void setCurrentShape(String shape) {
     shapeName.setText(shape);
   }
 
+  /**
+   * Set the type of the shape that is currently being edited.
+   * @param shapeType The type of the shape that is being edited.
+   */
   public void setShapeType(String shapeType) {
-    if (shapeType == "rectangle") {
+    if (shapeType.equals("rectangle")) {
       selectShapeType.setSelectedIndex(0);
     }
-    else if (shapeType == "oval") {
+    else if (shapeType.equals("oval")) {
       selectShapeType.setSelectedIndex(1);
     }
   }
 
+  /**
+   * Set the available keyframe tick times.
+   * @param ticks A list of the available tick times.
+   */
   public void setAvailableTicks(List<String> ticks) {
     selectTick.removeAllItems();
     for (String s: ticks) {
@@ -218,6 +238,10 @@ public class EditorPanel extends JPanel {
     this.selectTick.addItem(NEW_KEYFRAME);
   }
 
+  /**
+   * Set the text field values that are available on this view.
+   * @param textFields  The field properties that should be set as strings.
+   */
   public void setTextFields(List<String> textFields) {
     if (textFields.size() > 8) {
       throw new IllegalArgumentException("Too many components!");

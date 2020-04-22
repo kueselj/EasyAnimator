@@ -2,8 +2,13 @@ package cs3500.easyanimator.layersimplementation.view.panels;
 
 import cs3500.easyanimator.layersimplementation.controller.PlaybackControls;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+
+import java.awt.Dimension;
+import java.awt.Color;
+import java.awt.GridLayout;
 
 /**
  * Panel only consisting of the playback control features.

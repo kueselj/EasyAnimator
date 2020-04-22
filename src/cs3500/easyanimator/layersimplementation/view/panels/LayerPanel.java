@@ -2,8 +2,17 @@ package cs3500.easyanimator.layersimplementation.view.panels;
 
 import cs3500.easyanimator.layersimplementation.controller.LayerControls;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import javax.swing.BoxLayout;
+
+import java.awt.Dimension;
+import java.awt.Color;
+import java.awt.BorderLayout;
+
 import java.util.List;
 
 /**
@@ -51,11 +60,10 @@ public class LayerPanel extends JPanel {
    * @param layerControls The instance of the controller to query with view requests.
    */
   public void addLayerControls(LayerControls layerControls) {
-    selectedLayer.addActionListener(e ->
-            {
-              layerControls.selectLayer((String) selectedLayer.getSelectedItem());
-              layerName.setText((String) selectedLayer.getSelectedItem());
-            });
+    selectedLayer.addActionListener(e -> {
+      layerControls.selectLayer((String) selectedLayer.getSelectedItem());
+      layerName.setText((String) selectedLayer.getSelectedItem());
+    });
     saveLayer.addActionListener(e ->
             layerControls.saveLayer((String) selectedLayer.getSelectedItem(),
                     layerName.getText()));

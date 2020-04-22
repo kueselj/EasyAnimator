@@ -454,36 +454,6 @@ public abstract class AnimatorModelTest {
     assertEquals(model.getCanvasSize(), new WidthHeight(100, 100));
   }
 
-  // Instructor interpretation tests. We had a different idea of how shapes would work.
-
-  /**
-   * Test that the model is compatible with the style of motions provided by instructors.
-   * Specifically a 1-tick long motions for teleports.
-   */
-  @Test
-  public void testOneTickTeleport() {
-    // These ideas of motions are a little frustrating.
-    // IMO 2-tick long motions e.g starting at tick = 1, and ending at t = 2 [1,2)
-    //  make more sense.
-    // But we have to be compatible with their inputs, so this is what we get.
-    WidthHeight startWH = new WidthHeight(100, 100);
-    WidthHeight endWH = new WidthHeight(200, 200);
-    Color startColor = new Color(200, 200, 200);
-    Point startPoint = new Point(200, 200);
-    model.addShape("sample", new Rectangle(startWH, startPoint, startColor));
-    model.addMotion("sample", new BasicMotion(1, 1,
-            startWH, startWH,
-            startPoint, startPoint,
-            startColor, startColor));
-    model.addMotion("sample", new BasicMotion(1, 10,
-            startWH, endWH,
-            startPoint, startPoint,
-            startColor, startColor));
-    // Broken test? I don't know. We are too far gone to worry about this.
-    // assertEquals("Expected the sample shape to have 2 motions.",
-    //        2, model.getSortedMotions().get("sample").size());
-  }
-
   // New utility method checks.
 
   /**

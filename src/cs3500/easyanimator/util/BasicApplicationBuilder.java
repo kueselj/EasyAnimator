@@ -6,7 +6,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import cs3500.easyanimator.controller.MVCController;
-import cs3500.easyanimator.layersimplementation.controller.ILayerMVCController;
 import cs3500.easyanimator.layersimplementation.controller.LayerMVCController;
 import cs3500.easyanimator.layersimplementation.view.ILayerView;
 import cs3500.easyanimator.layersimplementation.view.LayerView;
@@ -71,7 +70,8 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
   public void launch() throws IllegalStateException {
     // We need the output for the text views. So it is supplied to the factory.
     // It's simply unused for visual views.
-    if (viewType == null || (!viewType.equals("edit") && !viewType.equals("oldedit") && input == null)) {
+    if (viewType == null || (!viewType.equals("edit") &&
+            !viewType.equals("oldedit") && input == null)) {
       // We hotfix in a change to allow you to edit a fresh model.
       throw new IllegalStateException("Failed to provide both a view type and an input " +
               "file.");
@@ -97,7 +97,7 @@ public class BasicApplicationBuilder implements IApplicationBuilder {
       ILayerView view = new LayerView(canvasX, canvasY);
       LayerMVCController controller = new LayerMVCController(model, view);
       controller.setSpeed(speed);
-      controller.go();
+      controller.start();
       // Skip the rest of the code that's here.
       return;
     }

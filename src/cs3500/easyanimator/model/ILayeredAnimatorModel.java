@@ -7,17 +7,17 @@ import cs3500.easyanimator.model.layers.ILayer;
  * layers. These are groups of shapes and their motions, that have names, and visibility. The order
  * of layers in this model determines the order of shapes delivered as a regular animator model.
  *
- * Note that this does not extend an IAnimatorModel, only the ViewOnly version. That is because
+ * <p>Note that this does not extend an IAnimatorModel, only the ViewOnly version. That is because
  * some operations such as addShape, and removeShape, and addMotion and removeMotion, and so on,
- * have no natural interpretation for layers.
+ * have no natural interpretation for layers.</p>
  *
- * Get shapes and get motions will still return what they need to. The only important difference is
- * that these will be lists made by compiling the results across all layers. The same thing happens
- * for canvases as well. There is one caveat to all of this, shapes across layers cannot have
+ * <p>Get shapes and get motions will still return what they need to. The only important difference
+ * is that these will be lists made by compiling the results across all layers. The same thing
+ * happens for canvases. There is one caveat to all of this, shapes across layers cannot have
  * duplicate names or there will be undefined behavior. The last added layer will have its shapes
- * placed last into getShapesAtTick so they are displayed on top.
+ * placed last into getShapesAtTick so they are displayed on top.</p>
  *
- * If a layer is not visible, then it won't appear in getShapesAtTick.
+ * <p>>If a layer is not visible, then it won't appear in getShapesAtTick.</p>
  */
 public interface ILayeredAnimatorModel extends ILayeredAnimatorModelViewOnly {
   /**
@@ -55,7 +55,7 @@ public interface ILayeredAnimatorModel extends ILayeredAnimatorModelViewOnly {
    * Swap the layers located at the given indices.
    * @param i   The index of the first layer to swap.
    * @param j   The index of the second layer to swap.
-   * @throws IllegalArgumentException
+   * @throws IllegalArgumentException If the indices are out of bounds.
    */
   void swapLayer(int i, int j);
 }

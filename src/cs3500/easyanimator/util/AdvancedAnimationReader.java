@@ -43,7 +43,7 @@ public class AdvancedAnimationReader {
     while (s.hasNextLine()) {
       String line = s.nextLine();
       Scanner lineScanner = new Scanner(line.trim());
-      if (lineScanner.hasNext() == false) {
+      if (!lineScanner.hasNext()) {
         continue;
       }
       String word = lineScanner.next();
@@ -60,7 +60,8 @@ public class AdvancedAnimationReader {
         case "motion":
           readMotion(lineScanner, builder);
           break;
-        case "#": // This was supposed to be caught by their scanner, but I guess I messed it up with lines.
+        case "#": // This was supposed to be caught by their scanner,
+          // but I guess I messed it up with lines.
           continue;
         // I'm scared to do keyframes away from their code.
         default:

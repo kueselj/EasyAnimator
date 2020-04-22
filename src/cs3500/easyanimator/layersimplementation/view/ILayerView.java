@@ -1,10 +1,16 @@
 package cs3500.easyanimator.layersimplementation.view;
 
-import cs3500.easyanimator.layersimplementation.controller.*;
+import cs3500.easyanimator.layersimplementation.controller.PlaybackControls;
+import cs3500.easyanimator.layersimplementation.controller.EditorControls;
+import cs3500.easyanimator.layersimplementation.controller.LayerControls;
+
 import cs3500.easyanimator.model.shapes.IShape;
 
 import java.util.List;
 
+/**
+ * An ILayerView is the interface behind a view of the animation's layers.
+ */
 public interface ILayerView {
 
   /**

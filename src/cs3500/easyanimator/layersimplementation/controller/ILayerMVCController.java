@@ -1,12 +1,16 @@
 package cs3500.easyanimator.layersimplementation.controller;
 
+/**
+ * An ILayerMVCController is a newly designed controller interface with a focus on putting more
+ * business logic in the controller and NOT the view.
+ */
 public interface ILayerMVCController {
 
   /**
    * Will start the animation with the given model and view.
    * @throws IllegalArgumentException if the model or view is null, or the speed has not been set.
    */
-  void go();
+  void start();
 
   /**
    * Refreshes the controller, controller will request all needed information from the model

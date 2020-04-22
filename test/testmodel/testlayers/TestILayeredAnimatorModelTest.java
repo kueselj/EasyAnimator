@@ -2,8 +2,6 @@ package testmodel.testlayers;
 
 import org.junit.Test;
 
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -16,7 +14,6 @@ import cs3500.easyanimator.model.LayeredAnimatorModel;
 import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.layers.BasicLayer;
 import cs3500.easyanimator.model.layers.ILayer;
-import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.model.shapes.Oval;
 import cs3500.easyanimator.model.shapes.Rectangle;
 import cs3500.easyanimator.model.shapes.WidthHeight;
@@ -61,6 +58,7 @@ public abstract class TestILayeredAnimatorModelTest {
 
   private static ILayer LAYER_ONE;
   private static ILayer LAYER_TWO;
+
   static {
     IAnimatorModel modelOne = new EasyAnimator();
     modelOne.addShape("rectangle", RECT);

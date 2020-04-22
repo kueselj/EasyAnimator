@@ -57,6 +57,14 @@ public class LayeredAnimatorModel implements ILayeredAnimatorModel {
     layers.remove(layer);
   }
 
+  @Override
+  public void removeLayer(int index) {
+    if (!indexCheck(index)) {
+      throw new IllegalArgumentException("Unable to remove layer out of index.");
+    }
+    layers.remove(index);
+  }
+
   /**
    * A private helper method to check if an index is in bounds.
    * @param index The index to lookup.
@@ -64,14 +72,6 @@ public class LayeredAnimatorModel implements ILayeredAnimatorModel {
    */
   private boolean indexCheck(int index) {
     return index >= 0 && index < layers.size();
-  }
-
-  @Override
-  public void removeLayer(int index) {
-    if (!indexCheck(index)) {
-      throw new IllegalArgumentException("Unable to remove layer out of index.");
-    }
-    layers.remove(index);
   }
 
   @Override
@@ -150,7 +150,9 @@ public class LayeredAnimatorModel implements ILayeredAnimatorModel {
             .map(layer -> layer.getModel()) // Turn a stream of layers into one of models.
             .flatMap(model -> model.getShapes().entrySet().stream()) // -> named shapes.
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                    (k1, k2) -> {throw new IllegalStateException("Unable to merge shape names.");},
+                (k1, k2) -> {
+                  throw new IllegalStateException("Unable to merge same names.");
+                },
                     LinkedHashMap::new)); // collect.
   }
 

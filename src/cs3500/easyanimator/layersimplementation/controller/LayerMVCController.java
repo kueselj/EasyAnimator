@@ -10,10 +10,22 @@ import cs3500.easyanimator.model.Point;
 import cs3500.easyanimator.model.ILayeredAnimatorModel;
 import cs3500.easyanimator.model.layers.BasicLayer;
 import cs3500.easyanimator.model.layers.ILayer;
-import cs3500.easyanimator.model.shapes.*;
+import cs3500.easyanimator.model.shapes.BasicShapeFactory;
+import cs3500.easyanimator.model.shapes.IShape;
+import cs3500.easyanimator.model.shapes.IShapeFactory;
+import cs3500.easyanimator.model.shapes.IShapeVisitor;
+import cs3500.easyanimator.model.shapes.ShapeF;
+import cs3500.easyanimator.model.shapes.ShapeNameVisitor;
+import cs3500.easyanimator.model.shapes.WidthHeight;
 
 import javax.swing.Timer;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
 import java.util.stream.Collectors;
 
 /**
@@ -55,7 +67,7 @@ public class LayerMVCController implements ILayerMVCController,
   }
 
   @Override
-  public void go() {
+  public void start() {
     if (this.speed == -1.0) {
       throw new IllegalArgumentException("Can't start if speed has not been set.");
     }

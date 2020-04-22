@@ -1,15 +1,15 @@
 package cs3500.easyanimator.layersimplementation.view.panels;
 
 import cs3500.easyanimator.layersimplementation.controller.PlaybackControls;
-import cs3500.easyanimator.model.Color;
 import cs3500.easyanimator.model.shapes.IShape;
-import cs3500.easyanimator.model.shapes.Oval;
-import cs3500.easyanimator.model.shapes.Rectangle;
-import cs3500.easyanimator.model.shapes.WidthHeight;
 import cs3500.easyanimator.view.DrawPanel;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.BoxLayout;
+import javax.swing.JScrollPane;
+
+import java.awt.Dimension;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +53,7 @@ public class AnimationPanel extends JPanel {
   }
 
   /**
-   * Sets the drawPanels shapes to draw to the given shapes
+   * Sets the drawPanels shapes to draw to the given shapes.
    * @param shapes the shapes to set the draw panel to draw.
    */
   public void setShapes(List<IShape> shapes) {

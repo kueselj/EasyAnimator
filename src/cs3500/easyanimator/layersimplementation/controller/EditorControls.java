@@ -1,5 +1,8 @@
 package cs3500.easyanimator.layersimplementation.controller;
 
+/**
+ * An interface describing the macro user inputs that happen in the editor panel.
+ */
 public interface EditorControls {
 
 
