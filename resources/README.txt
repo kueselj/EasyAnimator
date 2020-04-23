@@ -94,3 +94,14 @@ functionality.
 We were unable to implement the editor features of our providers view for the simple reason that
 they are not there. They did not implement these features in their view so it was impossible for
 us to support these features. They did implement playback features and we got those to work.
+
+//ASSIGNMENT 9//
+
+We implemented layers, and scrubbing.
+
+The model required for layering is best defined by the
+cs3500.easyanimator.model.ILayeredAnimatorModel interface.
+It is implemented in the cs3500.easyanimator.model.LayeredAnimatorModel class.
+
+The rework for our controller and views are contained within the layersimplementation package.
+We decided we wanted to try a different MVC that contained more logic in the controller.
