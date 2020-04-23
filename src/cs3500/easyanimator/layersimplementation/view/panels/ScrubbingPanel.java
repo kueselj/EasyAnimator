@@ -16,6 +16,9 @@ public class ScrubbingPanel extends JPanel {
 
   private static Dimension MAX_SCRUBBER_SIZE = new Dimension(Integer.MAX_VALUE, 25);
 
+  /**
+   * Basic constructor for a scrubbing panel, initializes the scrubber.
+   */
   public ScrubbingPanel() {
     super();
     setMaximumSize(MAX_SCRUBBER_SIZE);
