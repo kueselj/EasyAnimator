@@ -1,9 +1,11 @@
 package cs3500.easyanimator.layersimplementation.view.panels;
 
 import cs3500.easyanimator.layersimplementation.controller.ScrubbingControls;
-
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JPanel;
+import javax.swing.JSlider;
+import java.awt.Dimension;
+import java.awt.BorderLayout;
+import java.awt.Color;
 
 /**
  * JPanel consisting of the components related to the scrubbing of an Animation.
