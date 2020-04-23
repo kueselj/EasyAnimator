@@ -1,6 +1,5 @@
 package cs3500.easyanimator.layersimplementation.view.panels;
 
-
 import cs3500.easyanimator.layersimplementation.controller.ScrubbingControls;
 
 import javax.swing.*;
@@ -55,9 +54,4 @@ public class ScrubbingPanel extends JPanel {
   public void setScrubberPosition(int position) {
     slider.setValue(position);
   }
-
-
-
-
-
 }

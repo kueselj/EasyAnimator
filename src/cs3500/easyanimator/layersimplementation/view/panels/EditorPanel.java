@@ -9,9 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.BoxLayout;
 
-import java.awt.Dimension;
-import java.awt.Color;
-import java.awt.BorderLayout;
+import java.awt.*;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,7 +25,9 @@ public class EditorPanel extends JPanel {
   private static String[] DEFAULT_SHAPES = new String[]{"rectangle", "oval"};
   private static final Dimension EDITOR_PANEL_SIZE = new Dimension(300, 500);
   private static final Color EDITOR_PANEL_BACKGROUND = new Color(51, 107, 135);
+  private static final Color BUTTON_COLOR = new Color(188, 223, 255);
   private static Dimension MAX_FIELD_SIZE = new Dimension(200, 25);
+  private static final Font TEXT_FONT = new Font("Courier", Font.PLAIN, 20);
 
   //Shape Selection.
   private JComboBox<String> selectShape;
@@ -63,20 +63,26 @@ public class EditorPanel extends JPanel {
     setBackground(EDITOR_PANEL_BACKGROUND);
 
     selectShape = new JComboBox<String>();
+    selectShape.setFont(TEXT_FONT);
     add(selectShape);
 
     shapeName = createField("Shape Name");
 
     selectShapeType = new JComboBox<>(DEFAULT_SHAPES);
+    selectShapeType.setFont(TEXT_FONT);
     add(selectShapeType);
 
     saveShape = new JButton("Save Shape");
+    saveShape.setBackground(BUTTON_COLOR);
+
+
     add(saveShape);
 
     deleteShape = new JButton("Delete Shape");
     add(deleteShape);
 
     selectTick = new JComboBox<String>();
+    selectTick.setFont(TEXT_FONT);
     add(selectTick);
 
     keyFrameTick = createField("Tick");
@@ -184,7 +190,10 @@ public class EditorPanel extends JPanel {
    */
   private JTextField createField(String name) {
     JPanel group = new JPanel(new BorderLayout());
+    group.setBackground(EDITOR_PANEL_BACKGROUND);
     JTextField field = new JTextField();
+    field.setBackground(BUTTON_COLOR);
+    field.setFont(TEXT_FONT);
     field.setPreferredSize(MAX_FIELD_SIZE);
     JLabel label = new JLabel(name);
     group.add(label, BorderLayout.CENTER);

@@ -9,9 +9,7 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.BoxLayout;
 
-import java.awt.Dimension;
-import java.awt.Color;
-import java.awt.BorderLayout;
+import java.awt.*;
 
 import java.util.List;
 
@@ -22,7 +20,12 @@ public class LayerPanel extends JPanel {
 
   private static final Dimension EDITOR_PANEL_SIZE = new Dimension(300, 500);
   private static final Color EDITOR_PANEL_BACKGROUND = new Color(51, 107, 135);
+  private static final Color BUTTON_COLOR = new Color(188, 223, 255);
   private static Dimension MAX_FIELD_SIZE = new Dimension(200, 25);
+
+
+  private static final Font TEXT_FONT = new Font("Courier", Font.PLAIN, 20);
+  private static final Font BUTTON_FONT = new Font("Impact", Font.PLAIN, 12);
 
   private final JComboBox<String> selectedLayer;
   private final JTextField layerName;
@@ -42,17 +45,32 @@ public class LayerPanel extends JPanel {
     setMaximumSize(EDITOR_PANEL_SIZE);
     setBackground(EDITOR_PANEL_BACKGROUND);
 
+
+    JPanel dummyPanel1 = new JPanel();
+    dummyPanel1.setPreferredSize(new Dimension(200, 250));
+    dummyPanel1.setBackground(EDITOR_PANEL_BACKGROUND);
+    add(dummyPanel1);
     selectedLayer = new JComboBox<String>();
+    selectedLayer.setFont(TEXT_FONT);
     add(selectedLayer);
     layerName = createField("Layer Name");
+
     moveLayerUp = new JButton("Move Layer Up");
+    //moveLayerUp.setFont(BUTTON_FONT);
     add(moveLayerUp);
     moveLayerDown = new JButton("Move Layer Down");
+    //moveLayerDown.setFont(BUTTON_FONT);
     add(moveLayerDown);
     saveLayer = new JButton("Save Layer");
+    //saveLayer.setFont(BUTTON_FONT);
     add(saveLayer);
     deleteLayer = new JButton("Delete Layer");
+    //deleteLayer.setFont(BUTTON_FONT);
     add(deleteLayer);
+    JPanel dummyPanel2 = new JPanel();
+    dummyPanel2.setPreferredSize(new Dimension(200, 250));
+    dummyPanel2.setBackground(EDITOR_PANEL_BACKGROUND);
+    add(dummyPanel2);
   }
 
   /**
@@ -84,11 +102,14 @@ public class LayerPanel extends JPanel {
    */
   private JTextField createField(String name) {
     JPanel group = new JPanel(new BorderLayout());
+    group.setBackground(EDITOR_PANEL_BACKGROUND);
     JTextField field = new JTextField();
+    field.setBackground(BUTTON_COLOR);
+    field.setFont(TEXT_FONT);
     field.setPreferredSize(MAX_FIELD_SIZE);
     JLabel label = new JLabel(name);
     group.add(label, BorderLayout.CENTER);
-    group.add(field, BorderLayout.EAST);
+    group.add(field, BorderLayout.WEST);
     add(group);
     return field;
   }
