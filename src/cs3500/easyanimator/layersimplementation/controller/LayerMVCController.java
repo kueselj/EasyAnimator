@@ -416,6 +416,7 @@ public class LayerMVCController implements ILayerMVCController,
     }
     view.setAvailableTicks(ticksToDisplay);
     view.setScrubbingMax(model.getMaxTick());
+    view.setPreferredCanvasSize(model.getCanvasSize());
   }
 
   private static String DEFAULT = "100";

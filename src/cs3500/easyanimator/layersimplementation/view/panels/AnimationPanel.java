@@ -3,6 +3,7 @@ package cs3500.easyanimator.layersimplementation.view.panels;
 import cs3500.easyanimator.layersimplementation.controller.PlaybackControls;
 import cs3500.easyanimator.layersimplementation.controller.ScrubbingControls;
 import cs3500.easyanimator.model.shapes.IShape;
+import cs3500.easyanimator.model.shapes.WidthHeight;
 import cs3500.easyanimator.view.DrawPanel;
 
 import javax.swing.JPanel;
@@ -100,6 +101,14 @@ public class AnimationPanel extends JPanel {
   public void setTick(int tick) {
     playbackPanel.setTickLabel(tick);
     scrubbingPanel.setScrubberPosition(tick);
+  }
+
+
+  /**
+   * Sets the preferred canvas size.
+   */
+  public void setPreferredCanvasSize(WidthHeight wH) {
+    drawPanel.setPreferredSize(new Dimension(wH.getWidth(), wH.getHeight()));
   }
 
 

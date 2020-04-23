@@ -6,6 +6,7 @@ import cs3500.easyanimator.layersimplementation.controller.LayerControls;
 
 import cs3500.easyanimator.layersimplementation.controller.ScrubbingControls;
 import cs3500.easyanimator.model.shapes.IShape;
+import cs3500.easyanimator.model.shapes.WidthHeight;
 
 import java.util.List;
 
@@ -95,6 +96,12 @@ public interface ILayerView {
    * @param layers  The names of the layers.
    */
   void setLayers(List<String> layers);
+
+  /**
+   * Sets the preferred canvas size of the draw panel.
+   * @param wH the width height to use.
+   */
+  void setPreferredCanvasSize(WidthHeight wH);
 
   /**
    * Sets the max size of the scrubber.

@@ -8,6 +8,7 @@ import cs3500.easyanimator.layersimplementation.view.panels.AnimationPanel;
 import cs3500.easyanimator.layersimplementation.view.panels.EditorPanel;
 import cs3500.easyanimator.layersimplementation.view.panels.LayerPanel;
 import cs3500.easyanimator.model.shapes.IShape;
+import cs3500.easyanimator.model.shapes.WidthHeight;
 
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
@@ -120,6 +121,11 @@ public class LayerView extends JFrame implements ILayerView {
   @Override
   public void setLayers(List<String> layers) {
     layerPanel.setLayers(layers);
+  }
+
+  @Override
+  public void setPreferredCanvasSize(WidthHeight wH) {
+    animationPanel.setPreferredCanvasSize(wH);
   }
 
   @Override
