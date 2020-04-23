@@ -84,11 +84,14 @@ public class LayerMVCController implements ILayerMVCController,
   public void refreshTick() {
     //update the shapes that should be drawn. This goes at start so first frame has it.
     refreshDrawing();
-    if (looping && this.tick >= model.getMaxTick()) {
-      this.tick = 0;
+    if (looping && tick >= model.getMaxTick()) {
+      tick = 0;
+    }
+    else if (!looping && tick >= model.getMaxTick()) {
+      //do nothing, timer should still run, but don't update the tick.
     }
     else {
-      this.tick += 1;
+      tick += 1;
     }
   }
 
