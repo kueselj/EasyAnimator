@@ -1,6 +1,8 @@
 package cs3500.easyanimator.layersimplementation.view.panels;
 
 
+import cs3500.easyanimator.layersimplementation.controller.ScrubbingControls;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,16 +13,17 @@ public class ScrubbingPanel extends JPanel {
 
   JSlider slider;
 
-  private static Dimension MAX_SCRUBBER_SIZE = new Dimension(Integer.MAX_VALUE, 50);
+  private static Dimension MAX_SCRUBBER_SIZE = new Dimension(Integer.MAX_VALUE, 25);
 
   public ScrubbingPanel() {
     super();
-    setBackground(new Color(49, 98, 106));
-    slider = new JSlider(JSlider.HORIZONTAL);
-    slider.setMajorTickSpacing(100);
-    slider.setMinorTickSpacing(10);
+    setMaximumSize(MAX_SCRUBBER_SIZE);
+    setLayout(new BorderLayout());
+    setBackground(new Color(118, 54, 38));
+    slider = new JSlider(JSlider.HORIZONTAL, 0,1000,0);
     slider.setPaintLabels(true);
     slider.setPaintTicks(true);
+    add(slider, BorderLayout.PAGE_END);
   }
 
   /**
@@ -28,7 +31,8 @@ public class ScrubbingPanel extends JPanel {
    * @param scrubbingControls the scrubbing controls the panel can use.
    */
   public void addScrubbingControls(ScrubbingControls scrubbingControls) {
-    slider.addChangeListener(evt -> scrubbingControls.scrubbingOccured(slider.getValue()));
+
+    slider.addChangeListener(evt -> scrubbingControls.scrubbingOccurred(slider.getValue()));
   }
 
   /**
@@ -37,6 +41,11 @@ public class ScrubbingPanel extends JPanel {
    */
   public void setScrubbingMax(int max) {
     slider.setMaximum(max);
+    slider.setMajorTickSpacing(max / 10);
+    slider.setMinorTickSpacing(max / 100);
+    slider.setPaintLabels(true);
+    slider.setPaintTicks(true);
+
   }
 
   /**
@@ -46,6 +55,8 @@ public class ScrubbingPanel extends JPanel {
   public void setScrubberPosition(int position) {
     slider.setValue(position);
   }
+
+
 
 
 

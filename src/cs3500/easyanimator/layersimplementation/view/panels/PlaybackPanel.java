@@ -34,7 +34,8 @@ public class PlaybackPanel extends JPanel {
   public PlaybackPanel() {
     super();
     setLayout(new GridLayout());
-    setBackground(new Color(106, 35, 38));
+
+    setBackground(new Color(42, 49, 50));
     setMaximumSize(MAX_PLAYBACK_BUTTONS_SIZE);
 
     //play button

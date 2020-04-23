@@ -1,6 +1,7 @@
 package cs3500.easyanimator.layersimplementation.view.panels;
 
 import cs3500.easyanimator.layersimplementation.controller.PlaybackControls;
+import cs3500.easyanimator.layersimplementation.controller.ScrubbingControls;
 import cs3500.easyanimator.model.shapes.IShape;
 import cs3500.easyanimator.view.DrawPanel;
 
@@ -20,7 +21,9 @@ import java.util.List;
 public class AnimationPanel extends JPanel {
 
   private PlaybackPanel playbackPanel;
+  private ScrubbingPanel scrubbingPanel;
   private DrawPanel drawPanel;
+
 
   /**
    * Basic constructor for an animation panel, will construct a
@@ -30,6 +33,7 @@ public class AnimationPanel extends JPanel {
 
     drawPanel = new DrawPanel();
     playbackPanel = new PlaybackPanel();
+    scrubbingPanel = new ScrubbingPanel();
 
     setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
     //setLayout(new BorderLayout());
@@ -45,8 +49,12 @@ public class AnimationPanel extends JPanel {
     scrollPane.setSize(0, 0);
     add(scrollPane);
 
+    add(scrubbingPanel);
+
     //PLAYBACK PANEL
     add(playbackPanel);
+
+
 
 
     drawPanel.repaint();
@@ -70,10 +78,30 @@ public class AnimationPanel extends JPanel {
   }
 
   /**
-   * Sets the Playback panels tick label to the given tick.
+   * Sets the scrubbing listener controls.
+   * @param scrubbingControls the scrubbing controls the listener can use.
+   */
+  public void addScrubbingControls(ScrubbingControls scrubbingControls) {
+    scrubbingPanel.addScrubbingControls(scrubbingControls);
+  }
+
+  /**
+   * Sets the max size of the scrubber.
+   * @param max the max size of the scrubber.
+   */
+  public void setScrubbingMax(int max) {
+    scrubbingPanel.setScrubbingMax(max);
+  }
+
+  /**
+   * Sets the tick for any components that need the current tick.
    * @param tick the tick to set.
    */
-  public void setTickLabel(int tick) {
-    this.playbackPanel.setTickLabel(tick);
+  public void setTick(int tick) {
+    playbackPanel.setTickLabel(tick);
+    scrubbingPanel.setScrubberPosition(tick);
   }
+
+
+
 }

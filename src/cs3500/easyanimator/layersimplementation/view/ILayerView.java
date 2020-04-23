@@ -4,6 +4,7 @@ import cs3500.easyanimator.layersimplementation.controller.PlaybackControls;
 import cs3500.easyanimator.layersimplementation.controller.EditorControls;
 import cs3500.easyanimator.layersimplementation.controller.LayerControls;
 
+import cs3500.easyanimator.layersimplementation.controller.ScrubbingControls;
 import cs3500.easyanimator.model.shapes.IShape;
 
 import java.util.List;
@@ -37,10 +38,16 @@ public interface ILayerView {
   void addLayerControls(LayerControls layerControls);
 
   /**
-   * Sets the tick label in playback controls to the given tick.
+   * Sets the scrubbing listener controls.
+   * @param scrubbingControls the controls the listener can use.
+   */
+  void addScrubbingControls(ScrubbingControls scrubbingControls);
+
+  /**
+   * Gives the view to tick to update any components that need to know the current tick.
    * @param tick the tick to set.
    */
-  void setTickLabel(int tick);
+  void setTick(int tick);
 
   /**
    * Sets the shapes, this is for a specific tick. Should pass to the draw component of the view.
@@ -88,6 +95,12 @@ public interface ILayerView {
    * @param layers  The names of the layers.
    */
   void setLayers(List<String> layers);
+
+  /**
+   * Sets the max size of the scrubber.
+   * @param max the max to set.
+   */
+  void setScrubbingMax(int max);
 
   /**
    * Sounds the alarm.

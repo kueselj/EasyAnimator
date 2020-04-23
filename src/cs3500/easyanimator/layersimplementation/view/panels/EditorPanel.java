@@ -26,7 +26,7 @@ public class EditorPanel extends JPanel {
   private static String NEW_SHAPE = "New Shape";
   private static String[] DEFAULT_SHAPES = new String[]{"rectangle", "oval"};
   private static final Dimension EDITOR_PANEL_SIZE = new Dimension(300, 500);
-  private static final Color EDITOR_PANEL_BACKGROUND = Color.GRAY;
+  private static final Color EDITOR_PANEL_BACKGROUND = new Color(51, 107, 135);
   private static Dimension MAX_FIELD_SIZE = new Dimension(200, 25);
 
   //Shape Selection.

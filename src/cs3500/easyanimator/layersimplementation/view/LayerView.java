@@ -3,6 +3,7 @@ package cs3500.easyanimator.layersimplementation.view;
 import cs3500.easyanimator.layersimplementation.controller.EditorControls;
 import cs3500.easyanimator.layersimplementation.controller.LayerControls;
 import cs3500.easyanimator.layersimplementation.controller.PlaybackControls;
+import cs3500.easyanimator.layersimplementation.controller.ScrubbingControls;
 import cs3500.easyanimator.layersimplementation.view.panels.AnimationPanel;
 import cs3500.easyanimator.layersimplementation.view.panels.EditorPanel;
 import cs3500.easyanimator.layersimplementation.view.panels.LayerPanel;
@@ -77,8 +78,14 @@ public class LayerView extends JFrame implements ILayerView {
   }
 
   @Override
-  public void setTickLabel(int tick) {
-    animationPanel.setTickLabel(tick);
+  public void addScrubbingControls(ScrubbingControls scrubbingControls) {
+    animationPanel.addScrubbingControls(scrubbingControls);
+  }
+
+  @Override
+  public void setTick(int tick) {
+    animationPanel.setTick(tick);
+
   }
 
   @Override
@@ -113,6 +120,11 @@ public class LayerView extends JFrame implements ILayerView {
   @Override
   public void setLayers(List<String> layers) {
     layerPanel.setLayers(layers);
+  }
+
+  @Override
+  public void setScrubbingMax(int max) {
+    animationPanel.setScrubbingMax(max);
   }
 
   private static Toolkit tk = Toolkit.getDefaultToolkit();

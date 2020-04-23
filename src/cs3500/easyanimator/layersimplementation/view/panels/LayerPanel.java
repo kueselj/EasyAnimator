@@ -21,7 +21,7 @@ import java.util.List;
 public class LayerPanel extends JPanel {
 
   private static final Dimension EDITOR_PANEL_SIZE = new Dimension(300, 500);
-  private static final Color EDITOR_PANEL_BACKGROUND = Color.BLACK;
+  private static final Color EDITOR_PANEL_BACKGROUND = new Color(51, 107, 135);
   private static Dimension MAX_FIELD_SIZE = new Dimension(200, 25);
 
   private final JComboBox<String> selectedLayer;

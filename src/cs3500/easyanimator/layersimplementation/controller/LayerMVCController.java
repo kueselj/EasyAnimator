@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
  * Controller specifically for the layer implementation of a model.
  */
 public class LayerMVCController implements ILayerMVCController,
-        PlaybackControls, EditorControls, LayerControls {
+        PlaybackControls, EditorControls, LayerControls, ScrubbingControls {
 
   private Timer timer;
   private int tick;
@@ -60,6 +60,8 @@ public class LayerMVCController implements ILayerMVCController,
     this.view.addPlaybackControls(this);
     this.view.addEditorControls(this);
     this.view.addLayerControls(this);
+    this.view.addScrubbingControls(this);
+    this.view.setScrubbingMax(model.getMaxTick());
 
     // Start timer with the speed of view.
     this.timer = new Timer(0, e -> this.refreshTick());
@@ -94,7 +96,8 @@ public class LayerMVCController implements ILayerMVCController,
   public void refreshDrawing() {
     // Update the shapes that should be drawn. This goes at start so first frame has it.
     view.setDrawShapes(model.getShapesAtTick(this.tick));
-    view.setTickLabel(this.tick);
+    view.setTick(this.tick);
+
   }
 
   @Override
@@ -412,6 +415,7 @@ public class LayerMVCController implements ILayerMVCController,
       ticksToDisplay.add(Integer.toString(tick));
     }
     view.setAvailableTicks(ticksToDisplay);
+    view.setScrubbingMax(model.getMaxTick());
   }
 
   private static String DEFAULT = "100";
@@ -569,5 +573,12 @@ public class LayerMVCController implements ILayerMVCController,
     }
     model.swapLayer(layerIndex, delta + layerIndex);
     updateLayers();
+  }
+
+  @Override
+  public void scrubbingOccurred(int value) {
+    tick = value;
+    refreshDrawing();
+
   }
 }
